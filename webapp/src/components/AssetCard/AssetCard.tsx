@@ -21,7 +21,7 @@ import {
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
 import { PriceDenomination } from '../../modules/trade/denomination'
-import { useTradePriceDenomination } from '../../modules/trade/hooks'
+import { useTradePricing } from '../../modules/trade/hooks'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { useHoverPreview } from '../HoverPreview'
@@ -105,7 +105,8 @@ const AssetCard = (props: Props) => {
   const { ref, inView } = useInView()
   const isMobile = useMobileMediaQuery()
   const isIAP = useIsIAP()
-  const isUSDPegged = useTradePriceDenomination(priceTradeId) === PriceDenomination.USD_PEGGED
+  const { denomination, marketplaceAddress } = useTradePricing(priceTradeId)
+  const isUSDPegged = denomination === PriceDenomination.USD_PEGGED
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
   const hoverPreview = useHoverPreview()
@@ -214,7 +215,12 @@ const AssetCard = (props: Props) => {
         {catalogItemInformation.price ? (
           showsPeggedMintPrice ? (
             <div className="PriceInMana">
-              <PeggedManaPrice usdWei={catalogItemInformation.price} network={asset.network} size="large" />
+              <PeggedManaPrice
+                usdWei={catalogItemInformation.price}
+                network={asset.network}
+                marketplaceAddress={marketplaceAddress}
+                size="large"
+              />
             </div>
           ) : isIAP ? (
             <span className="CreditsPrice">
@@ -296,7 +302,7 @@ const AssetCard = (props: Props) => {
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   isUSDPegged ? (
-                    <PeggedManaPrice usdWei={price} network={asset.network} inline />
+                    <PeggedManaPrice usdWei={price} network={asset.network} marketplaceAddress={marketplaceAddress} inline />
                   ) : isIAP ? (
                     <span className="CreditsPrice">
                       <img src={CreditsIcon} alt="Credits" className="creditsIcon" />

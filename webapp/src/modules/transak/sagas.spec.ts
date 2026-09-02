@@ -252,6 +252,45 @@ describe('when handling the open transak action', () => {
     })
 
     describe('when not using credits', () => {
+      /**
+       * Transak executes `accept` on a contract it has registered on its own side, addressed by an opaque id.
+       * A trade's signature only authorises the contract it was signed against, so running a V3-signed listing
+       * through the pre-V3 registration reverts on chain — after the buyer has already been charged. Until V3
+       * is registered with Transak there is no id to use, and refusing to open the widget is the only outcome
+       * that does not take someone's money for a purchase that cannot complete.
+       */
+      describe('and the trade was signed against a marketplace Transak does not know', () => {
+        let unregisteredTrade: Trade
+
+        beforeEach(() => {
+          unregisteredTrade = {
+            ...mockTrade,
+            contract: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+          }
+        })
+
+        it('should fail without opening the widget', () => {
+          return (
+            expectSaga(transakSaga, () => undefined)
+              .provide([
+                [select(getWallet), mockWallet],
+                [select(getAddress), mockWallet.address],
+                [select(getIsCreditsEnabled), false],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+              ])
+              // The asset is an NFT, so the trade id reaches the saga through the order, not the asset.
+              .dispatch(openTransak(mockAsset, { ...mockOrder, tradeId: 'mock-trade-id' }))
+              .put(
+                openTransakFailure(`${ContractName.OffChainMarketplaceV3} is not registered with Transak on chainId ${ChainId.MATIC_AMOY}`)
+              )
+              .run({ silenceTimeout: true, timeout: 500 })
+              .then(() => {
+                expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
+              })
+          )
+        })
+      })
+
       describe('and the asset has a trade', () => {
         it('should open the Transak widget with the correct configuration for marketplace v3', () => {
           return expectSaga(transakSaga, () => undefined)

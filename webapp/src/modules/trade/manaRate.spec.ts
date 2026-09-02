@@ -1,17 +1,17 @@
 import { ChainId } from '@dcl/schemas'
 import { clearManaUsdRateCache, fetchManaUsdRate, usdWeiToManaWei, ManaUsdRate } from './manaRate'
 
+/** The contract a trade settles on — what the caller reads off the trade and passes in. */
+const MARKETPLACE = '0xmarketplace'
+/** A second version on the same chain, for the cache-key case. */
+const OTHER_MARKETPLACE = '0xothermarketplace'
+
 const manaUsdAggregator = jest.fn()
 const decimals = jest.fn()
 const latestRoundData = jest.fn()
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => ({
   getNetworkProvider: jest.fn().mockResolvedValue({ request: jest.fn() })
-}))
-
-jest.mock('decentraland-transactions', () => ({
-  ContractName: { OffChainMarketplaceV2: 'OffChainMarketplaceV2' },
-  getContract: () => ({ address: '0xmarketplace', name: 'OffChainMarketplaceV2', version: '1', abi: [] })
 }))
 
 jest.mock('ethers', () => {
@@ -50,8 +50,8 @@ describe('when reading the MANA/USD rate', () => {
    * decentraland-transactions is `0xe18B1361…` — a different contract, which does not even expose the same
    * interface. Reading it off the marketplace makes the displayed rate the settlement rate by construction.
    */
-  it('should read the aggregator address from the marketplace contract', async () => {
-    await fetchManaUsdRate(ChainId.MATIC_MAINNET)
+  it('should read the aggregator address from the marketplace the caller named', async () => {
+    await fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)
 
     expect(manaUsdAggregator).toHaveBeenCalledWith('0xmarketplace')
     expect(decimals).toHaveBeenCalledWith('0xaggregator')
@@ -59,38 +59,52 @@ describe('when reading the MANA/USD rate', () => {
   })
 
   it('should return the answer and its decimals', async () => {
-    const rate = await fetchManaUsdRate(ChainId.MATIC_MAINNET)
+    const rate = await fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)
 
     expect(rate).toEqual({ answer: 6686601n, decimals: 8 })
   })
 
   it('should reuse the read within the TTL', async () => {
-    await fetchManaUsdRate(ChainId.MATIC_MAINNET)
-    await fetchManaUsdRate(ChainId.MATIC_MAINNET)
+    await fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)
+    await fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)
 
     // One read for a whole grid of cards, rather than one per price.
     expect(manaUsdAggregator).toHaveBeenCalledTimes(1)
   })
 
+  /**
+   * Two marketplace versions on one chain hold their own aggregators, so a chain-only cache key would serve
+   * whichever was read first to both — pricing a V2 listing at V3's rate, which is the exact thing passing the
+   * settlement contract is meant to prevent.
+   */
+  it('should not reuse one marketplace read for a different marketplace on the same chain', async () => {
+    await fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)
+    await fetchManaUsdRate(ChainId.MATIC_MAINNET, OTHER_MARKETPLACE)
+
+    expect(manaUsdAggregator).toHaveBeenCalledTimes(2)
+    expect(manaUsdAggregator).toHaveBeenCalledWith(MARKETPLACE)
+    expect(manaUsdAggregator).toHaveBeenCalledWith(OTHER_MARKETPLACE)
+  })
+
   it('should reject a non-positive rate instead of dividing by it', async () => {
     latestRoundData.mockResolvedValue(round({ toString: () => '0' }))
 
-    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).rejects.toThrow(/non-positive/)
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)).rejects.toThrow(/non-positive/)
   })
 
   it('should reject when the tuple carries no rate at all', async () => {
     // Not a cast: if the decode shape ever changes, this must fail loudly rather than yield a nonsense price.
     latestRoundData.mockResolvedValue([0, undefined, 0, 0, 0] as unknown[])
 
-    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).rejects.toThrow(/no rate/)
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)).rejects.toThrow(/no rate/)
   })
 
   it('should not cache a failure', async () => {
     manaUsdAggregator.mockRejectedValueOnce(new Error('rpc down'))
 
-    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).rejects.toThrow('rpc down')
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)).rejects.toThrow('rpc down')
     // A transient failure must not pin a broken price for the whole TTL.
-    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).resolves.toEqual({ answer: 6686601n, decimals: 8 })
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET, MARKETPLACE)).resolves.toEqual({ answer: 6686601n, decimals: 8 })
   })
 })
 

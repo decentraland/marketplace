@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
-import { PriceDenomination, fetchTradePriceDenomination } from './denomination'
+import { PriceDenomination, TradePricing, fetchTradePricing } from './denomination'
 import { ManaUsdRate, fetchManaUsdRate } from './manaRate'
+
+const MANA_PRICING: TradePricing = { denomination: PriceDenomination.MANA, marketplaceAddress: null }
 
 /**
  * How the given trade-backed listing is priced, for components that render a `price`.
@@ -12,19 +14,19 @@ import { ManaUsdRate, fetchManaUsdRate } from './manaRate'
  * re-renders. Listings without a `tradeId` (legacy on-chain orders, collection-store mints) are
  * always MANA and never trigger a request.
  */
-export function useTradePriceDenomination(tradeId?: string): PriceDenomination {
-  const [denomination, setDenomination] = useState(PriceDenomination.MANA)
+export function useTradePricing(tradeId?: string): TradePricing {
+  const [pricing, setPricing] = useState<TradePricing>(MANA_PRICING)
 
   useEffect(() => {
     if (!tradeId) {
-      setDenomination(PriceDenomination.MANA)
+      setPricing(MANA_PRICING)
       return
     }
 
     let cancelled = false
-    void fetchTradePriceDenomination(tradeId).then(resolved => {
+    void fetchTradePricing(tradeId).then(resolved => {
       if (!cancelled) {
-        setDenomination(resolved)
+        setPricing(resolved)
       }
     })
 
@@ -33,7 +35,7 @@ export function useTradePriceDenomination(tradeId?: string): PriceDenomination {
     }
   }, [tradeId])
 
-  return denomination
+  return pricing
 }
 
 /**
@@ -42,11 +44,13 @@ export function useTradePriceDenomination(tradeId?: string): PriceDenomination {
  * A null result is a real state, not a loading detail to paper over: without the rate there is no honest MANA
  * figure to show for a USD-pegged listing, so the caller renders "price unavailable" instead of guessing.
  */
-export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
+export function useManaUsdRate(chainId?: ChainId, marketplaceAddress?: string | null): ManaUsdRate | null {
   const [rate, setRate] = useState<ManaUsdRate | null>(null)
 
   useEffect(() => {
-    if (!chainId) {
+    // No settlement contract means no honest rate to read — the caller renders "price unavailable" rather
+    // than falling back to a version this listing may not have been signed against.
+    if (!chainId || !marketplaceAddress) {
       setRate(null)
       return
     }
@@ -55,7 +59,7 @@ export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
     // Clear first: on a chain switch the previous chain's rate would otherwise linger until the new read
     // resolves, briefly pricing a listing at another network's rate.
     setRate(null)
-    void fetchManaUsdRate(chainId)
+    void fetchManaUsdRate(chainId, marketplaceAddress)
       .then(resolved => {
         if (!cancelled) {
           setRate(resolved)
@@ -70,7 +74,7 @@ export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
     return () => {
       cancelled = true
     }
-  }, [chainId])
+  }, [chainId, marketplaceAddress])
 
   return rate
 }

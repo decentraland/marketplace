@@ -22,14 +22,41 @@ import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
 import { encodeTokenId } from './utils'
 
-const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
-  [Network.MATIC]: {
-    [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
-    [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
+/**
+ * Transak's own id for each marketplace contract it will execute against. These are registrations on
+ * Transak's side, not addresses, so a contract Transak has never been told about simply has no id here.
+ *
+ * Keyed by marketplace VERSION as well as chain. A trade carries the contract it was signed against, and
+ * Transak has to execute `accept` on that same contract — the signature is bound to it. A single id per chain
+ * cannot serve two versions at once: pointing it at V3 would break every V2-signed listing, and leaving it on
+ * the older one breaks the V3 ones.
+ *
+ * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
+ * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
+ */
+const OffChainMarketplaceContractIds: Partial<
+  Record<ContractName, Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM>>
+> = {
+  [ContractName.OffChainMarketplace]: {
+    [Network.MATIC]: {
+      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
+      [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
+    },
+    [Network.ETHEREUM]: {
+      [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
+      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+    }
   },
-  [Network.ETHEREUM]: {
-    [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
-    [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+  // The same registrations: before V3 both versions were served by one id per chain.
+  [ContractName.OffChainMarketplaceV2]: {
+    [Network.MATIC]: {
+      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
+      [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
+    },
+    [Network.ETHEREUM]: {
+      [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
+      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+    }
   }
 }
 const CreditsManagerContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC> = {
@@ -101,14 +128,18 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (tradeId && wallet?.address) {
-        // MarketplaceV3
-        contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
-        if (!contractId) {
-          throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
-        }
+        // Off-chain marketplace. The trade has to be read BEFORE the Transak contract id is chosen: the id and
+        // the ABI both depend on which marketplace version this particular listing was signed against.
         const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
         const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
-        const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
+        const marketplaceName = getContractName(trade.contract)
+        contractId = OffChainMarketplaceContractIds[marketplaceName]?.[asset.network]?.[asset.chainId]
+        if (!contractId) {
+          // Fail closed. Executing against another version's registration would send `accept` to a contract the
+          // signature does not authorise, so the purchase reverts after the buyer has already paid Transak.
+          throw new Error(`${marketplaceName} is not registered with Transak on chainId ${asset.chainId}`)
+        }
+        const { abi } = getContract(marketplaceName, asset.chainId)
 
         // if credits are enabled and useCredits is true, we need to use credits
         if (useCredits && credits) {
