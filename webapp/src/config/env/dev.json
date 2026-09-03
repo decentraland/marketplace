@@ -32,6 +32,7 @@
   "INTERCOM_APP_ID": "z0h94kay",
   "SEGMENT_API_KEY": "gMnkewUBzA6J879kAtMvp2WhohEk36uy",
   "SEGMENT_ANALYTICS_URL": "https://evs.e.decentraland.org/z8jpJNrQbg/rqp8VgURTs.min.js",
+  "SEGMENT_API_HOST": "api.e.decentraland.org/v1",
   "DISCORD_URL": "https://dcl.gg/discord",
   "ENVIRONMENT": "development",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
