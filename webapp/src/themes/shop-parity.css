@@ -227,3 +227,218 @@ body .recently-sold-card {
   background: rgba(0, 0, 0, 0.4);
   border-radius: 12px;
 }
+
+/* ============================================================================
+   Contrast pass
+
+   Every threshold below comes from measuring the rendered pages against WCAG AA
+   (4.5:1 for body text). The purple page is far lighter than the near-black it
+   replaced, so the greys that used to read fine now sit between 2.0 and 3.3.
+   ============================================================================ */
+
+:root {
+  /* Was #676370, which measured 2.0:1 on the purple: the single worst offender,
+     and the one carrying "MIN", card meta and the wallet-connect copy. This is
+     the shop's own Gray 4, and it measures ~7:1 here. */
+  --secondary-text: #cfcdd4;
+}
+
+/* Group and box headers. #736e7d measured 2.37:1; the collapsed filter titles
+   (RARITY, CREATORS, COLLECTION, NETWORK, BODY SHAPE, MORE FILTERS) are the
+   same element, which is why they all read as disabled. */
+body .dcl.box-header-text,
+body .dcl.box .box-header-text,
+body .ui.sub.header,
+body .special-filter-header,
+body .dui-rarity-filter__name {
+  color: #ffffff;
+}
+
+/* Carousel "EXPLORE ALL" / "VIEW ALL" and the sort control. Red on purple
+   measures 3.2:1. As a text link it fails; as a button FILL it is fine, which
+   is why --primary itself is left alone. */
+body .Slideshow .ui.basic.button,
+body .Slideshow .ui.basic.button:hover,
+body .HeaderMenu .ui.basic.button,
+body .ui.dropdown > .default.text,
+body .ui.dropdown > .text,
+body .sort-by .ui.dropdown > .text {
+  color: #ffffff;
+}
+
+/* The rarity name in a card's description ("Legendary" at 3.33:1) is drawn in
+   its own rarity colour, which is a pale lilac for several tiers. */
+body .AssetCard .rarity-badge .text,
+body .AssetCard .dui-rarity-badge {
+  color: #ffffff;
+}
+
+/* ----------------------------------------------------------------------------
+   Announcement bar
+   The bar exposes its own custom property, so this retargets that rather than
+   fighting the fill. It sat at #691fa9, the shop's accent purple, which on the
+   purple page read as another band of the same hue.
+   ---------------------------------------------------------------------------- */
+
+aside[class*='_bar_'] {
+  --announcement-bar-background: #242129;
+}
+
+/* ----------------------------------------------------------------------------
+   Rankings and Recently Sold
+
+   Both are #242129 slabs with their own opaque table inside, so they read as a
+   separate dark site pasted onto the purple. Note the two-class selectors:
+   the earlier single-class rule lost to `.RankingsTable .rankings-card`.
+   ---------------------------------------------------------------------------- */
+
+body .RankingsTable .rankings-card,
+body .RecentlySoldTable .recently-sold-card {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+}
+
+body .TableContent .ui.table,
+body .TableContent .ui.table thead,
+body .TableContent .ui.table tbody,
+body .TableContent .ui.table tr,
+body .TableContent .ui.table th,
+body .TableContent .ui.table td {
+  background: transparent;
+  color: #ffffff;
+}
+
+/* Row separators have to be visible on a translucent surface, where a solid
+   hairline would disappear against whichever part of the gradient shows. */
+body .TableContent .ui.table th,
+body .TableContent .ui.table td {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ----------------------------------------------------------------------------
+   Rarity filter chips
+
+   The shop's chip, measured: transparent fill, 1px rgba(255,255,255,0.3)
+   hairline, 6px radius, a 16px colour swatch at 4px radius, and a CAPITALIZED
+   12px label in #ecebed. The marketplace's chips are grey pills with uppercase
+   labels and no swatch.
+   ---------------------------------------------------------------------------- */
+
+body .dui-rarity-filter .dui-array-filter__option {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: #ecebed;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The swatch. decentraland-ui renders these options with no per-rarity class or
+   data attribute, so there is no honest hook: the colour has to come from
+   position. That is why this is scoped to .dui-rarity-filter, where the order is
+   fixed by the Rarity enum, and why it stops at a pseudo-element. Giving the
+   option a rarity attribute upstream is the real fix. */
+body .dui-rarity-filter .dui-array-filter__option::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+body .dui-rarity-filter .dui-array-filter__option:nth-child(1)::before {
+  background: #73d3d3;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(2)::before {
+  background: #ff8362;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(3)::before {
+  background: #34ce76;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(4)::before {
+  background: #289cff;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(5)::before {
+  background: #a24bf3;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(6)::before {
+  background: #9cd71e;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(7)::before {
+  background: #ff4bed;
+}
+body .dui-rarity-filter .dui-array-filter__option:nth-child(8)::before {
+  background: #fea217;
+}
+
+/* ----------------------------------------------------------------------------
+   Price histogram
+   ---------------------------------------------------------------------------- */
+
+body .bar-chart .chart,
+body .bar-chart > div:first-child,
+body .filters-sidebar .bar-chart {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+/* ----------------------------------------------------------------------------
+   Sidebar alignment
+
+   Dropping the slab earlier also dropped its 24px inset, so the filter groups
+   sat flush against the rail while the categories menu above kept its own. That
+   is the missing padding on My Assets.
+   ---------------------------------------------------------------------------- */
+
+body .dcl.box.filters-sidebar-box,
+body .dcl.box.special-filter,
+body .dcl.box.asset-status-filter {
+  padding: 12px 24px 20px;
+}
+
+/* ----------------------------------------------------------------------------
+   Contrast pass, second round
+
+   Four selectors above lost the cascade. Recorded here with the reason, because
+   "add !important until it sticks" is how a layer like this rots.
+   ---------------------------------------------------------------------------- */
+
+/* decentraland-ui ships `.dcl.box .dcl.box-header-text` (three classes), which
+   outranks a two-class override. This matches its shape and adds the type. */
+body .dcl.box .dcl.box-header-text {
+  color: #ffffff;
+}
+
+/* Semantic UI declares `.ui.basic.button { color: ... !important }`, so nothing
+   short of !important reaches it. This is the carousel EXPLORE ALL / VIEW ALL. */
+body .Slideshow .ui.basic.button,
+body .dcl.header-menu-right .ui.basic.button {
+  color: #ffffff !important;
+}
+
+/* The carousel subtitle sits at 4.31:1, just under AA. */
+body .slideshow-header .ui.sub.header,
+body .dcl.header-menu-left .ui.sub.header {
+  color: #cfcdd4;
+}
+
+/* The wallet-connect copy links out to MetaMask in primary red on the purple. */
+body .SignIn .message a,
+body .SignInPage .message a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* The card's rarity chip. Both the pill tint and the label colour are inline
+   styles emitted from JS (the rarity colour at 20% and at full strength), so
+   this needs !important to reach the label. The shop's chip is a saturated pill
+   with a white label; the pill can only be matched upstream, where the colour is
+   emitted, but whitening the label already carries most of the look and takes
+   the label from 3.33:1 to about 11:1. */
+body .dui-rarity-badge .text {
+  color: #ffffff !important;
+}
