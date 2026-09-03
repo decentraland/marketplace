@@ -23,7 +23,20 @@ export enum PriceDenomination {
  * change for a given id. That makes an unbounded process-lifetime cache safe, and it keeps a list of
  * rows sharing a trade (or a revisited detail page) down to a single request.
  */
-const cache = new Map<string, Promise<PriceDenomination>>()
+const cache = new Map<string, Promise<TradePricing>>()
+
+/**
+ * How a listing is priced, and the marketplace that will settle it.
+ *
+ * Both come from one `fetchTrade`, and they belong together: a USD-pegged price can only be converted through
+ * the aggregator of the contract the trade was actually signed against, so the surface that learns "this is
+ * USD-pegged" is exactly the surface that has to say which contract to ask.
+ */
+export type TradePricing = {
+  denomination: PriceDenomination
+  /** The trade's own `contract`. Null only when the trade could not be read, where the fallback is MANA. */
+  marketplaceAddress: string | null
+}
 
 function buildService(): TradeService {
   return new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
@@ -43,7 +56,7 @@ export function denominationOfTrade(trade: Pick<Trade, 'received'>): PriceDenomi
  * every listing the marketplace itself creates is MANA-denominated, so MANA is the safe default for
  * an unknown, and it keeps a failed request from blanking a price that is almost certainly correct.
  */
-export async function fetchTradePriceDenomination(tradeId: string): Promise<PriceDenomination> {
+export async function fetchTradePricing(tradeId: string): Promise<TradePricing> {
   const cached = cache.get(tradeId)
   if (cached) {
     return cached
@@ -51,11 +64,11 @@ export async function fetchTradePriceDenomination(tradeId: string): Promise<Pric
 
   const pending = buildService()
     .fetchTrade(tradeId)
-    .then(denominationOfTrade)
+    .then(trade => ({ denomination: denominationOfTrade(trade), marketplaceAddress: trade.contract }))
     .catch(() => {
       // Do not cache a failure: a transient error should not pin the wrong unit for the session.
       cache.delete(tradeId)
-      return PriceDenomination.MANA
+      return { denomination: PriceDenomination.MANA, marketplaceAddress: null }
     })
 
   cache.set(tradeId, pending)
@@ -63,6 +76,6 @@ export async function fetchTradePriceDenomination(tradeId: string): Promise<Pric
 }
 
 /** Test seam — the cache is module state, so specs have to be able to empty it. */
-export function clearTradePriceDenominationCache(): void {
+export function clearTradePricingCache(): void {
   cache.clear()
 }

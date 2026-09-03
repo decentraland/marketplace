@@ -14,7 +14,15 @@ import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset, estimateTradeGas } from './trades'
+import {
+  OFFCHAIN_MARKETPLACE_TYPES,
+  getTradeSignature,
+  getOnChainTrade,
+  getValueForTradeAsset,
+  estimateTradeGas,
+  getLatestOffChainMarketplaceContract,
+  getDeployedOffChainMarketplaceContracts
+} from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const module = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -92,10 +100,8 @@ describe('when getting the trade signature', () => {
       } as Omit<TradeCreation, 'signature'>
     })
 
-    it('should throw an error', async () => {
-      await expect(getTradeSignature(trade)).rejects.toThrowError(
-        'Could not get a valid contract for OffChainMarketplaceV2 using chain 42161'
-      )
+    it('should throw naming the chain that has no off-chain marketplace', async () => {
+      await expect(getTradeSignature(trade)).rejects.toThrowError('No off-chain marketplace contract exists on chain 42161')
     })
   })
 
@@ -147,7 +153,7 @@ describe('when getting the trade signature', () => {
       }
 
       const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
-      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplaceV2, trade.chainId)
+      offchainMarketplaceContract = getLatestOffChainMarketplaceContract(trade.chainId)
       domain = {
         name: offchainMarketplaceContract.name,
         version: offchainMarketplaceContract.version,
@@ -379,6 +385,37 @@ describe('when estimating trade gas', () => {
     jest.clearAllMocks()
   })
 
+  /**
+   * The caller does not always know the settlement contract, and the fallback used to be V1 — so a V2 or V3
+   * trade was measured against a contract its signature does not authorise. That estimates a call that would
+   * revert, which is precisely what the buyer needs the estimate to surface.
+   */
+  describe('and the caller does not pass a settlement contract', () => {
+    beforeEach(() => {
+      mockEstimateGas.mockResolvedValue(ethers.BigNumber.from('100000'))
+    })
+
+    it('should estimate against the contract the trade settles on', async () => {
+      await estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)
+
+      expect(ethers.Contract).toHaveBeenCalledWith(
+        getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+        expect.anything(),
+        provider
+      )
+    })
+
+    it('should not fall back to a fixed version', async () => {
+      await estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)
+
+      expect(ethers.Contract).not.toHaveBeenCalledWith(
+        getContract(ContractName.OffChainMarketplace, ChainId.ETHEREUM_SEPOLIA).address,
+        expect.anything(),
+        expect.anything()
+      )
+    })
+  })
+
   describe.skip('when the gas estimation succeeds', () => {
     beforeEach(() => {
       mockEstimateGas.mockResolvedValue(ethers.BigNumber.from('100000'))
@@ -406,6 +443,72 @@ describe('when estimating trade gas', () => {
 
     it('should propagate the error', async () => {
       return expect(estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
+    })
+  })
+})
+
+/**
+ * Asserted against the versions themselves rather than against the enumerator's own output. contract/sagas
+ * builds its expected authorizations by calling this function, so a regression in it would move both sides
+ * of that comparison and pass — this is the check that would not.
+ */
+describe('when listing every off-chain marketplace deployed on a chain', () => {
+  describe('and the chain has all three versions', () => {
+    it('should return them newest first', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_SEPOLIA).map(({ contractName }) => contractName)).toEqual([
+        ContractName.OffChainMarketplaceV3,
+        ContractName.OffChainMarketplaceV2,
+        ContractName.OffChainMarketplace
+      ])
+    })
+  })
+
+  describe('and the chain has no V3 deployment', () => {
+    it('should return only the versions that are actually there', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_MAINNET).map(({ contractName }) => contractName)).toEqual([
+        ContractName.OffChainMarketplaceV2,
+        ContractName.OffChainMarketplace
+      ])
+    })
+  })
+
+  describe('and the chain has no off-chain marketplace at all', () => {
+    it('should return nothing instead of throwing', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ARBITRUM_MAINNET)).toEqual([])
+    })
+  })
+})
+
+describe('when getting the latest off-chain marketplace contract', () => {
+  let chainId: ChainId
+
+  describe('and the chain has a V3 deployment', () => {
+    beforeEach(() => {
+      chainId = ChainId.ETHEREUM_SEPOLIA
+    })
+
+    it('should return V3, so a listing and its approval both name the newest deployment', () => {
+      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV3, chainId))
+    })
+  })
+
+  describe('and the chain has no V3 deployment', () => {
+    beforeEach(() => {
+      chainId = ChainId.ETHEREUM_MAINNET
+    })
+
+    it('should fall back to V2 rather than throw', () => {
+      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV2, chainId))
+    })
+  })
+
+  describe('and the chain has no off-chain marketplace at all', () => {
+    beforeEach(() => {
+      chainId = ChainId.ARBITRUM_MAINNET
+    })
+
+    it('should throw naming the chain', () => {
+      expect(() => getLatestOffChainMarketplaceContract(chainId)).toThrowError('No off-chain marketplace contract exists on chain 42161')
     })
   })
 })

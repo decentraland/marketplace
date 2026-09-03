@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { Network, TradeAssetType } from '@dcl/schemas'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
-import { clearTradePriceDenominationCache } from '../../modules/trade/denomination'
+import { clearTradePricingCache } from '../../modules/trade/denomination'
 import ListingPrice from './ListingPrice'
 
 jest.mock('decentraland-dapps/dist/modules/trades/TradeService')
@@ -35,6 +35,9 @@ jest.mock('../../modules/trade/manaRate', () => {
 
 const mockTradeWithReceivedAssetType = (assetType: TradeAssetType) => {
   const fetchTrade = jest.fn().mockResolvedValue({
+    // The settlement contract: the price surface reads the MANA/USD aggregator off THIS address, so a trade
+    // without it renders "unavailable" rather than borrowing another version's rate.
+    contract: '0xmarketplace',
     received: [{ assetType, contractAddress: '0xmana', amount: '500000000000000000', extra: '' }]
   })
   ;(TradeService as unknown as jest.Mock).mockImplementation(() => ({ fetchTrade }))
@@ -44,7 +47,7 @@ const mockTradeWithReceivedAssetType = (assetType: TradeAssetType) => {
 describe('ListingPrice', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    clearTradePriceDenominationCache()
+    clearTradePricingCache()
   })
 
   describe('when the backing trade is USD-pegged', () => {

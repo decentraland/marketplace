@@ -6,10 +6,10 @@ import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { isAuthorized } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
+import { getDeployedOffChainMarketplaceContracts } from '../../../utils/trades'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
@@ -42,15 +42,17 @@ const Authorization = (props: Props) => {
 
   let contract
   let name: string = ''
-  const offchainContract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
-  const offchainContractV2 = getDecentralandContract(ContractName.OffChainMarketplaceV2, authorization.chainId)
-  // This is fix to get the correct contract name for the offchain marketplace
-  if (authorizedAddress === offchainContract.address) {
-    contract = offchainContract
-    name = contract.name
-  } else if (authorizedAddress === offchainContractV2.address) {
-    contract = offchainContractV2
-    name = contract.name
+  // Every off-chain marketplace version, so an approval granted to any of them is named here instead of
+  // falling through to the generic lookup, which does not know these addresses.
+  const offChainMarketplace = getDeployedOffChainMarketplaceContracts(authorization.chainId).find(
+    ({ contract: { address } }) => authorizedAddress === address
+  )
+  if (offChainMarketplace) {
+    contract = offChainMarketplace.contract
+    // The VERSION, not contract.name: every version shares one on-chain name per network
+    // ("DecentralandMarketplaceEthereum"), so naming them that way renders a page of identical rows with no
+    // way to tell which approval is which — or which one to revoke.
+    name = offChainMarketplace.contractName
   } else {
     contract = getContract({ address: authorizedAddress })
     if (contract) {

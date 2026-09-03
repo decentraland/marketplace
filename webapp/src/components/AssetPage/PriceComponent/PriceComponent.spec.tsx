@@ -2,7 +2,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { render, screen, waitFor } from '@testing-library/react'
 import { Network, TradeAssetType } from '@dcl/schemas'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
-import { clearTradePriceDenominationCache } from '../../../modules/trade/denomination'
+import { clearTradePricingCache } from '../../../modules/trade/denomination'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { ManaToFiat } from '../../ManaToFiat'
 import PriceComponent from './PriceComponent'
@@ -39,6 +39,9 @@ jest.mock('../../../modules/trade/manaRate', () => {
 
 const mockTradeWithReceivedAssetType = (assetType: TradeAssetType) => {
   const fetchTrade = jest.fn().mockResolvedValue({
+    // The settlement contract: the price surface reads the MANA/USD aggregator off THIS address, so a trade
+    // without it renders "unavailable" rather than borrowing another version's rate.
+    contract: '0xmarketplace',
     received: [{ assetType, contractAddress: '0xmana', amount: '600000000000000000', extra: '' }]
   })
   ;(TradeService as unknown as jest.Mock).mockImplementation(() => ({ fetchTrade }))
@@ -80,7 +83,7 @@ describe('PriceComponent', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    clearTradePriceDenominationCache()
+    clearTradePricingCache()
   })
 
   describe('when not using credits', () => {

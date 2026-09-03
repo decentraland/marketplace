@@ -8,6 +8,7 @@ import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
@@ -17,12 +18,18 @@ import { API_SIGNER } from '../../lib/api'
 import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
+import { getOpenTransakFailureToast } from '../toast/toasts'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
 import { encodeTokenId } from './utils'
 
-const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+/**
+ * The one registration that existed before V3: Transak registered a single contract per chain, and both V1
+ * and V2 were served by it. Named once and referenced twice below so "the same registrations" is a fact of
+ * the code rather than a comment above two identical literals.
+ */
+const PRE_V3_MARKETPLACE_CONTRACT_IDS: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
   [Network.MATIC]: {
     [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
     [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
@@ -31,6 +38,25 @@ const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, str
     [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
     [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
   }
+}
+
+/**
+ * Transak's own id for each marketplace contract it will execute against. These are registrations on
+ * Transak's side, not addresses, so a contract Transak has never been told about simply has no id here.
+ *
+ * Keyed by marketplace VERSION as well as chain. A trade carries the contract it was signed against, and
+ * Transak has to execute `accept` on that same contract — the signature is bound to it. A single id per chain
+ * cannot serve two versions at once: pointing it at V3 would break every V2-signed listing, and leaving it on
+ * the older one breaks the V3 ones.
+ *
+ * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
+ * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
+ */
+const OffChainMarketplaceContractIds: Partial<
+  Record<ContractName, Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM>>
+> = {
+  [ContractName.OffChainMarketplace]: PRE_V3_MARKETPLACE_CONTRACT_IDS,
+  [ContractName.OffChainMarketplaceV2]: PRE_V3_MARKETPLACE_CONTRACT_IDS
 }
 const CreditsManagerContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC> = {
   [Network.MATIC]: {
@@ -101,14 +127,11 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (tradeId && wallet?.address) {
-        // MarketplaceV3
-        contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
-        if (!contractId) {
-          throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
-        }
+        // Off-chain marketplace. The trade is read first because which marketplace version this listing was
+        // signed against decides the Transak registration and the ABI — but only on the direct route; the
+        // credits route goes through the CreditsManager and needs neither.
         const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
         const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
-        const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
 
         // if credits are enabled and useCredits is true, we need to use credits
         if (useCredits && credits) {
@@ -133,9 +156,19 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
           // encode useCredits function data
           calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
         } else {
-          // native call to marketplace
-          const MarketplaveV3Interface = new ethers.utils.Interface(abi)
-          calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
+          // Native call to the marketplace: Transak executes `accept` on the contract itself, so it needs a
+          // registration for THIS version. The credits route above does not — the CreditsManager is the
+          // registered contract there, and it resolves the marketplace from the trade on chain.
+          const marketplaceName = getContractName(trade.contract)
+          contractId = OffChainMarketplaceContractIds[marketplaceName]?.[asset.network]?.[asset.chainId]
+          if (!contractId) {
+            // Fail closed. Executing against another version's registration would send `accept` to a contract
+            // the signature does not authorise, so the purchase reverts after the buyer has already paid.
+            throw new Error(`${marketplaceName} is not registered with Transak on chainId ${asset.chainId}`)
+          }
+          const { abi } = getContract(marketplaceName, asset.chainId)
+          const marketplaceInterface = new ethers.utils.Interface(abi)
+          calldata = marketplaceInterface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
         }
       } else if (order && isNFT(asset)) {
         // Legacy Marketplace
@@ -246,6 +279,9 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         yield call([transak, 'openWidget'], { ...customizationOptions, walletAddress: address, network: Network.MATIC })
       }
     } catch (error) {
+      // Tell the buyer. OPEN_TRANSAK_FAILURE has no reducer or handler, so on its own it is a dead end —
+      // the widget just never opens.
+      yield put(showToast(getOpenTransakFailureToast()))
       yield put(openTransakFailure(error instanceof Error ? error.message : 'Unknown error'))
     }
   }

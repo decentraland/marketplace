@@ -160,6 +160,15 @@ const mockTrade: Trade = {
   ]
 }
 
+/**
+ * The action types still queued after redux-saga-test-plan has consumed the ones a `.put(...)` expectation
+ * matched. These specs used to assert nothing else was dispatched; the failure toast is now deliberately
+ * dispatched alongside, because OPEN_TRANSAK_FAILURE has no reducer and on its own reaches no one.
+ */
+function putActionTypes(effects: { put?: unknown[] }): string[] {
+  return ((effects.put ?? []) as { payload: { action: { type: string } } }[]).map(effect => effect.payload.action.type)
+}
+
 describe('when handling the open transak action', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -210,6 +219,38 @@ describe('when handling the open transak action', () => {
           })
         })
 
+        /**
+         * The credits route executes through the CreditsManager, which is what Transak has registered there,
+         * and which resolves the marketplace from the trade on chain itself. A version Transak has no direct
+         * registration for must therefore NOT block this route — only the direct `accept` route needs one.
+         */
+        describe('and the trade was signed against a marketplace Transak has no registration for', () => {
+          let unregisteredTrade: Trade
+
+          beforeEach(() => {
+            unregisteredTrade = {
+              ...mockTrade,
+              contract: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+            }
+          })
+
+          it('should still open the widget, because credits do not go through that registration', () => {
+            return expectSaga(transakSaga, () => undefined)
+              .provide([
+                [select(getWallet), mockWallet],
+                [select(getAddress), mockWallet.address],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, mockWallet.address), mockCredits],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+              ])
+              .dispatch(openTransak(mockAsset, mockOrder, true))
+              .run({ silenceTimeout: true, timeout: 500 })
+              .then(() => {
+                expect(Transak.prototype.openWidget).toHaveBeenCalled()
+              })
+          })
+        })
+
         describe('and the user does not have enough credits', () => {
           it('should throw an error', () => {
             return expectSaga(transakSaga, () => undefined)
@@ -224,7 +265,7 @@ describe('when handling the open transak action', () => {
               .put(openTransakFailure('No credits available'))
               .run()
               .then(({ effects }) => {
-                expect(effects.put).toBeUndefined()
+                expect(putActionTypes(effects)).toEqual(['Show toast'])
                 expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
               })
           })
@@ -244,7 +285,7 @@ describe('when handling the open transak action', () => {
             .put(openTransakFailure('Credits are not enabled'))
             .run()
             .then(({ effects }) => {
-              expect(effects.put).toBeUndefined()
+              expect(putActionTypes(effects)).toEqual(['Show toast'])
               expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
             })
         })
@@ -252,6 +293,45 @@ describe('when handling the open transak action', () => {
     })
 
     describe('when not using credits', () => {
+      /**
+       * Transak executes `accept` on a contract it has registered on its own side, addressed by an opaque id.
+       * A trade's signature only authorises the contract it was signed against, so running a V3-signed listing
+       * through the pre-V3 registration reverts on chain — after the buyer has already been charged. Until V3
+       * is registered with Transak there is no id to use, and refusing to open the widget is the only outcome
+       * that does not take someone's money for a purchase that cannot complete.
+       */
+      describe('and the trade was signed against a marketplace Transak does not know', () => {
+        let unregisteredTrade: Trade
+
+        beforeEach(() => {
+          unregisteredTrade = {
+            ...mockTrade,
+            contract: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+          }
+        })
+
+        it('should fail without opening the widget', () => {
+          return (
+            expectSaga(transakSaga, () => undefined)
+              .provide([
+                [select(getWallet), mockWallet],
+                [select(getAddress), mockWallet.address],
+                [select(getIsCreditsEnabled), false],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+              ])
+              // The asset is an NFT, so the trade id reaches the saga through the order, not the asset.
+              .dispatch(openTransak(mockAsset, { ...mockOrder, tradeId: 'mock-trade-id' }))
+              .put(
+                openTransakFailure(`${ContractName.OffChainMarketplaceV3} is not registered with Transak on chainId ${ChainId.MATIC_AMOY}`)
+              )
+              .run({ silenceTimeout: true, timeout: 500 })
+              .then(() => {
+                expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
+              })
+          )
+        })
+      })
+
       describe('and the asset has a trade', () => {
         it('should open the Transak widget with the correct configuration for marketplace v3', () => {
           return expectSaga(transakSaga, () => undefined)
@@ -360,7 +440,7 @@ describe('when handling the open transak action', () => {
         )
         .run()
         .then(({ effects }) => {
-          expect(effects.put).toBeUndefined()
+          expect(putActionTypes(effects)).toEqual(['Show toast'])
           expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
         })
     })

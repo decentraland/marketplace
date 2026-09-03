@@ -6,7 +6,7 @@ import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthori
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
+import { ContractName } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isNFT, isOwnedBy } from '../../../modules/asset/utils'
@@ -17,6 +17,7 @@ import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { getRentalEndDate, hasRentalEnded, isRentalListingExecuted } from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getContractNames } from '../../../modules/vendor'
+import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import { AssetAction } from '../../AssetAction'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
@@ -55,7 +56,7 @@ const BidModal = (props: Props) => {
     network: asset.network
   })
 
-  const offchainBidsContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, asset.chainId)
+  const offchainBidsContract = getLatestOffChainMarketplaceContract(asset.chainId)
 
   if (!wallet || !mana || !bids) {
     return null
