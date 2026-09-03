@@ -98,8 +98,15 @@ body .HomePage {
   box-shadow: none;
 }
 
-.ui.card.AssetCard .AssetImage,
-.ui.card.AssetCard .AssetImage .rarity-background {
+/* The media frame and the plate inside it must round IDENTICALLY, in every state. On hover the frame
+   was picking up 10px on all four corners while the plate kept 12px/12px/0/0, so the plate's square
+   bottom corners protruded past the frame's rounded ones and showed as two light notches over the
+   dark footer. */
+body .ui.card.AssetCard .AssetImage,
+body .ui.card.AssetCard .AssetImage .rarity-background,
+body .ui.card.AssetCard:hover .AssetImage.catalog,
+body .ui.cards > .card.AssetCard:hover .AssetImage.catalog,
+body .ui.card.AssetCard:hover .AssetImage.catalog .rarity-background {
   border-radius: 12px 12px 0 0 !important;
 }
 
@@ -197,10 +204,14 @@ body ul.box-menu.Menu {
   border-radius: 12px;
 }
 
+/* The row carries an explicit width (the category rail's --menu-item-width), so a lateral margin
+   shifted it right without shrinking it: a selected SUBcategory ran 12px past the rail's right edge.
+   `width: auto` lets the margins reduce the box instead of displacing it. */
 body ul.box-menu.Menu > .MenuItem.active {
   background-color: rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   margin: 0 12px;
+  width: auto;
   padding-left: 12px;
 }
 
@@ -386,9 +397,17 @@ body .dui-rarity-filter .dui-array-filter__option:nth-child(8)::before {
  * and since all three children are the full 272px width, the labels, bars and slider all ran into
  * the edges. The tint belongs to the outer panel; the row inside just needs to get out of the way. */
 body .filters-sidebar .bar-chart {
-  background: rgba(0, 0, 0, 0.25);
+  background: transparent;
+  padding: 0;
+}
+
+/* The histogram reads as broken without something to sit in, so the bars get their own rectangle
+   rather than a tint spread over the whole price block. Keeping it on this one element also avoids
+   the stacked-translucency problem: two 25% blacks composited to ~44% and made the top of the block
+   look like a darker lid. */
+body .bar-chart .recharts-responsive-container {
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  padding: 14px 16px 12px;
 }
 
 body .bar-chart .ui.min-max-field {
@@ -458,6 +477,28 @@ body .SignInPage .message a {
    with a white label; the pill can only be matched upstream, where the colour is
    emitted, but whitening the label already carries most of the look and takes
    the label from 3.33:1 to about 11:1. */
+/* The shop draws the rarity as a SATURATED pill with a white label. The marketplace draws the same
+ * rarity twice from inline styles emitted by JS: the pill at 20% opacity and the label at full
+ * strength. At 20% over a translucent footer every rarity composites to nearly the same muted violet,
+ * which is why the collection page reads as one colour.
+ *
+ * The full-strength colour is only reachable as the label's own `color`, so `currentColor` turns it
+ * into the pill fill, and -webkit-text-fill-color paints the glyphs white without disturbing
+ * `color` (which is what currentColor resolves against). This is a stopgap: the honest fix is for
+ * decentraland-ui to emit the rarity at full strength for the fill. */
+body .dui-rarity-badge .wrapper {
+  background-color: transparent !important;
+}
+
 body .dui-rarity-badge .text {
-  color: #ffffff !important;
+  background-color: currentColor;
+  /* A DARK label, where the shop uses white. The shop can use white because its rarity palette is
+     uniformly saturated; the marketplace's runs much paler at the top end (Exotic is #e4ffb8 against
+     the shop's #9cd71e), and white on that is unreadable. Near-black clears AA on all eight tiers,
+     from the pale Exotic down to the purple Legendary. Adopting the shop's palette outright would
+     need a per-rarity hook, and the only one this element carries is a supply string in `title`
+     that would break on any rewording or translation. */
+  -webkit-text-fill-color: #242129;
+  border-radius: 4px;
+  padding: 2px 8px;
 }
