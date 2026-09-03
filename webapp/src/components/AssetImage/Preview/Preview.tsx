@@ -332,6 +332,7 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
+            baseUrl="https://wearable-preview-git-fix-emissive-tonemapp-a30fcd-decentraland1.vercel.app"
             background={Rarity.getColor(rarity)}
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}
@@ -345,7 +346,7 @@ export const Preview: React.FC<Props> = ({
             {...wearablePreviewProps}
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={PreviewUnityMode.MARKETPLACE}
-            unity={!isSocialEmote && isUnityWearablePreviewEnabled}
+            unity={false}
             socialEmote={isSocialEmote ? socialEmote : undefined}
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
