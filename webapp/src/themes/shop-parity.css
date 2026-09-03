@@ -379,10 +379,21 @@ body .dui-rarity-filter .dui-array-filter__option:nth-child(8)::before {
    Price histogram
    ---------------------------------------------------------------------------- */
 
-body .filters-sidebar .bar-chart,
-body .bar-chart .ui.min-max-field {
+/* ONE surface for the whole price block, with an inset.
+ *
+ * This carried the tint on both the outer chart panel and the MIN/MAX row inside it. Two 25% blacks
+ * stacked composite to ~44%, so the top of the block read as a darker lid sitting on a lighter panel,
+ * and since all three children are the full 272px width, the labels, bars and slider all ran into
+ * the edges. The tint belongs to the outer panel; the row inside just needs to get out of the way. */
+body .filters-sidebar .bar-chart {
   background: rgba(0, 0, 0, 0.25);
   border-radius: 8px;
+  padding: 14px 16px 12px;
+}
+
+body .bar-chart .ui.min-max-field {
+  background: transparent;
+  border-radius: 0;
 }
 
 /* The opaque box is recharts' own container, not anything decentraland-ui names:
