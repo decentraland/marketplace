@@ -1,0 +1,196 @@
+/* ============================================================================
+   Shop visual parity — experimental layer
+
+   Goal: moving from the shop to the marketplace should not feel like changing
+   product. Every value here was MEASURED off decentraland.org/shop with a
+   headless browser (computed styles, not eyeballed from a screenshot), so this
+   file is a transcription rather than an interpretation.
+
+   It loads last in themes/index.ts, so it wins on specificity ties without
+   touching the ~90 component stylesheets. Delete the import to revert.
+
+   What the measurements showed, and what surprised us: the shop is NOT a light
+   app. Its `theme.ts` carries `bg: #ffffff`, but that token is legacy and the
+   body actually paints a deep purple radial gradient with LIGHT cards on top.
+   An earlier attempt at this (feat/marketplace-light-reskin) read those tokens
+   and pushed the marketplace towards white, which is why it never converged.
+   ============================================================================ */
+
+:root {
+  /* The two libraries' theme layers. The shop shares this palette family
+     already (its "Neutrals/Soft Black 2" is #242129, the marketplace's --card),
+     so only the surfaces that read as "the page" need to move. */
+
+  /* The outer stop of the page gradient below, so any full-bleed fill still
+     using --background blends into the page edge instead of punching a
+     near-black hole in the purple. */
+  --background: #32134c;
+
+  /* The shop's card footer: 40% black over the page, not a solid slab. */
+  --card: rgba(0, 0, 0, 0.4);
+
+  /* Panels, modals and dropdowns keep a solid surface (text has to stay
+     readable over them) but move onto the purple's dark end. */
+  --secondary: #2b1140;
+  --modal: #2b1140;
+  --card-on-modal: rgba(255, 255, 255, 0.06);
+
+  /* Hairlines. The shop draws them as translucent light so they read the same
+     over both the purple page and a light card. */
+  --divider: rgba(255, 255, 255, 0.12);
+  --clear-divider: rgba(255, 255, 255, 0.4);
+
+  /* --primary stays the marketplace red: the shop uses the same #ff2d55 as its
+     `dclRed`, on the BUY CREDITS gradient and its selected radio dots. */
+}
+
+/* ----------------------------------------------------------------------------
+   The page surface
+   ---------------------------------------------------------------------------- */
+
+/* Transcribed from the shop's body:
+   radial-gradient(61.64% 109.58% at 50% 54.49%, #952dc6, #7c27a8, #642089, #4b1a6b, #32134c)
+   The stops carry no explicit positions there either, so they stay evenly spread. */
+body {
+  background-color: #32134c;
+  background-image: radial-gradient(61.64% 109.58% at 50% 54.49%, #952dc6, #7c27a8, #642089, #4b1a6b, #32134c);
+  background-repeat: no-repeat;
+}
+
+/* Page shells paint their own near-black over the gradient; let it through. */
+body .ui.page,
+body .ui.page.dcl,
+body .AssetBrowse,
+body .HomePage {
+  background: transparent;
+}
+
+/* ----------------------------------------------------------------------------
+   Cards
+
+   The shop's grid card, measured: 12px radius, a 334x188 media plate filled
+   #ecebed with a 1px #cfcdd4 hairline on its three outer edges, and a 112px
+   footer at rgba(0,0,0,0.4) with 16px padding.
+   ---------------------------------------------------------------------------- */
+
+.ui.card.AssetCard {
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.ui.card.AssetCard .AssetImage,
+.ui.card.AssetCard .AssetImage .rarity-background {
+  border-radius: 12px 12px 0 0 !important;
+}
+
+/* One light plate for every item, whatever its rarity: in the shop, rarity is
+   carried by the footer chip alone and never floods the media. The gradient is
+   applied as an inline style from JS (Rarity.getGradient), which is why this
+   has to shout to be heard. */
+.ui.card.AssetCard .AssetImage .rarity-background {
+  background-color: #ecebed !important;
+  background-image: none !important;
+  border-bottom: 1px solid #cfcdd4;
+}
+
+/* The creator line: 10px and a lighter grey, so the item name carries the row.
+   The marketplace had both at 14px, which flattened the hierarchy. */
+.ui.card.AssetCard .creator {
+  font-size: 10px;
+  line-height: 14.3px;
+  color: #a09ba8;
+}
+
+/* ----------------------------------------------------------------------------
+   Filters sidebar
+
+   The shop has no sidebar panel at all: the filter groups sit directly on the
+   purple, separated by hairlines, with white labels. The marketplace wraps each
+   group in a #242129 slab, which on the purple page reads as a large near-black
+   mass fighting the background. Those slabs are the single biggest remaining
+   difference between the two grids.
+
+   AssetFilters.css hardcodes the slab fill at three-class specificity, so these
+   carry a `body` prefix to outrank it. That is deliberate and cheaper to read
+   than !important: it says "the page decides this", not "I give up".
+   ---------------------------------------------------------------------------- */
+
+body .dcl.box.filters-sidebar-box,
+body .dcl.box.special-filter,
+body .dcl.box.asset-status-filter {
+  background: transparent;
+  border: none;
+  padding: 8px 0 16px;
+}
+
+/* Hairline between groups, in the shop's translucent-light idiom so it reads
+   the same wherever the gradient happens to be. */
+body .dcl.box.filters-sidebar-box:not(:last-child),
+body .dcl.box.special-filter:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Group labels. The marketplace greys them to #736e7d, which was legible on
+   near-black; on the purple they nearly vanish. The shop keeps them white. */
+body .special-filter-header,
+body .dui-rarity-filter__name,
+body .filters-sidebar .box-header,
+body .filters-sidebar .dcl.box .box-header > span {
+  color: #ffffff;
+}
+
+/* Chips and option pills. Both libraries pull these from --superGray, so
+   retargeting the two variables covers every one of them at once instead of
+   chasing individual selectors. */
+:root {
+  --superGray: rgba(255, 255, 255, 0.12);
+  --superGrayHovered: rgba(255, 255, 255, 0.2);
+}
+
+body .dui-array-filter__option,
+body .smart-left {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ----------------------------------------------------------------------------
+   Card media hairline
+
+   The shop outlines the light plate on its three outer edges (1px #cfcdd4) so
+   it reads as a physical card over the purple rather than a hole punched in it.
+   ---------------------------------------------------------------------------- */
+
+body .ui.card.AssetCard .AssetImage .rarity-background {
+  border-top: 1px solid #cfcdd4;
+  border-left: 1px solid #cfcdd4;
+  border-right: 1px solid #cfcdd4;
+}
+
+/* ----------------------------------------------------------------------------
+   Categories menu and controls
+
+   themes/components/Menu.css pins the active row to #37333d, a grey that was
+   built for the near-black page. The shop marks its active filter with a
+   translucent light pill instead, which works over any part of the gradient.
+   ---------------------------------------------------------------------------- */
+
+body ul.box-menu.Menu {
+  border-radius: 12px;
+}
+
+body ul.box-menu.Menu > .MenuItem.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  margin: 0 12px;
+  padding-left: 12px;
+}
+
+/* Search and dropdown fields: the shop uses a translucent light fill over the
+   purple rather than a darker-than-page well, and its 8px button radius. */
+body .ui.fluid.search.selection.dropdown,
+body .ui.search .ui.input > input,
+body .ui.selection.dropdown {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
