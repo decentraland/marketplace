@@ -20,7 +20,8 @@ import {
   getOnChainTrade,
   getValueForTradeAsset,
   estimateTradeGas,
-  getLatestOffChainMarketplaceContract
+  getLatestOffChainMarketplaceContract,
+  getDeployedOffChainMarketplaceContracts
 } from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
@@ -442,6 +443,38 @@ describe('when estimating trade gas', () => {
 
     it('should propagate the error', async () => {
       return expect(estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
+    })
+  })
+})
+
+/**
+ * Asserted against the versions themselves rather than against the enumerator's own output. contract/sagas
+ * builds its expected authorizations by calling this function, so a regression in it would move both sides
+ * of that comparison and pass — this is the check that would not.
+ */
+describe('when listing every off-chain marketplace deployed on a chain', () => {
+  describe('and the chain has all three versions', () => {
+    it('should return them newest first', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_SEPOLIA).map(({ contractName }) => contractName)).toEqual([
+        ContractName.OffChainMarketplaceV3,
+        ContractName.OffChainMarketplaceV2,
+        ContractName.OffChainMarketplace
+      ])
+    })
+  })
+
+  describe('and the chain has no V3 deployment', () => {
+    it('should return only the versions that are actually there', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_MAINNET).map(({ contractName }) => contractName)).toEqual([
+        ContractName.OffChainMarketplaceV2,
+        ContractName.OffChainMarketplace
+      ])
+    })
+  })
+
+  describe('and the chain has no off-chain marketplace at all', () => {
+    it('should return nothing instead of throwing', () => {
+      expect(getDeployedOffChainMarketplaceContracts(ChainId.ARBITRUM_MAINNET)).toEqual([])
     })
   })
 })

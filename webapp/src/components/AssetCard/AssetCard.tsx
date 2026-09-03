@@ -250,7 +250,7 @@ const AssetCard = (props: Props) => {
         {catalogItemInformation.extraInformation && <span className="extraInformation">{catalogItemInformation.extraInformation}</span>}
       </div>
     ) : null
-  }, [asset, catalogItemInformation, showsPeggedMintPrice, isIAP])
+  }, [asset, catalogItemInformation, showsPeggedMintPrice, isIAP, marketplaceAddress])
 
   const setWrapperRef = useCallback(
     (node: HTMLDivElement | null) => {

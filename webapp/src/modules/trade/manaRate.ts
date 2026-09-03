@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { getContract, getContractName } from 'decentraland-transactions'
 
 /**
  * The MANA/USD rate a USD-pegged listing will actually settle at.
@@ -48,12 +49,18 @@ function cacheKey(chainId: ChainId, marketplaceAddress: string): string {
 }
 
 async function readRate(chainId: ChainId, marketplaceAddress: string): Promise<ManaUsdRate> {
+  // Resolve the address through the contract registry before calling it. `marketplaceAddress` reaches here
+  // from a server-supplied `trade.contract`, and this is the one path that would otherwise dial it directly:
+  // every transacting path re-resolves and fails closed already. Two things this prevents — pricing off a
+  // contract nobody deployed, and ethers v5 treating a non-address string as an ENS name to go and look up.
+  // An unknown address throws, which the caller renders as "price unavailable".
+  const marketplaceContract = getContract(getContractName(marketplaceAddress), chainId)
   const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get a provider to read the MANA/USD oracle')
   }
   const web3 = new ethers.providers.Web3Provider(provider)
-  const marketplace = new ethers.Contract(marketplaceAddress, MARKETPLACE_ABI, web3)
+  const marketplace = new ethers.Contract(marketplaceContract.address, MARKETPLACE_ABI, web3)
   const aggregatorAddress: string = await marketplace.manaUsdAggregator()
 
   const aggregator = new ethers.Contract(aggregatorAddress, AGGREGATOR_ABI, web3)

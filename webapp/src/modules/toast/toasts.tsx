@@ -153,6 +153,25 @@ export function getClaimNameWithCreditsCostUnavailableToast(): Omit<Toast, 'id'>
   }
 }
 
+/**
+ * The card-payment flow could not be opened.
+ *
+ * Every failure in the Transak saga used to dispatch OPEN_TRANSAK_FAILURE into nothing — no reducer, no
+ * handler — so the widget simply never appeared and the buyer was told why by nobody. This PR routes the
+ * first EXPECTED failure into that path (a listing whose marketplace version Transak has no registration
+ * for), which turns a dead end into a silence someone will actually hit.
+ */
+export function getOpenTransakFailureToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.WARN,
+    title: t('toast.open_transak_failure.title'),
+    body: <p>{t('toast.open_transak_failure.body')}</p>,
+    icon: <Icon size="big" name="exclamation circle" />,
+    closable: true,
+    timeout: 15000
+  }
+}
+
 export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,

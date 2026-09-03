@@ -64,24 +64,6 @@ describe('when handling the fetch contracts request', () => {
         vendor: VendorName.DECENTRALAND
       }
 
-      const offChainMarketplaceEthereum: Contract = {
-        address: 'offChainMarketplaceEthereumAddress',
-        category: null,
-        chainId: ChainId.ETHEREUM_MAINNET,
-        name: contractNames.OFF_CHAIN_MARKETPLACE,
-        network: Network.ETHEREUM,
-        vendor: VendorName.DECENTRALAND
-      }
-
-      const offChainMarketplaceMatic: Contract = {
-        address: 'offChainMarketplaceMaticAddress',
-        category: null,
-        chainId: ChainId.MATIC_MAINNET,
-        name: contractNames.OFF_CHAIN_MARKETPLACE,
-        network: Network.MATIC,
-        vendor: VendorName.DECENTRALAND
-      }
-
       const legacyMarketplace: Contract = {
         address: 'legacyMarketplaceAddress',
         category: null,
@@ -165,20 +147,6 @@ describe('when handling the fetch contracts request', () => {
               network: Network.MATIC
             }),
             marketplaceMatic
-          ],
-          [
-            select(getContract, {
-              name: contractNames.OFF_CHAIN_MARKETPLACE,
-              network: Network.ETHEREUM
-            }),
-            offChainMarketplaceEthereum
-          ],
-          [
-            select(getContract, {
-              name: contractNames.OFF_CHAIN_MARKETPLACE,
-              network: Network.MATIC
-            }),
-            offChainMarketplaceMatic
           ],
           [
             select(getContract, {

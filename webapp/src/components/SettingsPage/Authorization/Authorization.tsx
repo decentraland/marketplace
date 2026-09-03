@@ -6,10 +6,10 @@ import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { isAuthorized } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
+import { getDeployedOffChainMarketplaceContracts } from '../../../utils/trades'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
@@ -43,21 +43,10 @@ const Authorization = (props: Props) => {
   let contract
   let name: string = ''
   // Every off-chain marketplace version, so an approval granted to any of them is named here instead of
-  // falling through to the generic lookup, which does not know these addresses. Each lookup is guarded
-  // because getContract THROWS for a version a chain does not have, and V3 is testnet-only for now.
-  const offChainMarketplaces = [
-    ContractName.OffChainMarketplace,
-    ContractName.OffChainMarketplaceV2,
-    ContractName.OffChainMarketplaceV3
-  ].flatMap(contractName => {
-    try {
-      return [{ contractName, contract: getDecentralandContract(contractName, authorization.chainId) }]
-    } catch (_error) {
-      return []
-    }
-  })
-
-  const offChainMarketplace = offChainMarketplaces.find(({ contract: { address } }) => authorizedAddress === address)
+  // falling through to the generic lookup, which does not know these addresses.
+  const offChainMarketplace = getDeployedOffChainMarketplaceContracts(authorization.chainId).find(
+    ({ contract: { address } }) => authorizedAddress === address
+  )
   if (offChainMarketplace) {
     contract = offChainMarketplace.contract
     // The VERSION, not contract.name: every version shares one on-chain name per network

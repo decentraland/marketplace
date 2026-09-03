@@ -14,6 +14,30 @@ jest.mock('decentraland-dapps/dist/lib/eth', () => ({
   getNetworkProvider: jest.fn().mockResolvedValue({ request: jest.fn() })
 }))
 
+// The registry gate the module now runs the address through. Mirrors the real pair: getContractName maps a
+// known address to its version and THROWS for an unknown one, which is what keeps an attacker-supplied
+// address from being dialled.
+jest.mock('decentraland-transactions', () => ({
+  ContractName: { OffChainMarketplaceV2: 'OffChainMarketplaceV2', OffChainMarketplaceV3: 'OffChainMarketplaceV3' },
+  getContractName: (address: string) => {
+    const known: Record<string, string> = {
+      '0xmarketplace': 'OffChainMarketplaceV2',
+      '0xothermarketplace': 'OffChainMarketplaceV3'
+    }
+    const name = known[address.toLowerCase()]
+    if (!name) {
+      throw new Error(`Could not get a valid contract name for address ${address}`)
+    }
+    return name
+  },
+  getContract: (name: string) => ({
+    address: name === 'OffChainMarketplaceV3' ? '0xothermarketplace' : '0xmarketplace',
+    name,
+    version: '1.0.0',
+    abi: []
+  })
+}))
+
 jest.mock('ethers', () => {
   // Annotated rather than asserted — see the note in the component specs.
   const actual: typeof import('ethers') = jest.requireActual('ethers')
@@ -84,6 +108,17 @@ describe('when reading the MANA/USD rate', () => {
     expect(manaUsdAggregator).toHaveBeenCalledTimes(2)
     expect(manaUsdAggregator).toHaveBeenCalledWith(MARKETPLACE)
     expect(manaUsdAggregator).toHaveBeenCalledWith(OTHER_MARKETPLACE)
+  })
+
+  /**
+   * `marketplaceAddress` arrives from a server-supplied `trade.contract`. Every transacting path already
+   * re-resolves it; this is the one read that would otherwise dial the raw string, and ethers v5 would treat
+   * a non-address as an ENS name to go and look up.
+   */
+  it('should refuse an address the contract registry does not know', async () => {
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET, '0xnotamarketplace')).rejects.toThrow(/valid contract name/)
+
+    expect(manaUsdAggregator).not.toHaveBeenCalled()
   })
 
   it('should reject a non-positive rate instead of dividing by it', async () => {

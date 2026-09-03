@@ -64,12 +64,6 @@ const OFF_CHAIN_MARKETPLACE_SETTINGS_CONTRACT_NAMES = [
 ]
 
 /**
- * The newest off-chain marketplace deployed on a chain.
- *
- * `getContract` THROWS for a version that is not deployed on the given chain rather than returning a
- * falsy value, which is why each candidate is tried in turn.
- */
-/**
  * Every off-chain marketplace version deployed on a chain, newest first.
  *
  * Distinct from {@link getLatestOffChainMarketplaceContract}, which answers "where do NEW listings go".
@@ -91,6 +85,12 @@ export function getDeployedOffChainMarketplaceContracts(chainId: ChainId): { con
   )
 }
 
+/**
+ * The newest off-chain marketplace deployed on a chain.
+ *
+ * `getContract` THROWS for a version that is not deployed on the given chain rather than returning a
+ * falsy value, which is why each candidate is tried in turn.
+ */
 export function getLatestOffChainMarketplaceContract(chainId: ChainId): ContractData {
   for (const contractName of OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES) {
     try {
@@ -110,17 +110,6 @@ export async function getOffChainMarketplaceContract(chainId: ChainId) {
   const { address, abi } = getLatestOffChainMarketplaceContract(chainId)
   const instance = new ethers.Contract(address, abi, new ethers.providers.Web3Provider(provider))
   return instance
-}
-
-export async function getOffChainMarketplaceContractInstance(chainId: ChainId) {
-  const provider = await getNetworkProvider(chainId)
-  if (!provider) {
-    throw new Error('Could not get connected provider')
-  }
-
-  const contractData = getLatestOffChainMarketplaceContract(chainId)
-  const contract = new ethers.Contract(contractData.address, contractData.abi, new ethers.providers.Web3Provider(provider))
-  return { contractData, contract }
 }
 
 export function getValueForTradeAsset(asset: TradeAsset): string {
@@ -203,7 +192,7 @@ export function getOnChainTrade(trade: Trade, sentBeneficiaryAddress: string): O
   }
 }
 
-export async function getTradeSignature(trade: Omit<TradeCreation, 'signature' | 'contract'>) {
+export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>) {
   const marketplaceContract: ContractData = getLatestOffChainMarketplaceContract(trade.chainId)
 
   const signer = (await getSigner()) as ethers.providers.JsonRpcSigner

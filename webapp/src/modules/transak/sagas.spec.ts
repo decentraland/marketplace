@@ -160,6 +160,15 @@ const mockTrade: Trade = {
   ]
 }
 
+/**
+ * The action types still queued after redux-saga-test-plan has consumed the ones a `.put(...)` expectation
+ * matched. These specs used to assert nothing else was dispatched; the failure toast is now deliberately
+ * dispatched alongside, because OPEN_TRANSAK_FAILURE has no reducer and on its own reaches no one.
+ */
+function putActionTypes(effects: { put?: unknown[] }): string[] {
+  return ((effects.put ?? []) as { payload: { action: { type: string } } }[]).map(effect => effect.payload.action.type)
+}
+
 describe('when handling the open transak action', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -256,7 +265,7 @@ describe('when handling the open transak action', () => {
               .put(openTransakFailure('No credits available'))
               .run()
               .then(({ effects }) => {
-                expect(effects.put).toBeUndefined()
+                expect(putActionTypes(effects)).toEqual(['Show toast'])
                 expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
               })
           })
@@ -276,7 +285,7 @@ describe('when handling the open transak action', () => {
             .put(openTransakFailure('Credits are not enabled'))
             .run()
             .then(({ effects }) => {
-              expect(effects.put).toBeUndefined()
+              expect(putActionTypes(effects)).toEqual(['Show toast'])
               expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
             })
         })
@@ -431,7 +440,7 @@ describe('when handling the open transak action', () => {
         )
         .run()
         .then(({ effects }) => {
-          expect(effects.put).toBeUndefined()
+          expect(putActionTypes(effects)).toEqual(['Show toast'])
           expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
         })
     })

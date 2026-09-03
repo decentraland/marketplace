@@ -1246,6 +1246,10 @@
       "title": "暂时不可用",
       "body": "由于网络费用较高，使用积分注册 NAME 暂时暂停。请稍后再试。"
     },
+    "open_transak_failure": {
+      "title": "暂不支持银行卡支付",
+      "body": "此商品暂不支持银行卡支付。你仍然可以使用 MANA 或积分购买。"
+    },
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
       "view_transaction": "查看交易"

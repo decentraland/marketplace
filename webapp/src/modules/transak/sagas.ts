@@ -8,6 +8,7 @@ import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
@@ -17,6 +18,7 @@ import { API_SIGNER } from '../../lib/api'
 import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
+import { getOpenTransakFailureToast } from '../toast/toasts'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
@@ -34,30 +36,27 @@ import { encodeTokenId } from './utils'
  * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
  * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
  */
+/**
+ * The one registration that existed before V3: Transak registered a single contract per chain, and both V1
+ * and V2 were served by it. Named once and referenced twice below so "the same registrations" is a fact of
+ * the code rather than a comment above two identical literals.
+ */
+const PRE_V3_MARKETPLACE_CONTRACT_IDS: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+  [Network.MATIC]: {
+    [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
+    [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
+  },
+  [Network.ETHEREUM]: {
+    [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
+    [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+  }
+}
+
 const OffChainMarketplaceContractIds: Partial<
   Record<ContractName, Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM>>
 > = {
-  [ContractName.OffChainMarketplace]: {
-    [Network.MATIC]: {
-      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
-      [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
-    },
-    [Network.ETHEREUM]: {
-      [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
-      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
-    }
-  },
-  // The same registrations: before V3 both versions were served by one id per chain.
-  [ContractName.OffChainMarketplaceV2]: {
-    [Network.MATIC]: {
-      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
-      [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
-    },
-    [Network.ETHEREUM]: {
-      [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
-      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
-    }
-  }
+  [ContractName.OffChainMarketplace]: PRE_V3_MARKETPLACE_CONTRACT_IDS,
+  [ContractName.OffChainMarketplaceV2]: PRE_V3_MARKETPLACE_CONTRACT_IDS
 }
 const CreditsManagerContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC> = {
   [Network.MATIC]: {
@@ -280,6 +279,9 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         yield call([transak, 'openWidget'], { ...customizationOptions, walletAddress: address, network: Network.MATIC })
       }
     } catch (error) {
+      // Tell the buyer. OPEN_TRANSAK_FAILURE has no reducer or handler, so on its own it is a dead end —
+      // the widget just never opens.
+      yield put(showToast(getOpenTransakFailureToast()))
       yield put(openTransakFailure(error instanceof Error ? error.message : 'Unknown error'))
     }
   }

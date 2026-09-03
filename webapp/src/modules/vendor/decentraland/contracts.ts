@@ -7,7 +7,6 @@ export const LEGACY_MARKETPLACE_MAINNET_CONTRACT = '0xb3bca6f5052c7e24726b44da74
 export enum ContractName {
   MANA = 'MANA',
   MARKETPLACE = 'Marketplace',
-  OFF_CHAIN_MARKETPLACE = 'OffChainMarketplace',
   LEGACY_MARKETPLACE = 'LegacyMarketplace',
   CREDITS_MANAGER = 'CreditsManager',
   BIDS = 'Bids',
@@ -469,14 +468,6 @@ const localContracts = {
       chainId: ChainId.ETHEREUM_SEPOLIA
     },
     {
-      name: ContractName.OFF_CHAIN_MARKETPLACE,
-      address: getContract(CN.OffChainMarketplace, ChainId.ETHEREUM_SEPOLIA).address,
-      vendor: 'decentraland',
-      category: null,
-      network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_SEPOLIA
-    },
-    {
       name: ContractName.CREDITS_MANAGER,
       address: getContract(CN.CreditsManager, ChainId.MATIC_AMOY).address,
       vendor: 'decentraland',
@@ -512,14 +503,6 @@ const localContracts = {
       name: ContractName.MARKETPLACE,
       address: getContract(CN.MarketplaceV2, ChainId.MATIC_AMOY).address,
       label: 'MarketplaceV2',
-      vendor: 'decentraland',
-      category: null,
-      network: Network.MATIC,
-      chainId: ChainId.MATIC_AMOY
-    },
-    {
-      name: ContractName.OFF_CHAIN_MARKETPLACE,
-      address: getContract(CN.OffChainMarketplace, ChainId.MATIC_AMOY).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -645,14 +628,6 @@ const localContracts = {
       chainId: ChainId.ETHEREUM_MAINNET
     },
     {
-      name: ContractName.OFF_CHAIN_MARKETPLACE,
-      address: getContract(CN.OffChainMarketplace, ChainId.ETHEREUM_MAINNET).address,
-      vendor: 'decentraland',
-      category: null,
-      network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_MAINNET
-    },
-    {
       name: ContractName.CREDITS_MANAGER,
       address: getContract(CN.CreditsManager, ChainId.MATIC_MAINNET).address,
       vendor: 'decentraland',
@@ -687,14 +662,6 @@ const localContracts = {
     {
       name: ContractName.MARKETPLACE,
       address: getContract(CN.MarketplaceV2, ChainId.MATIC_MAINNET).address,
-      vendor: 'decentraland',
-      category: null,
-      network: Network.MATIC,
-      chainId: ChainId.MATIC_MAINNET
-    },
-    {
-      name: ContractName.OFF_CHAIN_MARKETPLACE,
-      address: getContract(CN.OffChainMarketplace, ChainId.MATIC_MAINNET).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
