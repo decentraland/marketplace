@@ -379,11 +379,19 @@ body .dui-rarity-filter .dui-array-filter__option:nth-child(8)::before {
    Price histogram
    ---------------------------------------------------------------------------- */
 
-body .bar-chart .chart,
-body .bar-chart > div:first-child,
-body .filters-sidebar .bar-chart {
+body .filters-sidebar .bar-chart,
+body .bar-chart .ui.min-max-field {
   background: rgba(0, 0, 0, 0.25);
   border-radius: 8px;
+}
+
+/* The opaque box is recharts' own container, not anything decentraland-ui names:
+   #161419, which stayed as a black rectangle after the surrounding chart had
+   already gone translucent. The bars are drawn as SVG on top and keep their fill. */
+body .bar-chart .recharts-responsive-container,
+body .bar-chart .recharts-wrapper,
+body .bar-chart .recharts-surface {
+  background: transparent;
 }
 
 /* ----------------------------------------------------------------------------
