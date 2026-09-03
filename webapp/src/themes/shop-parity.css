@@ -191,8 +191,14 @@ body .smart-left {
    translucent light pill instead, which works over any part of the gradient.
    ---------------------------------------------------------------------------- */
 
+/* The shop's category list sits directly on the page under a hairline, like every other filter
+   group; the marketplace wrapped it in a --card panel, which made it the only boxed thing in the
+   rail and the last obvious difference between the two sidebars. */
 body ul.box-menu.Menu {
-  border-radius: 12px;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
+  padding-bottom: 16px;
 }
 
 /* The row carries an explicit width (the category rail's --menu-item-width), so a lateral margin
@@ -520,4 +526,59 @@ body .dui-rarity-badge .text {
 
 body .HoverPreview {
   border-radius: 12px 12px 0 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Card media base
+
+   The wash is translucent (4% at the centre, 62% at the edge), so what it sits
+   ON decides whether it reads as a pastel or as mud. The shop sets only
+   `background-image` and leaves its Media component's own #ecebed underneath,
+   which is what makes its grid pastel. Dropping that base here left the same
+   rgba values compositing over the dark card and the purple page, and every
+   rarity came out muddy and nearly identical.
+   ---------------------------------------------------------------------------- */
+
+body .ui.card.AssetCard .AssetImage .rarity-background {
+  background-color: #ecebed;
+}
+
+/* ----------------------------------------------------------------------------
+   Content width
+
+   Measured at a 2560 viewport: the shop holds its content at 1652px and centres
+   it, so the grid stays 5 columns of 258px. The marketplace ran full width and
+   reached 8 columns of 255px on the same screen, which is the single biggest
+   reason the two catalogues do not read as the same product.
+   ---------------------------------------------------------------------------- */
+
+body .dcl.page.AssetBrowse,
+body .dcl.page.HomePage {
+  max-width: 1652px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The Semantic container inside the page has its own width rules; let it fill the capped page
+   rather than fighting it. The map view opts out: a map wants the whole screen. */
+body .dcl.page.AssetBrowse > .ui.container,
+body .dcl.page.HomePage > .ui.container {
+  max-width: 100%;
+}
+
+body .dcl.page.AssetBrowse.is-map {
+  max-width: none;
+}
+
+/* The lists heart sits on the right of the sub-nav, next to the CTA, the way the shop places it. */
+body .my-lists-heart {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 20px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+body .my-lists-heart:hover {
+  opacity: 0.8;
 }

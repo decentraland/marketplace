@@ -80,14 +80,6 @@ const Navigation = (props: Props) => {
               <Link to={locations.defaultCurrentAccount()}>
                 <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
               </Link>
-              {/* The shop reaches its lists through a heart rather than a labelled tab. The label stays
-                  as the accessible name, so the tab is still announced as "My Lists" and still reads
-                  as one to a screen reader. */}
-              <Link to={locations.lists()} aria-label={t('navigation.my_lists')} title={t('navigation.my_lists')}>
-                <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
-                  <Icon name="heart outline" fitted />
-                </Tabs.Tab>
-              </Link>
               <Mobile>
                 <Link to={locations.activity()}>
                   <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
@@ -101,6 +93,12 @@ const Navigation = (props: Props) => {
             <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
+            {/* The shop reaches its lists through a heart on the right of the bar, after the CTA,
+                rather than a labelled tab in the strip. The label stays as the accessible name, so the
+                control is still announced as "My Lists" to a screen reader. */}
+            <Link to={locations.lists()} className="my-lists-heart" aria-label={t('navigation.my_lists')} title={t('navigation.my_lists')}>
+              <Icon name={activeTab === NavigationTab.MY_LISTS ? 'heart' : 'heart outline'} fitted />
+            </Link>
           </Tabs.Right>
         ) : null}
       </Tabs>
