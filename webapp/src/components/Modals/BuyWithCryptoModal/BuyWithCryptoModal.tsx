@@ -235,12 +235,13 @@ export const BuyWithCryptoModal = (props: Props) => {
         const priceToCheck = price // Use price
 
         if (selectedToken.symbol === 'MANA' && wallet) {
-          // wants to buy a L2 item with ETH MANA (through the provider)
-          if (asset.network === Network.MATIC && getNetwork(selectedChain) === Network.ETHEREUM) {
-            canBuy = wallet.networks[Network.ETHEREUM].mana >= +ethers.utils.formatEther(priceToCheck)
-          } else {
-            canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(priceToCheck)
-          }
+          // MANA is spent on the chain the user pays from (selectedChain); when it differs from the
+          // asset's chain the purchase goes through the cross-chain provider and the source amount
+          // is fromAmount, so the balance check must look at the payment chain, not the asset's.
+          const paymentNetwork = getNetwork(selectedChain)
+          const requiredAmount =
+            paymentNetwork !== asset.network && fromAmount ? Number(fromAmount) : +ethers.utils.formatEther(priceToCheck)
+          canBuy = wallet.networks[paymentNetwork].mana >= requiredAmount
           if (!canBuy) {
             setInsufficientToken(selectedToken)
           }
@@ -857,7 +858,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   route={route}
                   routeFeeCost={routeFeeCost}
                   fromAmount={fromAmount}
-                  isLoading={isFetchingRoute || isFetchingGasCost || (shouldUseCrossChainProvider && !route)}
+                  isLoading={isFetchingRoute || isFetchingGasCost || (shouldUseCrossChainProvider && !route && !routeFailed)}
                   gasCost={gasCost}
                   manaTokenOnSelectedChain={manaTokenOnAssetChain}
                   routeTotalUSDCost={routeTotalUSDCost}
