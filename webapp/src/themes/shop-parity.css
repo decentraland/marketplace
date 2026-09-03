@@ -50,11 +50,29 @@
 
 /* Transcribed from the shop's body:
    radial-gradient(61.64% 109.58% at 50% 54.49%, #952dc6, #7c27a8, #642089, #4b1a6b, #32134c)
-   The stops carry no explicit positions there either, so they stay evenly spread. */
-body {
+   The stops carry no explicit positions there either, so they stay evenly spread.
+ *
+ * Two deliberate departures from where the shop puts it, both forced by this app:
+ *
+ * 1. It goes on <html>, not <body>. ui2's DclThemeProvider mounts MUI's CssBaseline, which sets
+ *    `body { background-color }` from the theme palette at RUNTIME. Emotion injects that after this
+ *    stylesheet, so on a plain `body` selector it wins the tie and the near-black comes back. <html>
+ *    is nobody else's, so the gradient survives there without an !important shouting match. The one
+ *    !important below is still needed to stop CssBaseline painting over it.
+ *
+ * 2. `background-attachment: fixed`. The shop lets the gradient stretch over its full body height;
+ *    here <body> stops at the viewport while the content scrolls past it, so a stretched gradient
+ *    covered only the first screen and everything below fell back to flat colour. Anchoring it to
+ *    the viewport covers any page length and reads the same inside any given screenful. */
+html {
   background-color: #32134c;
   background-image: radial-gradient(61.64% 109.58% at 50% 54.49%, #952dc6, #7c27a8, #642089, #4b1a6b, #32134c);
   background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body {
+  background: transparent !important;
 }
 
 /* Page shells paint their own near-black over the gradient; let it through. */
@@ -193,4 +211,19 @@ body .ui.search .ui.input > input,
 body .ui.selection.dropdown {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+}
+
+/* ----------------------------------------------------------------------------
+   Homepage panels
+
+   The rankings and recently-sold blocks are full-width #242129 slabs. On the
+   near-black page they read as a slight lift; on the purple they read as two
+   large holes, which is what made the lower half of the homepage look like a
+   different site from the top half.
+   ---------------------------------------------------------------------------- */
+
+body .rankings-card,
+body .recently-sold-card {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
 }
