@@ -229,9 +229,15 @@ export async function estimateTradeGas(
   const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(tradeId)
   // Build the trade data
   const tradeToAccept = getOnChainTrade(trade, buyerAddress)
-  // Estimate the gas
-  const offchainContractName = tradeContractAddress ? getContractName(tradeContractAddress) : ContractName.OffChainMarketplace
-  const contract = getContract(offchainContractName, chainId)
+  // Estimate against the contract this trade actually settles on. The caller's address wins when given,
+  // but the fallback is the trade's own `contract`, never a fixed version: estimating a V2 or V3 trade
+  // against V1 measures a call that would revert, and `accept` reverting is exactly what a buyer needs the
+  // estimate to warn them about. Fail closed if neither is available rather than guess a version.
+  const settlementAddress = tradeContractAddress ?? trade.contract
+  if (!settlementAddress) {
+    throw new Error(`Trade ${tradeId} has no settlement contract to estimate against`)
+  }
+  const contract = getContract(getContractName(settlementAddress), chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
   return c.estimateGas.accept([tradeToAccept], { from: buyerAddress })
 }

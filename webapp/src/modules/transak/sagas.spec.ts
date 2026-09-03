@@ -210,6 +210,38 @@ describe('when handling the open transak action', () => {
           })
         })
 
+        /**
+         * The credits route executes through the CreditsManager, which is what Transak has registered there,
+         * and which resolves the marketplace from the trade on chain itself. A version Transak has no direct
+         * registration for must therefore NOT block this route — only the direct `accept` route needs one.
+         */
+        describe('and the trade was signed against a marketplace Transak has no registration for', () => {
+          let unregisteredTrade: Trade
+
+          beforeEach(() => {
+            unregisteredTrade = {
+              ...mockTrade,
+              contract: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+            }
+          })
+
+          it('should still open the widget, because credits do not go through that registration', () => {
+            return expectSaga(transakSaga, () => undefined)
+              .provide([
+                [select(getWallet), mockWallet],
+                [select(getAddress), mockWallet.address],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, mockWallet.address), mockCredits],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+              ])
+              .dispatch(openTransak(mockAsset, mockOrder, true))
+              .run({ silenceTimeout: true, timeout: 500 })
+              .then(() => {
+                expect(Transak.prototype.openWidget).toHaveBeenCalled()
+              })
+          })
+        })
+
         describe('and the user does not have enough credits', () => {
           it('should throw an error', () => {
             return expectSaga(transakSaga, () => undefined)

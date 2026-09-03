@@ -384,6 +384,37 @@ describe('when estimating trade gas', () => {
     jest.clearAllMocks()
   })
 
+  /**
+   * The caller does not always know the settlement contract, and the fallback used to be V1 — so a V2 or V3
+   * trade was measured against a contract its signature does not authorise. That estimates a call that would
+   * revert, which is precisely what the buyer needs the estimate to surface.
+   */
+  describe('and the caller does not pass a settlement contract', () => {
+    beforeEach(() => {
+      mockEstimateGas.mockResolvedValue(ethers.BigNumber.from('100000'))
+    })
+
+    it('should estimate against the contract the trade settles on', async () => {
+      await estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)
+
+      expect(ethers.Contract).toHaveBeenCalledWith(
+        getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+        expect.anything(),
+        provider
+      )
+    })
+
+    it('should not fall back to a fixed version', async () => {
+      await estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)
+
+      expect(ethers.Contract).not.toHaveBeenCalledWith(
+        getContract(ContractName.OffChainMarketplace, ChainId.ETHEREUM_SEPOLIA).address,
+        expect.anything(),
+        expect.anything()
+      )
+    })
+  })
+
   describe.skip('when the gas estimation succeeds', () => {
     beforeEach(() => {
       mockEstimateGas.mockResolvedValue(ethers.BigNumber.from('100000'))

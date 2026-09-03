@@ -128,18 +128,11 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (tradeId && wallet?.address) {
-        // Off-chain marketplace. The trade has to be read BEFORE the Transak contract id is chosen: the id and
-        // the ABI both depend on which marketplace version this particular listing was signed against.
+        // Off-chain marketplace. The trade is read first because which marketplace version this listing was
+        // signed against decides the Transak registration and the ABI — but only on the direct route; the
+        // credits route goes through the CreditsManager and needs neither.
         const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
         const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
-        const marketplaceName = getContractName(trade.contract)
-        contractId = OffChainMarketplaceContractIds[marketplaceName]?.[asset.network]?.[asset.chainId]
-        if (!contractId) {
-          // Fail closed. Executing against another version's registration would send `accept` to a contract the
-          // signature does not authorise, so the purchase reverts after the buyer has already paid Transak.
-          throw new Error(`${marketplaceName} is not registered with Transak on chainId ${asset.chainId}`)
-        }
-        const { abi } = getContract(marketplaceName, asset.chainId)
 
         // if credits are enabled and useCredits is true, we need to use credits
         if (useCredits && credits) {
@@ -164,9 +157,19 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
           // encode useCredits function data
           calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
         } else {
-          // native call to marketplace
-          const MarketplaveV3Interface = new ethers.utils.Interface(abi)
-          calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
+          // Native call to the marketplace: Transak executes `accept` on the contract itself, so it needs a
+          // registration for THIS version. The credits route above does not — the CreditsManager is the
+          // registered contract there, and it resolves the marketplace from the trade on chain.
+          const marketplaceName = getContractName(trade.contract)
+          contractId = OffChainMarketplaceContractIds[marketplaceName]?.[asset.network]?.[asset.chainId]
+          if (!contractId) {
+            // Fail closed. Executing against another version's registration would send `accept` to a contract
+            // the signature does not authorise, so the purchase reverts after the buyer has already paid.
+            throw new Error(`${marketplaceName} is not registered with Transak on chainId ${asset.chainId}`)
+          }
+          const { abi } = getContract(marketplaceName, asset.chainId)
+          const marketplaceInterface = new ethers.utils.Interface(abi)
+          calldata = marketplaceInterface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
         }
       } else if (order && isNFT(asset)) {
         // Legacy Marketplace
