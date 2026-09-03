@@ -55,16 +55,6 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const offChainMarketplaceEthereum = getContract({
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.ETHEREUM
-  })
-
-  const offChainMarketplaceMatic = getContract({
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.MATIC
-  })
-
   const bidsEthereum = getContract({
     name: contractNames.BIDS,
     network: Network.ETHEREUM
@@ -96,8 +86,6 @@ const SettingsPage = (props: Props) => {
     !collectionStore ||
     !marketplaceEthereum ||
     !marketplaceMatic ||
-    !offChainMarketplaceEthereum ||
-    !offChainMarketplaceMatic ||
     !bidsEthereum ||
     !bidsMatic ||
     !manaEthereum ||

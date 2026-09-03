@@ -51,16 +51,19 @@ const Authorization = (props: Props) => {
     ContractName.OffChainMarketplaceV3
   ].flatMap(contractName => {
     try {
-      return [getDecentralandContract(contractName, authorization.chainId)]
+      return [{ contractName, contract: getDecentralandContract(contractName, authorization.chainId) }]
     } catch (_error) {
       return []
     }
   })
 
-  const offChainMarketplace = offChainMarketplaces.find(({ address }) => authorizedAddress === address)
+  const offChainMarketplace = offChainMarketplaces.find(({ contract: { address } }) => authorizedAddress === address)
   if (offChainMarketplace) {
-    contract = offChainMarketplace
-    name = contract.name
+    contract = offChainMarketplace.contract
+    // The VERSION, not contract.name: every version shares one on-chain name per network
+    // ("DecentralandMarketplaceEthereum"), so naming them that way renders a page of identical rows with no
+    // way to tell which approval is which — or which one to revoke.
+    name = offChainMarketplace.contractName
   } else {
     contract = getContract({ address: authorizedAddress })
     if (contract) {
