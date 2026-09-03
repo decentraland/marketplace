@@ -25,18 +25,6 @@ import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
 import { encodeTokenId } from './utils'
 
 /**
- * Transak's own id for each marketplace contract it will execute against. These are registrations on
- * Transak's side, not addresses, so a contract Transak has never been told about simply has no id here.
- *
- * Keyed by marketplace VERSION as well as chain. A trade carries the contract it was signed against, and
- * Transak has to execute `accept` on that same contract — the signature is bound to it. A single id per chain
- * cannot serve two versions at once: pointing it at V3 would break every V2-signed listing, and leaving it on
- * the older one breaks the V3 ones.
- *
- * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
- * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
- */
-/**
  * The one registration that existed before V3: Transak registered a single contract per chain, and both V1
  * and V2 were served by it. Named once and referenced twice below so "the same registrations" is a fact of
  * the code rather than a comment above two identical literals.
@@ -52,6 +40,18 @@ const PRE_V3_MARKETPLACE_CONTRACT_IDS: Pick<Record<Network, Partial<Record<Chain
   }
 }
 
+/**
+ * Transak's own id for each marketplace contract it will execute against. These are registrations on
+ * Transak's side, not addresses, so a contract Transak has never been told about simply has no id here.
+ *
+ * Keyed by marketplace VERSION as well as chain. A trade carries the contract it was signed against, and
+ * Transak has to execute `accept` on that same contract — the signature is bound to it. A single id per chain
+ * cannot serve two versions at once: pointing it at V3 would break every V2-signed listing, and leaving it on
+ * the older one breaks the V3 ones.
+ *
+ * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
+ * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
+ */
 const OffChainMarketplaceContractIds: Partial<
   Record<ContractName, Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM>>
 > = {

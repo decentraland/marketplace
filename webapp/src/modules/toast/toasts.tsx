@@ -160,6 +160,10 @@ export function getClaimNameWithCreditsCostUnavailableToast(): Omit<Toast, 'id'>
  * handler — so the widget simply never appeared and the buyer was told why by nobody. This PR routes the
  * first EXPECTED failure into that path (a listing whose marketplace version Transak has no registration
  * for), which turns a dead end into a silence someone will actually hit.
+ *
+ * The copy stays generic BECAUSE the catch it hangs off is saga-wide: it also covers "Credits are not
+ * enabled" and "No credits available", so anything suggesting a specific alternative payment method would
+ * be wrong for some of the paths that reach here.
  */
 export function getOpenTransakFailureToast(): Omit<Toast, 'id'> {
   return {

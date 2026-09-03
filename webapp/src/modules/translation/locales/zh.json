@@ -1248,7 +1248,7 @@
     },
     "open_transak_failure": {
       "title": "暂不支持银行卡支付",
-      "body": "此商品暂不支持银行卡支付。你仍然可以使用 MANA 或积分购买。"
+      "body": "无法为此商品发起银行卡支付。"
     },
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",

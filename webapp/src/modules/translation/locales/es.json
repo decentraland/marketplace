@@ -1245,7 +1245,7 @@
     },
     "open_transak_failure": {
       "title": "Pago con tarjeta no disponible",
-      "body": "Los pagos con tarjeta aún no están disponibles para esta publicación. Puedes comprarla con MANA o créditos."
+      "body": "No se pudo iniciar el pago con tarjeta para esta publicación."
     },
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
