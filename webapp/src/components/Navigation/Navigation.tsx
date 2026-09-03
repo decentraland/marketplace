@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
+import { Button, Icon, Mobile, Tabs, useMobileMediaQuery } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { locations } from '../../modules/routing/locations'
@@ -13,7 +13,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import * as decentraland from '../../modules/vendor/decentraland'
 import * as events from '../../utils/events'
 import { AssetStatusFilter } from '../../utils/filters'
-import { Props, NavigationTab } from './Navigation.types'
+import { NavigationTab, Props } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
@@ -80,8 +80,13 @@ const Navigation = (props: Props) => {
               <Link to={locations.defaultCurrentAccount()}>
                 <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
               </Link>
-              <Link to={locations.lists()}>
-                <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
+              {/* The shop reaches its lists through a heart rather than a labelled tab. The label stays
+                  as the accessible name, so the tab is still announced as "My Lists" and still reads
+                  as one to a screen reader. */}
+              <Link to={locations.lists()} aria-label={t('navigation.my_lists')} title={t('navigation.my_lists')}>
+                <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
+                  <Icon name="heart outline" fitted />
+                </Tabs.Tab>
               </Link>
               <Mobile>
                 <Link to={locations.activity()}>

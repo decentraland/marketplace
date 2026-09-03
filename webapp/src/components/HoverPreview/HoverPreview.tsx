@@ -18,14 +18,15 @@ import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
+import { getRarityWash } from '../../utils/rarityWash'
 import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
 
-// The plate every card's media sits on. The preview renders INSIDE a cross-origin iframe, so this is
-// the only place its scene background can be set: parent CSS cannot reach in. Keeping it equal to the
-// thumbnail's plate means hovering swaps the picture without also swapping the surface under it.
-const MEDIA_PLATE_COLOR = '#ecebed'
+// The preview renders INSIDE a cross-origin iframe, and its scene background can only be a flat
+// colour, never a gradient. So the scene is made transparent and the rarity wash is painted on the
+// overlay BEHIND it: that way hovering swaps the picture without swapping the surface under it, and
+// a card looks the same at rest and under the pointer.
 
 // How long to wait for a genuinely idle moment before booting the preview, and the fallback delay
 // for browsers without requestIdleCallback (Safari).
@@ -97,7 +98,7 @@ const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previ
     // Land straight into a fashion pose so the avatar never flashes a T-pose.
     emote: PreviewEmote.FASHION,
     profile: canBeWornByAvatar ? env.profile : 'default',
-    bodyShape: canBeWornByAvatar ? null : shapes[0] ?? null
+    bodyShape: canBeWornByAvatar ? null : (shapes[0] ?? null)
   }
 }
 
@@ -106,7 +107,7 @@ const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previe
     ...getAvatarOptions(src, env),
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
-    background: MEDIA_PLATE_COLOR
+    disableBackground: true
   }
   if (src.network === Network.ETHEREUM && src.urn) {
     return { ...base, urns: [src.urn] }
@@ -331,13 +332,12 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
 
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
-    const [light, dark] = Rarity.getGradient(rarity)
     return {
       top: rect.top,
       left: rect.left,
       width: rect.width,
       height: rect.height,
-      backgroundImage: `radial-gradient(${light}, ${dark})`
+      backgroundImage: getRarityWash(rarity)
     }
   }, [isVisible, rect, rarity])
 
@@ -349,7 +349,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
           profile="default"
           peerUrl={envConfig.peerUrl}
           marketplaceServerUrl={envConfig.marketplaceServerUrl}
-          background={MEDIA_PLATE_COLOR}
+          disableBackground
           wheelZoom={1.5}
           wheelStart={100}
           disableAutoRotate

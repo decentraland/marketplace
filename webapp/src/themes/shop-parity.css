@@ -110,15 +110,12 @@ body .ui.card.AssetCard:hover .AssetImage.catalog .rarity-background {
   border-radius: 12px 12px 0 0 !important;
 }
 
-/* One light plate for every item, whatever its rarity: in the shop, rarity is
-   carried by the footer chip alone and never floods the media. The gradient is
-   applied as an inline style from JS (Rarity.getGradient), which is why this
-   has to shout to be heard. */
-.ui.card.AssetCard .AssetImage .rarity-background {
-  background-color: #ecebed !important;
-  background-image: none !important;
-  border-bottom: 1px solid #cfcdd4;
-}
+/* The media carries the shop's rarity wash, built in utils/rarityWash and applied as an inline style
+   from Preview.tsx. Nothing to override here: an earlier revision flattened this to a single grey
+   plate, which is exactly what the wash replaces.
+   The hairline that used to sit on the plate's three outer edges is gone too. A solid grey line
+   cannot sit over both a light centre and a saturated edge, so against the wash it read as a pale
+   rim; the shop dropped it from its own cards for the same reason. */
 
 /* The creator line: 10px and a lighter grey, so the item name carries the row.
    The marketplace had both at 14px, which flattened the hierarchy. */
@@ -185,12 +182,6 @@ body .smart-left {
    The shop outlines the light plate on its three outer edges (1px #cfcdd4) so
    it reads as a physical card over the purple rather than a hole punched in it.
    ---------------------------------------------------------------------------- */
-
-body .ui.card.AssetCard .AssetImage .rarity-background {
-  border-top: 1px solid #cfcdd4;
-  border-left: 1px solid #cfcdd4;
-  border-right: 1px solid #cfcdd4;
-}
 
 /* ----------------------------------------------------------------------------
    Categories menu and controls
@@ -529,6 +520,4 @@ body .dui-rarity-badge .text {
 
 body .HoverPreview {
   border-radius: 12px 12px 0 0;
-  background-color: #ecebed !important;
-  background-image: none !important;
 }
