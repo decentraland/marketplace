@@ -22,6 +22,11 @@ import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
 
+// The plate every card's media sits on. The preview renders INSIDE a cross-origin iframe, so this is
+// the only place its scene background can be set: parent CSS cannot reach in. Keeping it equal to the
+// thumbnail's plate means hovering swaps the picture without also swapping the surface under it.
+const MEDIA_PLATE_COLOR = '#ecebed'
+
 // How long to wait for a genuinely idle moment before booting the preview, and the fallback delay
 // for browsers without requestIdleCallback (Safari).
 const IDLE_BOOT_TIMEOUT_MS = 3000
@@ -101,7 +106,7 @@ const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previe
     ...getAvatarOptions(src, env),
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
-    background: Rarity.getColor(src.rarity ?? Rarity.COMMON)
+    background: MEDIA_PLATE_COLOR
   }
   if (src.network === Network.ETHEREUM && src.urn) {
     return { ...base, urns: [src.urn] }
@@ -344,7 +349,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
           profile="default"
           peerUrl={envConfig.peerUrl}
           marketplaceServerUrl={envConfig.marketplaceServerUrl}
-          background={Rarity.getColor(Rarity.COMMON)}
+          background={MEDIA_PLATE_COLOR}
           wheelZoom={1.5}
           wheelStart={100}
           disableAutoRotate

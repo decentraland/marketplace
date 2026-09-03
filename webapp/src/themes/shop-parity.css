@@ -252,6 +252,11 @@ body .recently-sold-card {
      and the one carrying "MIN", card meta and the wallet-connect copy. This is
      the shop's own Gray 4, and it measures ~7:1 here. */
   --secondary-text: #cfcdd4;
+
+  /* Comes from decentraland-ui and is never defined in this repo, only consumed.
+     At #5e5b67 (the shop's muted1, a token meant for LIGHT surfaces) it left the
+     PRICE and STOCK labels on the item page barely visible over the purple. */
+  --text-on-card: #cfcdd4;
 }
 
 /* Group and box headers. #736e7d measured 2.37:1; the collapsed filter titles
@@ -335,7 +340,7 @@ body .TableContent .ui.table td {
    labels and no swatch.
    ---------------------------------------------------------------------------- */
 
-body .dui-rarity-filter .dui-array-filter__option {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
@@ -353,7 +358,7 @@ body .dui-rarity-filter .dui-array-filter__option {
    position. That is why this is scoped to .dui-rarity-filter, where the order is
    fixed by the Rarity enum, and why it stops at a pseudo-element. Giving the
    option a rarity attribute upstream is the real fix. */
-body .dui-rarity-filter .dui-array-filter__option::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option::before {
   content: '';
   width: 16px;
   height: 16px;
@@ -361,28 +366,28 @@ body .dui-rarity-filter .dui-array-filter__option::before {
   flex-shrink: 0;
 }
 
-body .dui-rarity-filter .dui-array-filter__option:nth-child(1)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(1)::before {
   background: #73d3d3;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(2)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(2)::before {
   background: #ff8362;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(3)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(3)::before {
   background: #34ce76;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(4)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(4)::before {
   background: #289cff;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(5)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(5)::before {
   background: #a24bf3;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(6)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(6)::before {
   background: #9cd71e;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(7)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(7)::before {
   background: #ff4bed;
 }
-body .dui-rarity-filter .dui-array-filter__option:nth-child(8)::before {
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option:nth-child(8)::before {
   background: #fea217;
 }
 
@@ -415,10 +420,9 @@ body .bar-chart .ui.min-max-field {
   border-radius: 0;
 }
 
-/* The opaque box is recharts' own container, not anything decentraland-ui names:
-   #161419, which stayed as a black rectangle after the surrounding chart had
-   already gone translucent. The bars are drawn as SVG on top and keep their fill. */
-body .bar-chart .recharts-responsive-container,
+/* recharts paints its own #161419 on the wrapper and surface; the containing rectangle above is the
+   one that should show, so only these two are cleared. An earlier revision cleared the container as
+   well, which silently cancelled that rectangle: same specificity, later rule, no rectangle. */
 body .bar-chart .recharts-wrapper,
 body .bar-chart .recharts-surface {
   background: transparent;
@@ -486,8 +490,14 @@ body .SignInPage .message a {
  * into the pill fill, and -webkit-text-fill-color paints the glyphs white without disturbing
  * `color` (which is what currentColor resolves against). This is a stopgap: the honest fix is for
  * decentraland-ui to emit the rarity at full strength for the fill. */
+/* The badge itself was picking up --background (the page's darkest purple) and the wrapper added
+   3px/6px of padding around the pill, so the coloured chip sat inside a dark purple frame. Both the
+   shell and the frame have to go for the pill to read as one solid chip, as it does in the shop. */
+body .dui-rarity-badge,
+body .dui-rarity-badge .wrapper.small,
 body .dui-rarity-badge .wrapper {
   background-color: transparent !important;
+  padding: 0;
 }
 
 body .dui-rarity-badge .text {
@@ -501,4 +511,24 @@ body .dui-rarity-badge .text {
   -webkit-text-fill-color: #242129;
   border-radius: 4px;
   padding: 2px 8px;
+}
+
+/* ----------------------------------------------------------------------------
+   3D hover preview
+
+   The overlay that replaces the thumbnail on hover paints the rarity colour and
+   rounds all four corners at 10px, while the plate underneath is #ecebed at
+   12px/12px/0/0. So hovering both reintroduced the rarity flood the parity work
+   removed AND left two light slivers where the plate showed past the overlay's
+   rounded bottom corners.
+
+   Its background is an inline radial-gradient built from the rarity, hence the
+   !important. Matching the plate means the card keeps one surface whether it is
+   showing a thumbnail or a live model.
+   ---------------------------------------------------------------------------- */
+
+body .HoverPreview {
+  border-radius: 12px 12px 0 0;
+  background-color: #ecebed !important;
+  background-image: none !important;
 }
