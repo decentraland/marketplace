@@ -584,13 +584,22 @@ body .dcl.page.AssetBrowse.is-map {
   max-width: none;
 }
 
-/* The lists heart sits on the right of the sub-nav, next to the CTA, the way the shop places it. */
+/* The lists heart sits on the right of the sub-nav, just before the CTA, the way the shop places it.
+   `align-self: center` matters: the tab strip is a flex row whose items stretch, so without it the
+   glyph anchored to the top of the row and read as misaligned against the button beside it. */
 body .my-lists-heart {
   display: inline-flex;
   align-items: center;
-  margin-left: 20px;
+  align-self: center;
+  margin-right: 20px;
   color: #ffffff;
   font-size: 20px;
+  line-height: 1;
+}
+
+body .my-lists-heart .icon {
+  margin: 0;
+  height: auto;
 }
 
 body .my-lists-heart:hover {
@@ -641,4 +650,18 @@ body .dcl.box.asset-status-filter {
 body ul.box-menu.Menu .MenuItem .content,
 body ul.box-menu.Menu .MenuItem:not(.active) .content {
   color: #cfcdd4;
+}
+
+/* Category glyphs in the rail, sized and spaced like the shop's. Kept at the label's own colour via
+   a brightness filter rather than a fill, since these are <img> not inline SVG. */
+body .MenuItem .category-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+body .MenuItem.active .category-icon {
+  opacity: 1;
 }
