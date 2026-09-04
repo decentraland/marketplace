@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer, PreviewUnityMode } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewRenderer, PreviewType, PreviewUnityMode, Rarity } from '@dcl/schemas'
 import { SocialEmoteAnimation } from '@dcl/schemas/dist/dapps/preview/social-emote-animation'
 import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Center, Loader, Popup, Icon } from 'decentraland-ui'
+import { Button, Center, Icon, Loader, Popup } from 'decentraland-ui'
 import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 'decentraland-ui2'
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
+import { getRarityWash } from '../../../utils/rarityWash'
 import AvailableForMintPopup from '../AvailableForMintPopup'
-import { getEthereumItemUrn, colorToHex } from '../utils'
+import { colorToHex, getEthereumItemUrn } from '../utils'
 import { PlayButton } from './PlayButton'
 import { Props } from './Preview.types'
 import './Preview.css'
@@ -306,7 +307,18 @@ export const Preview: React.FC<Props> = ({
 
   const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
 
-  const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
+  /**
+   * Cards get the shop's softer rarity wash; the item page keeps the explorer gradient.
+   *
+   * This component renders both surfaces, told apart by `isDraggable`: the item page mounts the
+   * interactive 3D preview, a card renders a still image. On a card the wash is what makes a grid
+   * read the way the shop's does, while the item page's full-bleed gradient is deliberate and was
+   * signed off as is.
+   */
+  const backgroundImage = useMemo(
+    () => (isDraggable ? `radial-gradient(${light}, ${dark})` : getRarityWash(rarity)),
+    [isDraggable, light, dark, rarity]
+  )
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
