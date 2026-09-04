@@ -7,12 +7,15 @@ import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { useFingerprint } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
+import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import * as events from '../../../../utils/events'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
+import { CheckoutPriceUnavailableModal } from '../CheckoutPriceUnavailableModal'
 import { useBuyNftGasCost, useCrossChainBuyNftRoute } from '../hooks'
+import { manaAfterCredits } from '../utils'
 import { Props } from './BuyNftWithCryptoModal.types'
 
 const BuyNftWithCryptoModalHOC = (props: Props) => {
@@ -32,6 +35,12 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     onExecuteOrderWithCard,
     metadata: { nft, order, slippage = 1, useCredits = false }
   } = props
+
+  // `order.price` carries no unit: on a USD-pegged trade it is USD wei rather than MANA wei. The figures below —
+  // the price shown, the balance check, the allowance, the total — are all in MANA, so they come from here
+  // instead of from `order.price`.
+  const checkoutPrice = useCheckoutPriceInMana(order.price, nft.network, order.tradeId)
+  const priceInMana = checkoutPrice.manaWei
 
   // Legacy `safeExecuteOrder` on V1 marketplace verifies the fingerprint
   // against the upgraded EstateRegistry (getFingerprintV2). Use the contract
@@ -62,7 +71,13 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       console.log('Error getting credit manager', error)
     }
 
-    const areCreditsEnoughToBuy = useCredits && credits && BigInt(credits.totalCredits) >= BigInt(order.price)
+    // Not reachable from the UI (nothing renders until the price resolves), but this builds an allowance
+    // request, so it does not run on an unknown amount.
+    if (priceInMana === null) {
+      return
+    }
+
+    const areCreditsEnoughToBuy = useCredits && credits && BigInt(credits.totalCredits) >= BigInt(priceInMana)
     const needsToAuthorizeCredits = useCredits && !areCreditsEnoughToBuy
 
     const authorizedAddress =
@@ -86,10 +101,10 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       authorizedAddress,
       targetContract: mana as Contract,
       authorizedContractLabel,
-      requiredAllowanceInWei: useCredits && credits ? (BigInt(order.price) - BigInt(credits.totalCredits)).toString() : order.price,
+      requiredAllowanceInWei: manaAfterCredits(priceInMana, useCredits ? credits : null),
       onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
     })
-  }, [nft, order, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
+  }, [nft, order, priceInMana, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
@@ -97,29 +112,54 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   }, [nft, order, useCredits, onExecuteOrderWithCard])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
-      useCrossChainBuyNftRoute(order, order.chainId, selectedToken, selectedChain, providerTokens, crossChainProvider, wallet, slippage),
-    [order]
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) => {
+      // The early return below keeps this modal off screen until the amount resolves, so the callbacks it
+      // hands out always have one. Falling back to `order.price` here would route the unconverted amount.
+      if (priceInMana === null) {
+        throw new Error('The listing price has not resolved yet')
+      }
+      return useCrossChainBuyNftRoute(
+        order,
+        priceInMana,
+        order.chainId,
+        selectedToken,
+        selectedChain,
+        providerTokens,
+        crossChainProvider,
+        wallet,
+        slippage
+      )
+    },
+    [order, priceInMana, slippage]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
     (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, contractFingerprint),
     [nft, order, contractFingerprint]
   )
 
-  const price = useMemo(() => {
-    if (!useCredits || !credits) return order.price
-    const adjustedPrice = BigInt(order.price) - BigInt(credits.totalCredits)
-    // Convert back to wei format
-    return adjustedPrice < 0 ? '0' : adjustedPrice.toString()
-  }, [order.price, useCredits, credits])
+  const price = useMemo(
+    () => (priceInMana === null ? null : manaAfterCredits(priceInMana, useCredits ? credits : null)),
+    [priceInMana, useCredits, credits]
+  )
+
+  // Without a resolved amount there is nothing to confirm. `resolving` is the trade read (a cache hit for
+  // anyone who came through the asset page); `unavailable` is an unreadable trade or an unreachable oracle.
+  if (price === null) {
+    return <CheckoutPriceUnavailableModal name={name} isLoading={checkoutPrice.status === 'resolving'} onClose={onClose} />
+  }
 
   return (
     <BuyWithCryptoModal
       price={price}
+      isPriceApproximate={checkoutPrice.isUSDPegged}
       useCredits={useCredits}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
-      onBuyWithCard={nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL ? undefined : onBuyWithCard}
+      // The card flow buys a fixed amount of MANA up front, so it cannot cover a price the contract
+      // recomputes from its oracle at accept time. Not offered for a pegged listing until it can.
+      onBuyWithCard={
+        nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL || checkoutPrice.isUSDPegged ? undefined : onBuyWithCard
+      }
       onBuyCrossChain={onExecuteOrderCrossChain}
       onGetGasCost={onGetGasCost}
       isUsingMagic={isUsingMagic}

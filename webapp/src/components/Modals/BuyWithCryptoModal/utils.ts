@@ -3,6 +3,7 @@ import { ChainId, Network, Order, Item } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Env } from '@dcl/ui-env'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract, getContractName } from 'decentraland-transactions'
@@ -243,4 +244,20 @@ export const getTokenBalance = async (token: Token, chainId: ChainId, address: s
     const tokenContract = new ethers.Contract(token.address, ['function balanceOf(address owner) view returns (uint256)'], provider)
     return tokenContract.balanceOf(address) as BigNumber
   }
+}
+
+/**
+ * What the buyer still owes in MANA wei once their credits are applied, never below zero.
+ *
+ * Both checkout modals need this twice — once for the figure on screen and once for the allowance they ask
+ * for — and the two were written out separately, which let them disagree: the on-screen figure clamped a
+ * credits balance larger than the price to '0' while the allowance did not. `priceInMana` must already be
+ * MANA wei (see `useCheckoutPriceInMana`), since credits are MANA denominated.
+ */
+export function manaAfterCredits(priceInMana: string, credits: CreditsResponse | null): string {
+  if (!credits) {
+    return priceInMana
+  }
+  const remaining = BigInt(priceInMana) - BigInt(credits.totalCredits)
+  return remaining > 0n ? remaining.toString() : '0'
 }

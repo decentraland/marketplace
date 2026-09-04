@@ -1714,6 +1714,10 @@
     "approximate": "~{amount}",
     "unavailable": "Precio no disponible"
   },
+  "checkout_price_unavailable_modal": {
+    "title": "Precio no disponible",
+    "description": "No pudimos confirmar cuánto MANA cuesta esta publicación en este momento, así que no te mostramos un monto para aprobar. Volvé a intentar en un rato."
+  },
   "announcement_bar": {
     "highlight": "Conoce la Decentraland Shop",
     "message": "{highlight} - Nuevo diseño, nuevos looks y conoce a los creadores.",

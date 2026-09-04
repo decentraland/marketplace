@@ -25,6 +25,11 @@ export type OnGetCrossChainRoute = (
 export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isUsingMagic'> &
   Omit<ModalProps, 'metadata'> & {
     price: string
+    /**
+     * True when `price` is an oracle conversion of a USD-pegged listing rather than the signed amount, so the
+     * figures rendered from it are marked approximate: the contract recomputes the rate at accept time.
+     */
+    isPriceApproximate?: boolean
     credits: CreditsResponse | null
     useCredits?: boolean
     wallet: Wallet | null
@@ -50,6 +55,7 @@ export type ContainerProps = Pick<
   Props,
   | 'metadata'
   | 'price'
+  | 'isPriceApproximate'
   | 'useCredits'
   | 'isBuyingAsset'
   | 'onBuyNatively'

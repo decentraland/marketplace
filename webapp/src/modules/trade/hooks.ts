@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import { ChainId } from '@dcl/schemas'
+import { useEffect, useMemo, useState } from 'react'
+import { ChainId, Network } from '@dcl/schemas'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { PriceDenomination, TradePricing, fetchTradePricing } from './denomination'
-import { ManaUsdRate, fetchManaUsdRate } from './manaRate'
+import { ManaUsdRate, fetchManaUsdRate, usdWeiToManaWei } from './manaRate'
 
 const MANA_PRICING: TradePricing = { denomination: PriceDenomination.MANA, marketplaceAddress: null }
 
@@ -77,4 +78,97 @@ export function useManaUsdRate(chainId?: ChainId, marketplaceAddress?: string | 
   }, [chainId, marketplaceAddress])
 
   return rate
+}
+
+/**
+ * The MANA a checkout should charge for a listing.
+ *
+ * `ready` carries the figure to use for the price, the balance check, the allowance and the total.
+ * `resolving` and `unavailable` carry none, because the amount is not known yet (or at all).
+ */
+export type CheckoutPrice = {
+  status: 'resolving' | 'ready' | 'unavailable'
+  /** MANA wei to charge. Set only when `status` is `ready`. */
+  manaWei: string | null
+  /** True once the trade is known to be USD-pegged, so callers can mark the figure as the approximation it is. */
+  isUSDPegged: boolean
+}
+
+const RESOLVING: CheckoutPrice = { status: 'resolving', manaWei: null, isUSDPegged: false }
+const UNAVAILABLE: CheckoutPrice = { status: 'unavailable', manaWei: null, isUSDPegged: false }
+
+/** `getChainIdByNetwork` throws when the app config is not initialised; a missing chain is an unpriceable listing. */
+function chainIdOf(network: Network): ChainId | undefined {
+  try {
+    return getChainIdByNetwork(network)
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * How much MANA to charge for a listing whose `price` may be MANA wei or USD wei.
+ *
+ * The catalog and order endpoints return `price` with no unit attached, so the trade behind it is the only
+ * thing that says what the number means. Price LABELS resolve that through {@link useTradePricing}; this is
+ * the same resolution for the checkout figures, and it differs from the label one in two ways:
+ *
+ * 1. It has no optimistic start. The label hook begins at MANA so the common case paints immediately and only
+ *    the pegged minority re-renders; here that first paint would already be a number the buyer acts on, so a
+ *    trade-backed listing stays `resolving` until the trade has answered.
+ * 2. A trade that could not be read resolves to `unavailable` rather than to MANA. `fetchTradePricing` reports
+ *    that as a null `marketplaceAddress` (its denomination falls back to MANA, which is right for a label and
+ *    not for an amount), and the two denominations differ by the MANA/USD rate.
+ *
+ * Listings with no `tradeId` (legacy on-chain orders, collection-store mints) are MANA by construction and
+ * resolve synchronously, with no request and no intermediate state.
+ */
+export function useCheckoutPriceInMana(price: string, network: Network, tradeId?: string): CheckoutPrice {
+  const untradedPrice = useMemo<CheckoutPrice>(() => ({ status: 'ready', manaWei: price, isUSDPegged: false }), [price])
+  const [resolved, setResolved] = useState<CheckoutPrice>(RESOLVING)
+
+  useEffect(() => {
+    if (!tradeId) {
+      return
+    }
+
+    let cancelled = false
+    setResolved(RESOLVING)
+
+    const resolve = async (): Promise<CheckoutPrice> => {
+      const { denomination, marketplaceAddress } = await fetchTradePricing(tradeId)
+      if (!marketplaceAddress) {
+        return UNAVAILABLE
+      }
+      if (denomination === PriceDenomination.MANA) {
+        return { status: 'ready', manaWei: price, isUSDPegged: false }
+      }
+
+      const chainId = chainIdOf(network)
+      if (!chainId) {
+        return { ...UNAVAILABLE, isUSDPegged: true }
+      }
+
+      // Read through the marketplace the trade was signed against, the same one that will convert the amount
+      // at accept time, so this is the settlement figure at read time. It moves before the buyer confirms,
+      // which is why callers label it approximate.
+      const rate = await fetchManaUsdRate(chainId, marketplaceAddress)
+      const manaWei = usdWeiToManaWei(price, rate)
+      return manaWei === null ? { ...UNAVAILABLE, isUSDPegged: true } : { status: 'ready', manaWei, isUSDPegged: true }
+    }
+
+    void resolve()
+      .catch(() => UNAVAILABLE)
+      .then(next => {
+        if (!cancelled) {
+          setResolved(next)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [tradeId, price, network])
+
+  return tradeId ? resolved : untradedPrice
 }
