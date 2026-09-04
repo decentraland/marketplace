@@ -93,7 +93,14 @@ body .HomePage {
 
 .ui.card.AssetCard {
   background: rgba(0, 0, 0, 0.4);
-  border: none;
+  /* Transparent rather than `none`, so the border BOX never changes size.
+   *
+   * Semantic puts a 1px border on these cards and keeps it on hover. Removing it at rest turned that
+   * into a 0px -> 1px transition, and with `box-sizing: border-box` on a fixed-width card that shrinks
+   * the content box by 2px on hover and grows it back on leave. LAND cards draw their map into a
+   * <canvas>, and resizing a canvas CLEARS its bitmap: every hover wiped the map and left the tile
+   * black. Keeping the border and making it invisible fixes the cause instead of the symptom. */
+  border: 1px solid transparent;
   border-radius: 12px;
   box-shadow: none;
 }
@@ -524,8 +531,15 @@ body .dui-rarity-badge .text {
    showing a thumbnail or a live model.
    ---------------------------------------------------------------------------- */
 
+/* The overlay needs an OPAQUE surface, not just the wash.
+ *
+ * The wash is translucent and the iframe now runs with `disableBackground`, so with nothing solid
+ * underneath the card's own still thumbnail showed straight through: the item's picture behind, the
+ * live avatar on top of it. The same #ecebed base the card media uses makes the overlay hide what it
+ * replaces, and keeps the two surfaces identical. */
 body .HoverPreview {
   border-radius: 12px 12px 0 0;
+  background-color: #ecebed;
 }
 
 /* ----------------------------------------------------------------------------
@@ -581,4 +595,50 @@ body .my-lists-heart {
 
 body .my-lists-heart:hover {
   opacity: 0.8;
+}
+
+/* ----------------------------------------------------------------------------
+   LAND tiles
+
+   decentraland-ui's Atlas paints #18141a behind its canvas, and the canvas stops
+   drawing after the card is hovered (reproducible with this layer disabled, so
+   the bug predates the parity work and lives upstream). On the near-black page
+   that failure was invisible; on the purple it reads as a black hole.
+
+   This does not fix the Atlas, it stops the failure from being the loudest thing
+   on the page: the well now sits in the page's own family, so a tile that draws
+   nothing looks empty rather than broken.
+   ---------------------------------------------------------------------------- */
+
+body .react-tile-map,
+body .atlas-wrapper .react-tile-map {
+  background-color: #2b1140;
+}
+
+/* Two labels still at #736e7d, a grey built for the near-black page: the Rankings subtitle and the
+   Recently Sold timestamp. Both measured about 2.4:1 over the purple. */
+body .RankingsTable .subtitle,
+body .RecentlySoldTable .recently-sold-timestamp {
+  color: #cfcdd4;
+}
+
+/* ----------------------------------------------------------------------------
+   Sidebar, closer to the shop's
+
+   - The group separators were drawn as a border-bottom on a box that still had
+     `border-radius: 12px`, so the hairline curved up at both ends and read as a
+     stray rounded outline rather than a rule. Squaring the box straightens it.
+   - The subcategory labels sat at 3.83:1 (#9791a3 over the purple), which is
+     what made them look disabled next to the shop's.
+   ---------------------------------------------------------------------------- */
+
+body .dcl.box.filters-sidebar-box,
+body .dcl.box.special-filter,
+body .dcl.box.asset-status-filter {
+  border-radius: 0;
+}
+
+body ul.box-menu.Menu .MenuItem .content,
+body ul.box-menu.Menu .MenuItem:not(.active) .content {
+  color: #cfcdd4;
 }
