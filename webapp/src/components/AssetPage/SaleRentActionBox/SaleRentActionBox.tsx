@@ -27,6 +27,7 @@ import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { LinkedProfile } from '../../LinkedProfile'
+import { ListingPrice } from '../../ListingPrice'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
@@ -183,12 +184,15 @@ const SaleRentActionBox = ({
               <div className={styles.price}>
                 <div className={styles.title}>{t('global.price')}</div>
                 <div className={styles.content}>
-                  <Mana showTooltip className={styles.priceInMana} withTooltip size="medium" network={order.network}>
-                    {formatWeiMANA(order.price)}
-                  </Mana>
-                  <span className={styles.priceInFiat}>
-                    (<ManaToFiat mana={order.price} />)
-                  </span>
+                  <ListingPrice
+                    price={order.price}
+                    network={order.network}
+                    tradeId={order.tradeId}
+                    showFiat
+                    size="medium"
+                    manaClassName={styles.priceInMana}
+                    showTooltip
+                  />
                 </div>
               </div>
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (

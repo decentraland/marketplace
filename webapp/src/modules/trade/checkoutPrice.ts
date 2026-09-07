@@ -9,7 +9,8 @@ export type CheckoutPriceInMana = {
   isUSDPegged: boolean
 }
 
-const UNRESOLVED: CheckoutPriceInMana = { manaWei: null, isUSDPegged: false }
+/** Frozen: it is handed out by reference, and a caller mutating it would corrupt every later call. */
+const UNRESOLVED: CheckoutPriceInMana = Object.freeze({ manaWei: null, isUSDPegged: false })
 
 /**
  * How much MANA a listing costs, given a `price` that may be MANA wei or USD wei.
