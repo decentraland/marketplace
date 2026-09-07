@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
-import { ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { ListingStatus, Order, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
@@ -23,6 +23,7 @@ import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { locations } from '../routing/locations'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import SubgraphService from '../vendor/decentraland/SubgraphService'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
@@ -122,6 +123,26 @@ export function* orderSaga(tradeService: TradeService) {
     }
   }
 
+  /**
+   * Poll the credits balance down to what it should be after a purchase.
+   *
+   * The amount spent is in MANA; `order.price` only is on most listings, since on a USD-pegged one it is USD
+   * wei, so it is resolved first. When it cannot be resolved there is no balance to expect: the poll is
+   * skipped and the balance refreshes on its next ordinary fetch, rather than waiting on a figure that will
+   * never arrive.
+   */
+  function* pollCreditsAfterPurchase(address: string, order: Order, totalCredits: CreditsResponse['totalCredits']) {
+    const { manaWei } = (yield call(resolveCheckoutPriceInMana, order.price, order.chainId, order.tradeId)) as Awaited<
+      ReturnType<typeof resolveCheckoutPriceInMana>
+    >
+
+    if (manaWei === null) {
+      return
+    }
+
+    yield put(pollCreditsBalanceRequest(address, BigInt(totalCredits) - BigInt(manaWei)))
+  }
+
   function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     const { order, nft, fingerprint, silent, useCredits } = action.payload
 
@@ -158,8 +179,7 @@ export function* orderSaga(tradeService: TradeService) {
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
-          const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
-          yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+          yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {
           txHash = yield call([tradeService, 'accept'], trade, wallet.address)
         }
@@ -168,8 +188,7 @@ export function* orderSaga(tradeService: TradeService) {
 
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
-          const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
-          yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+          yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {
           txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
             ReturnType<typeof orderService.execute>
