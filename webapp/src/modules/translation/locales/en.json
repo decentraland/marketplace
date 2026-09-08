@@ -1752,6 +1752,10 @@
     "approximate": "~{amount}",
     "unavailable": "Price unavailable"
   },
+  "checkout_price_unavailable_modal": {
+    "title": "Price unavailable",
+    "description": "We couldn't confirm how much MANA this listing costs right now, so we're not showing you an amount to approve. Please try again in a moment."
+  },
   "announcement_bar": {
     "highlight": "Meet the Decentraland Shop",
     "message": "{highlight} - New Layout, New Outfits, and Meet the creators.",

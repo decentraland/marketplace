@@ -1,0 +1,17 @@
+.modal {
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 32px;
+}
+
+.description {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--secondary-text);
+}

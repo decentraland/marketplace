@@ -12,6 +12,8 @@ import styles from './PurchaseTotal.module.css'
 
 export type Props = {
   price: string
+  /** See `isPriceApproximate` on the modal: a USD-pegged price settles at the oracle's rate, not this one. */
+  isPriceApproximate?: boolean
   selectedToken: Token
   useMetaTx: boolean
   shouldUseCrossChainProvider: boolean
@@ -27,6 +29,7 @@ export type Props = {
 const PurchaseTotal = (props: Props) => {
   const {
     price,
+    isPriceApproximate,
     route,
     routeFeeCost,
     isLoading,
@@ -82,7 +85,9 @@ const PurchaseTotal = (props: Props) => {
                   </>
                 ) : null}
                 <TokenIcon src={selectedToken.logoURI} name={selectedToken.name} />
-                {ethers.utils.formatEther(price)}
+                {isPriceApproximate
+                  ? t('pegged_mana_price.approximate', { amount: ethers.utils.formatEther(price) })
+                  : ethers.utils.formatEther(price)}
               </>
             )}
           </div>
