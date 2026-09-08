@@ -314,9 +314,11 @@ export const Preview: React.FC<Props> = ({
    * This component renders three surfaces. The item page, told apart by `isDraggable`, mounts the
    * interactive 3D preview and keeps its full-bleed gradient, which was signed off as is. A card
    * renders a still image and takes the wash, which is what makes a grid read the way the shop's
-   * does. A table thumbnail takes neither: the wash is tuned for a card-sized box, so at 48px its
-   * outer stop covers the whole tile and buries the item's silhouette, and both tables already show
-   * rarity in their own column.
+   * does. A small thumbnail takes neither: the wash is tuned for a card-sized box, so at 48px its
+   * outer stop covers almost the whole tile and buries the item's silhouette. That covers every
+   * `isSmall` surface, not just the rankings and recently-sold rows: the search dropdown, activity
+   * rows, transaction detail and the buy modal all render at the same size, and the two tables show
+   * rarity in a column of their own anyway.
    */
   const backgroundImage = useMemo(() => {
     if (isSmall) return undefined
@@ -336,9 +338,10 @@ export const Preview: React.FC<Props> = ({
   const className = useMemo(
     () =>
       classNames('Preview', 'rarity-background', {
-        'is-loading-wearable-preview': isLoadingWearablePreview
+        'is-loading-wearable-preview': isLoadingWearablePreview,
+        small: isSmall
       }),
-    [isLoadingWearablePreview]
+    [isLoadingWearablePreview, isSmall]
   )
 
   return (
