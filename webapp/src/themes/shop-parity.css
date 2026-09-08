@@ -117,7 +117,7 @@ body .ui.card.AssetCard:hover .AssetImage.catalog .rarity-background {
   border-radius: 12px 12px 0 0 !important;
 }
 
-/* The media carries the shop's rarity wash, built in utils/rarityWash and applied as an inline style
+/* The media carries the shop's rarity wash, built in utils/rarity and applied as an inline style
    from Preview.tsx. Nothing to override here: an earlier revision flattened this to a single grey
    plate, which is exactly what the wash replaces.
    The hairline that used to sit on the plate's three outer edges is gone too. A solid grey line

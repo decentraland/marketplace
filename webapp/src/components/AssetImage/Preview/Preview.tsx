@@ -10,7 +10,7 @@ import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
-import { getRarityWash } from '../../../utils/rarityWash'
+import { getRarityWash } from '../../../utils/rarity'
 import AvailableForMintPopup from '../AvailableForMintPopup'
 import { colorToHex, getEthereumItemUrn } from '../utils'
 import { PlayButton } from './PlayButton'
@@ -306,24 +306,19 @@ export const Preview: React.FC<Props> = ({
     return asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON
   }, [asset])
 
-  const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
-
   /**
-   * Cards get the shop's softer rarity wash; the item page keeps the explorer gradient.
+   * Only a card paints a stage behind the item; the other two surfaces paint nothing.
    *
-   * This component renders three surfaces. The item page, told apart by `isDraggable`, mounts the
-   * interactive 3D preview and keeps its full-bleed gradient, which was signed off as is. A card
-   * renders a still image and takes the wash, which is what makes a grid read the way the shop's
-   * does. A small thumbnail takes neither: the wash is tuned for a card-sized box, so at 48px its
-   * outer stop covers almost the whole tile and buries the item's silhouette. That covers every
-   * `isSmall` surface, not just the rankings and recently-sold rows: the search dropdown, activity
-   * rows, transaction detail and the buy modal all render at the same size, and the two tables show
-   * rarity in a column of their own anyway.
+   * A card takes the shop's softer rarity wash, which is what makes a grid read the way the shop's
+   * does. The item page, told apart by `isDraggable`, used to flood the panel with the explorer
+   * gradient and now paints nothing at all: the renderer composites its own shadow into the canvas
+   * alpha, so the page's own field can be the scene's backdrop and the shadow can land on it. The
+   * rarity still reads there, as a glow behind the frame that the detail pages draw. A small
+   * thumbnail takes neither, because the wash is tuned for a card-sized box: at 48px its outer stop
+   * covers almost the whole tile and buries the item's silhouette. That is every `isSmall` surface,
+   * not just the rankings and recently-sold rows, and those two show rarity in a column anyway.
    */
-  const backgroundImage = useMemo(() => {
-    if (isSmall) return undefined
-    return isDraggable ? `radial-gradient(${light}, ${dark})` : getRarityWash(rarity)
-  }, [isDraggable, isSmall, light, dark, rarity])
+  const backgroundImage = useMemo(() => (isSmall || isDraggable ? undefined : getRarityWash(rarity)), [isDraggable, isSmall, rarity])
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
@@ -350,7 +345,9 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            background={Rarity.getColor(rarity)}
+            // Transparent all the way down to the page's own field: the panel paints nothing either,
+            // and a full-saturation rarity scene background would be too loud over it.
+            disableBackground
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}

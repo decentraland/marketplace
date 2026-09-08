@@ -18,7 +18,7 @@ import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
-import { getRarityWash } from '../../utils/rarityWash'
+import { getRarityWash } from '../../utils/rarity'
 import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'

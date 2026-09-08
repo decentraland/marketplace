@@ -84,6 +84,12 @@
     width: 100%;
   }
 
+  /* The glow drops rather than being narrowed: a box scaled off a full-width frame reaches past the
+     viewport, and this wrapper's overflow is visible, so the page would gain a horizontal scrollbar. */
+  .ItemDetail .assetImageContainer:global(.rarity-glow)::before {
+    display: none;
+  }
+
   .ItemDetail :global(.dcl.stats) {
     margin: 0px;
   }

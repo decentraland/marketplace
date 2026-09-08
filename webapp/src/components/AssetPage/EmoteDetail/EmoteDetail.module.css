@@ -9,6 +9,17 @@
 
 .EmoteDetail .assetImageContainer {
   height: 602px;
+  /* Tighter than the shared default: this layout runs the preview the full width of the page, so a box
+     at 1.76 would reach well past the viewport on both sides. */
+  --glow-box: 1.5;
+}
+
+/* This frame is a wide band rather than the roughly square panel the shared glow assumes, so scaling
+   it in both directions would smear a flat ellipse across the page. The width comes from the height at
+   the shop's own frame ratio instead, which keeps the halo the shape it is there. */
+.EmoteDetail .assetImageContainer:global(.rarity-glow)::before {
+  width: auto;
+  aspect-ratio: 1045 / 752;
 }
 
 .EmoteDetail .assetImageContainer :global(.AssetImage) {
