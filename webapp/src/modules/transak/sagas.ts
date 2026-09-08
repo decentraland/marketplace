@@ -19,6 +19,7 @@ import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
 import { getOpenTransakFailureToast } from '../toast/toasts'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
@@ -246,11 +247,23 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         tokenId = asset.tokenId
       }
 
+      // The widget is quoted in MANA, and the listing's own amount only is on most listings: a USD-pegged
+      // trade carries USD wei, which would quote the buyer a price in the wrong unit. Credits are MANA
+      // denominated too, so they are subtracted from the converted figure rather than from the raw one.
+      const listedPrice = (isNFT(asset) ? order?.price : asset.price) || '0'
+      const { manaWei } = (yield call(resolveCheckoutPriceInMana, listedPrice, asset.chainId, tradeId)) as Awaited<
+        ReturnType<typeof resolveCheckoutPriceInMana>
+      >
+      if (manaWei === null) {
+        throw new Error('Could not resolve the price of this listing in MANA')
+      }
+
       let price: string | undefined
       if (useCredits && credits) {
-        price = (BigInt((isNFT(asset) ? order?.price : asset.price) || 0) - BigInt(credits.totalCredits)).toString()
+        const remaining = BigInt(manaWei) - BigInt(credits.totalCredits)
+        price = (remaining > 0n ? remaining : 0n).toString()
       } else {
-        price = isNFT(asset) ? order?.price : asset.price
+        price = manaWei
       }
       const customizationOptions = {
         calldata,

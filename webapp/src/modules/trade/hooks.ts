@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ChainId, Network } from '@dcl/schemas'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
+import { resolveCheckoutPriceInMana } from './checkoutPrice'
 import { PriceDenomination, TradePricing, fetchTradePricing } from './denomination'
-import { ManaUsdRate, fetchManaUsdRate, usdWeiToManaWei } from './manaRate'
+import { ManaUsdRate, fetchManaUsdRate } from './manaRate'
 
 const MANA_PRICING: TradePricing = { denomination: PriceDenomination.MANA, marketplaceAddress: null }
 
@@ -135,29 +136,10 @@ export function useCheckoutPriceInMana(price: string, network: Network, tradeId?
     let cancelled = false
     setResolved(RESOLVING)
 
-    const resolve = async (): Promise<CheckoutPrice> => {
-      const { denomination, marketplaceAddress } = await fetchTradePricing(tradeId)
-      if (!marketplaceAddress) {
-        return UNAVAILABLE
-      }
-      if (denomination === PriceDenomination.MANA) {
-        return { status: 'ready', manaWei: price, isUSDPegged: false }
-      }
-
-      const chainId = chainIdOf(network)
-      if (!chainId) {
-        return { ...UNAVAILABLE, isUSDPegged: true }
-      }
-
-      // Read through the marketplace the trade was signed against, the same one that will convert the amount
-      // at accept time, so this is the settlement figure at read time. It moves before the buyer confirms,
-      // which is why callers label it approximate.
-      const rate = await fetchManaUsdRate(chainId, marketplaceAddress)
-      const manaWei = usdWeiToManaWei(price, rate)
-      return manaWei === null ? { ...UNAVAILABLE, isUSDPegged: true } : { status: 'ready', manaWei, isUSDPegged: true }
-    }
-
-    void resolve()
+    void resolveCheckoutPriceInMana(price, chainIdOf(network), tradeId)
+      .then(({ manaWei, isUSDPegged }) =>
+        manaWei === null ? { ...UNAVAILABLE, isUSDPegged } : { status: 'ready' as const, manaWei, isUSDPegged }
+      )
       .catch(() => UNAVAILABLE)
       .then(next => {
         if (!cancelled) {

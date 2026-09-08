@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
@@ -23,6 +24,7 @@ import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
 import { getIsCreditsEnabled } from '../features/selectors'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { getWallet } from '../wallet/selectors'
 import { openTransak, openTransakFailure } from './actions'
 import { transakSaga } from './sagas'
@@ -193,6 +195,35 @@ describe('when handling the open transak action', () => {
     beforeEach(() => {
       mockOrder.tradeId = uuidv4()
     })
+    describe('and the listing is priced in USD', () => {
+      let manaWei: string
+
+      beforeEach(() => {
+        // What the marketplace converts the listing to at accept time, which is what the widget has to buy.
+        manaWei = (BigInt(mockOrder.price) * 13n).toString()
+      })
+
+      it('should quote the widget the converted amount rather than the listed one', () => {
+        return expectSaga(transakSaga, () => undefined)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getAddress), mockWallet.address],
+            [select(getIsCreditsEnabled), false],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade],
+            [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei, isUSDPegged: true }]
+          ])
+          .dispatch(openTransak(mockAsset, mockOrder, false))
+          .run({ silenceTimeout: true })
+          .then(() => {
+            expect(Transak.prototype.openWidget).toHaveBeenCalledWith(
+              expect.objectContaining({
+                nftData: [expect.objectContaining({ price: [+ethers.utils.formatEther(manaWei)] })]
+              })
+            )
+          })
+      })
+    })
+
     describe('and using credits', () => {
       describe('and credits are enabled', () => {
         describe('and the user has enough credits', () => {
@@ -203,7 +234,8 @@ describe('when handling the open transak action', () => {
                 [select(getAddress), mockWallet.address],
                 [select(getIsCreditsEnabled), true],
                 [select(getCredits, mockWallet.address), mockCredits],
-                [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade]
+                [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade],
+                [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
               ])
               .put(closeAllModals())
               .dispatch(openTransak(mockAsset, mockOrder, true))
@@ -241,7 +273,8 @@ describe('when handling the open transak action', () => {
                 [select(getAddress), mockWallet.address],
                 [select(getIsCreditsEnabled), true],
                 [select(getCredits, mockWallet.address), mockCredits],
-                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade],
+                [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
               ])
               .dispatch(openTransak(mockAsset, mockOrder, true))
               .run({ silenceTimeout: true, timeout: 500 })
@@ -259,7 +292,8 @@ describe('when handling the open transak action', () => {
                 [select(getAddress), mockWallet.address],
                 [select(getIsCreditsEnabled), true],
                 [select(getCredits, mockWallet.address), undefined],
-                [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade]
+                [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade],
+                [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
               ])
               .dispatch(openTransak(mockAsset, mockOrder, true))
               .put(openTransakFailure('No credits available'))
@@ -279,7 +313,8 @@ describe('when handling the open transak action', () => {
               [select(getWallet), mockWallet],
               [select(getIsCreditsEnabled), false],
               [select(getCredits, mockWallet.address), mockCredits],
-              [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade]
+              [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
             ])
             .dispatch(openTransak(mockAsset, mockOrder, true))
             .put(openTransakFailure('Credits are not enabled'))
@@ -317,7 +352,8 @@ describe('when handling the open transak action', () => {
                 [select(getWallet), mockWallet],
                 [select(getAddress), mockWallet.address],
                 [select(getIsCreditsEnabled), false],
-                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade]
+                [matchers.call.fn(TradeService.prototype.fetchTrade), unregisteredTrade],
+                [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
               ])
               // The asset is an NFT, so the trade id reaches the saga through the order, not the asset.
               .dispatch(openTransak(mockAsset, { ...mockOrder, tradeId: 'mock-trade-id' }))
@@ -339,7 +375,8 @@ describe('when handling the open transak action', () => {
               [select(getWallet), mockWallet],
               [select(getAddress), mockWallet.address],
               [select(getIsCreditsEnabled), false],
-              [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade]
+              [matchers.call.fn(TradeService.prototype.fetchTrade), mockTrade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: mockOrder.price, isUSDPegged: false }]
             ])
             .put(closeAllModals())
             .dispatch(openTransak({ ...mockAsset, tradeId: 'mock-trade-id' }))
