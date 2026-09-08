@@ -1,33 +1,20 @@
-/* Rarity glow behind a detail page's preview, ported from the shop (decentraland/shop#411).
+/* Rarity glow behind a detail page's preview (decentraland/shop#411), shared by the three
+   wearable/emote layouts. A page opts in with this class on the element WRAPPING the frame and
+   supplies the two custom properties from the item's rarity (utils/rarity `getRarityGlowStyle`).
 
-   The preview panel paints nothing now: the renderer composites its own shadow into the canvas
-   alpha, so the page's own field is the scene's backdrop and this glow is what carries the rarity.
-
-   Shared by the three wearable/emote detail layouts because they frame the preview differently but
-   light it identically. A page opts in with the `rarity-glow` class on the element that WRAPS the
-   frame, and supplies `--glow-rgb` and `--glow-core` from the item's rarity (see
-   utils/rarity.ts `getRarityGlowStyle`). The frame's proportions are the page's business, so each
-   one sets its own `--glow-box`.
-
-   It hangs off the wrapper rather than the frame because the frame clips: .AssetImage carries
-   overflow:hidden for its rounded corners, and the glow has to reach past it onto the page. */
+   On the wrapper rather than the frame because .AssetImage clips for its rounded corners, and the
+   glow has to reach past it onto the page. */
 .rarity-glow {
   position: relative;
-  /* Confines the glow's negative z-index. Without it the layer escapes to the root stacking context
-     and survives only while every ancestor happens to be background-less. */
+  /* Confines the glow's negative z-index, which would otherwise escape to the root stacking context. */
   isolation: isolate;
-  /* Glow box relative to the frame: roomy enough to spill onto the page, and for the gradient to
-     finish fading inside it. */
+  /* Oversized so the glow reaches past the frame while the gradient still finishes fading inside its
+     own box: the radii cannot exceed 50% without ending outside it and painting a hard rectangle. */
   --glow-box: 1.76;
 }
 
-/* The gradient's radii cannot exceed 50%, which is what stops it painting as a hard-edged rectangle:
-   they are radii measured against the box, so anything larger ends outside it and only the opaque
-   middle shows. --glow-box buys the reach back.
-
-   Opaque at the centre so the item reads backlit rather than washed; the iframe's own mask below
-   keeps the edges soft. The cyan fallback is the shop's default, for a surface that forgets to set a
-   rarity. */
+/* Opaque at the centre so the item reads backlit rather than washed; the iframe's mask below keeps
+   the edges soft. The cyan fallback is the shop's, for a surface that sets no rarity. */
 .rarity-glow::before {
   content: '';
   position: absolute;
@@ -35,9 +22,8 @@
   pointer-events: none;
   top: 50%;
   left: 50%;
-  /* Scaled off the frame in both directions, so the box keeps the frame's proportions: that is what
-     the shop does, and its frame happens to be the same shape as the glow. A layout whose frame is a
-     wide full-bleed band is the exception and overrides this (see the detail modules). */
+  /* Scaled in both directions, so the box keeps the frame's proportions as it does in the shop. A
+     full-bleed band is the exception and overrides this (see the detail modules). */
   width: calc(100% * var(--glow-box));
   height: calc(100% * var(--glow-box));
   transform: translate(-50%, -50%);
@@ -50,11 +36,10 @@
   );
 }
 
-/* Soft edges so a wearable's legs and its cast shadow dissolve instead of being sliced by the frame's
-   clip. On the iframe, not the panel, so the zoom and try-on pills stay crisp. Two intersected linear
-   gradients rather than one radial, which would round the corners. The bottom band is widest because
-   that is where the cut shows; 3% elsewhere stays clear of the controls the renderer draws inside its
-   own canvas. */
+/* Soft edges so legs and the cast shadow dissolve instead of being sliced by the frame's clip. On the
+   iframe, not the panel, so the pills stay crisp. Two intersected linear gradients rather than one
+   radial, which would round the corners. The bottom band is widest because that is where the cut
+   shows; 3% elsewhere stays clear of the controls the renderer draws inside its canvas. */
 .rarity-glow .Preview iframe {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 3%, #000 92%, transparent 100%),
     linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);

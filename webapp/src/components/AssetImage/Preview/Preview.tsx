@@ -307,16 +307,10 @@ export const Preview: React.FC<Props> = ({
   }, [asset])
 
   /**
-   * Only a card paints a stage behind the item; the other two surfaces paint nothing.
-   *
-   * A card takes the shop's softer rarity wash, which is what makes a grid read the way the shop's
-   * does. The item page, told apart by `isDraggable`, used to flood the panel with the explorer
-   * gradient and now paints nothing at all: the renderer composites its own shadow into the canvas
-   * alpha, so the page's own field can be the scene's backdrop and the shadow can land on it. The
-   * rarity still reads there, as a glow behind the frame that the detail pages draw. A small
-   * thumbnail takes neither, because the wash is tuned for a card-sized box: at 48px its outer stop
-   * covers almost the whole tile and buries the item's silhouette. That is every `isSmall` surface,
-   * not just the rankings and recently-sold rows, and those two show rarity in a column anyway.
+   * Only a card paints a stage. The detail page (`isDraggable`) paints nothing so the page's field is
+   * the scene's backdrop and the renderer's own shadow lands on it, with rarity carried by the glow
+   * the detail pages draw. A thumbnail paints nothing either: the wash is tuned for a card-sized box,
+   * so at 48px its outer stop buries the item's silhouette.
    */
   const backgroundImage = useMemo(() => (isSmall || isDraggable ? undefined : getRarityWash(rarity)), [isDraggable, isSmall, rarity])
 
@@ -345,8 +339,7 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            // Transparent all the way down to the page's own field: the panel paints nothing either,
-            // and a full-saturation rarity scene background would be too loud over it.
+            // Transparent down to the page's field; a full-saturation rarity scene would be too loud.
             disableBackground
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}

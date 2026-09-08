@@ -728,30 +728,8 @@ body .MenuItem.active .category-icon {
   opacity: 1;
 }
 
-/* ----------------------------------------------------------------------------
-   DCL symbols drifting over the field
-
-   The same sheet the auth screen and the fitting room use, ported from the shop
-   (decentraland/shop#411) so both storefronts share the texture.
-
-   A separate fixed layer rather than a second background-image on the field,
-   because background layers have no per-layer opacity and the sheet is 8-bit
-   grayscale with no alpha. Opacity scales that opaque tile rather than removing
-   it, so the rim takes a faint uniform wash along with the symbols: fine at
-   0.03, and the reason not to raise it much.
-
-   It sits on body while the field itself is on html, so z-index -1 puts it above
-   that background and below everything the app renders.
-
-   The mask is an inverse vignette, transparent in the middle and opaque at the
-   rim, so the symbols stay in the periphery and the centre, where a catalog grid
-   or an item preview sits, stays clean purple.
-   ---------------------------------------------------------------------------- */
-
-/* Travels exactly one tile, so the last frame is pixel-identical to the first and the loop has no
-   seam; any other distance would snap on the wrap, which is also why it pans continuously rather
-   than easing back and forth. It moves background-position rather than the element, because the mask
-   lives on the same element and a transform would drag the vignette along with the tiles. */
+/* Travels exactly one tile, so the wrap is seamless. Moves background-position rather than the
+   element, whose mask a transform would drag along with the tiles. */
 @keyframes symbol-drift {
   from {
     background-position: 0 0;
@@ -761,6 +739,11 @@ body .MenuItem.active .category-icon {
   }
 }
 
+/* DCL symbols drifting over the field (decentraland/shop#411), kept to the periphery by an inverse
+   vignette so the centre stays clean. Its own layer rather than a second background-image: the sheet
+   is grayscale with no alpha and background layers have no per-layer opacity, hence the faint wash the
+   low opacity leaves over the rim. Sits on body while the field is on html, so z-index -1 lands
+   between them. */
 body::before {
   content: '';
   position: fixed;
@@ -775,7 +758,6 @@ body::before {
   mask-image: radial-gradient(75% 70% at 50% 45%, transparent 25%, #000 85%);
 }
 
-/* Decorative, so it stops outright rather than slowing. */
 @media (prefers-reduced-motion: reduce) {
   body::before {
     animation: none;

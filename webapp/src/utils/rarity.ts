@@ -2,17 +2,8 @@ import type { CSSProperties } from 'react'
 import { Rarity } from '@dcl/schemas'
 
 /**
- * The rarity wash the shop paints behind an item on a card.
- *
- * Ported from the shop's draft RFC (decentraland/shop#409, treatment "A · tinted wash"), so both
- * storefronts colour a grid the same way. It is light at the centre, which keeps the artwork
- * readable and lets it recut against the fill, with colour gathering toward the edges. That is the
- * difference from `Rarity.getGradient`, the raw explorer gradient, which is saturated all the way
- * through and turns a grid into blocks of flat colour.
- *
- * The hues are the SHOP's rarity palette rather than `@dcl/schemas`' — the same values the card's own
- * rarity chip uses, so the wash and the chip agree. They diverge most at the top end, where the
- * marketplace's Exotic is a pale `#e4ffb8` against the shop's saturated `#9cd71e`.
+ * The shop's rarity palette (decentraland/shop#409), not `@dcl/schemas`'. The two diverge most at the
+ * top end: the marketplace's Exotic is a pale `#e4ffb8` against the shop's saturated `#9cd71e`.
  */
 const SHOP_RARITY_HEX: Record<string, string> = {
   common: '#73d3d3',
@@ -41,24 +32,18 @@ function toRgb(hex: string): [number, number, number] | null {
 const rgba = ([r, g, b]: [number, number, number], alpha: number) => `rgba(${r}, ${g}, ${b}, ${alpha})`
 
 /**
- * A CSS `background-image` for an item's media area. Returns the neutral wash for anything without a
- * rarity, so a NAME or a parcel is never painted as `common`.
+ * The wash behind an item on a card: light at the centre so the artwork stays readable, colour
+ * gathering at the edges. Unlike `Rarity.getGradient`, which is saturated throughout and turns a grid
+ * into blocks of flat colour. Anything without a rarity gets the neutral, never `common`.
  */
 export function getRarityWash(rarity?: Rarity | string | null): string {
   const color = toRgb(rarityHex(rarity)) ?? NEUTRAL_RGB
   return `radial-gradient(circle at 50% 38%, ${rgba(color, 0.04)} 0%, ${rgba(color, 0.3)} 50%, ${rgba(color, 0.62)} 100%)`
 }
 
-/**
- * Glow-only palette, ported with the shop's reasoning intact.
- *
- * Exotic's `#9cd71e` is a yellow-green that goes radioactive blown up to a page-sized light, and
- * browns as it fades: the purple field's complement sits near hue 100, so a colour close to it mixes
- * to mud on the way out. Exotic moves to a green clear of that and gives up 15% of the shared core
- * saturation, the hue being what keeps it out of the mud and the punch being what made it glare.
- * Rare moves to a jade far enough round to stay distinct from it. Chips, filters and the card wash
- * keep their own tokens.
- */
+// Glow-only overrides; chips, filters and the card wash keep their tokens. The purple field's
+// complement sits near hue 100, so exotic's yellow-green token muds as it fades: it moves clear of
+// that and drops some core saturation, and rare moves far enough round to stay distinct from it.
 const GLOW_OVERRIDES: Record<string, { hex: string; saturation?: number }> = {
   exotic: { hex: '#44c75b', saturation: 0.81 },
   rare: { hex: '#3fd39a' }
@@ -73,22 +58,14 @@ function glowHex(rarity?: Rarity | string | null): string {
   return GLOW_OVERRIDES[key]?.hex ?? rarityHex(rarity)
 }
 
-/**
- * The glow's outer halo, as a bare `R G B` triple for the `rgb(R G B / a)` stops that need the same
- * hue at more than one alpha.
- */
+// The glow's outer halo, as a bare `R G B` triple for the `rgb(R G B / a)` stops that need the same
+// hue at more than one alpha.
 export function getRarityGlowRgb(rarity?: Rarity | string | null): string {
   return (toRgb(glowHex(rarity)) ?? UNPARSEABLE_RGB).join(' ')
 }
 
-/**
- * The glow's hot centre: the same hue pushed to near-max saturation at a fixed lightness.
- *
- * This levels the rarities out. Legendary and Epic sit close to the page's own purple and sink into
- * it at their token value, while Unique is already bright, so without the push some items would be
- * backlit and others barely lit. Fixing lightness means every item is backlit as strongly and only
- * the hue changes.
- */
+// The glow's hot centre: the same hue at a fixed saturation and lightness, so every item is backlit as
+// strongly and only the hue changes. Legendary and epic would otherwise sink into the purple page.
 export function getRarityGlowCoreRgb(rarity?: Rarity | string | null, lightness = DEFAULT_GLOW_LIGHTNESS, saturation?: number): string {
   const rgb = toRgb(glowHex(rarity))
   if (!rgb) return UNPARSEABLE_RGB.join(' ')
@@ -100,8 +77,7 @@ export function getRarityGlowCoreRgb(rarity?: Rarity | string | null, lightness 
   const min = Math.min(r, g, b)
   const delta = max - min
 
-  // Achromatic, i.e. the neutral fallback. There is no hue to saturate and pretending otherwise would
-  // invent one, since grey has a hue angle of 0, which is red.
+  // Achromatic: no hue to saturate, and grey's hue angle of 0 would invent red.
   if (!delta) return rgb.join(' ')
 
   let hue: number
@@ -125,12 +101,7 @@ export function getRarityGlowCoreRgb(rarity?: Rarity | string | null, lightness 
   return sector.map(channel => Math.round((channel + lift) * 255)).join(' ')
 }
 
-/**
- * The custom properties the `rarity-glow` class reads, for a detail page's preview wrapper.
- *
- * Two values rather than one because the gradient needs the same hue at more than one alpha, and its
- * centre is a different, saturated colour (see the two helpers above).
- */
+/** The custom properties the `rarity-glow` class reads, for a detail page's preview wrapper. */
 export function getRarityGlowStyle(rarity?: Rarity | string | null): CSSProperties {
   return {
     '--glow-rgb': getRarityGlowRgb(rarity),

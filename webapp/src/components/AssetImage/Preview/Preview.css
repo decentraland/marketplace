@@ -122,9 +122,8 @@
   background-image: url('../../../images/emotes/volume.svg');
 }
 
-/* Small thumbnails carry no rarity gradient, so they need a plate of their own: the search dropdown
-   and the buy modal size and clip .AssetImage without ever painting it, and the gradient was what
-   filled them. This is the same neutral the rankings rows use, so every small tile matches. */
+/* Small thumbnails carry no rarity gradient, and the search dropdown and buy modal never paint
+   .AssetImage themselves, so without this they would be transparent. */
 .Preview.rarity-background.small {
   background-color: rgba(115, 110, 125, 0.24);
 }

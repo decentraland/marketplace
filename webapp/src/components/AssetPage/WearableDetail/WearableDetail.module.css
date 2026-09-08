@@ -9,14 +9,12 @@
 
 .WearableDetail .assetImageContainer {
   height: 602px;
-  /* Tighter than the shared default: this layout runs the preview the full width of the page, so a box
-     at 1.76 would reach well past the viewport on both sides. */
+  /* Tighter than the shared default: this preview runs the full width of the page. */
   --glow-box: 1.5;
 }
 
-/* This frame is a wide band rather than the roughly square panel the shared glow assumes, so scaling
-   it in both directions would smear a flat ellipse across the page. The width comes from the height at
-   the shop's own frame ratio instead, which keeps the halo the shape it is there. */
+/* A wide band rather than the squarish panel the shared glow assumes: scaling both directions would
+   smear a flat ellipse across the page, so the width comes from the height at the shop's frame ratio. */
 .WearableDetail .assetImageContainer:global(.rarity-glow)::before {
   width: auto;
   aspect-ratio: 1045 / 752;
