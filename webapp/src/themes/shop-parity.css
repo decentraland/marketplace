@@ -158,7 +158,7 @@ body .dcl.box.asset-status-filter {
    the same wherever the gradient happens to be. */
 body .dcl.box.filters-sidebar-box:not(:last-child),
 body .dcl.box.special-filter:not(:last-child) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 /* Group labels. The marketplace greys them to #736e7d, which was legible on
@@ -203,7 +203,7 @@ body .smart-left {
    rail and the last obvious difference between the two sidebars. */
 body ul.box-menu.Menu {
   background-color: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 0;
   padding-bottom: 16px;
 }
@@ -212,7 +212,7 @@ body ul.box-menu.Menu {
    shifted it right without shrinking it: a selected SUBcategory ran 12px past the rail's right edge.
    `width: auto` lets the margins reduce the box instead of displacing it. */
 body ul.box-menu.Menu > .MenuItem.active {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.14);
   border-radius: 8px;
   margin: 0 12px;
   width: auto;
@@ -624,9 +624,14 @@ body .atlas-wrapper .react-tile-map {
   background-color: #2b1140;
 }
 
-/* Two labels still at #736e7d, a grey built for the near-black page: the Rankings subtitle and the
-   Recently Sold timestamp. Both measured about 2.4:1 over the purple. */
-body .RankingsTable .subtitle,
+/* Labels still at #736e7d, a grey built for the near-black page and about 2.4:1 over the purple.
+   The subtitle takes the full chain on purpose: it is set by
+   `.RankingsTable .dcl .header-menu-left .subtitle`, four classes, so a shorter selector loses no
+   matter how targeted it looks. The fiat prices sit one step below their MANA figure, so they keep
+   the secondary grey rather than going white. */
+body .RankingsTable .dcl .header-menu-left .subtitle,
+body .RankingsTable .rankings-fiat-price,
+body .RecentlySoldTable .rankings-fiat-price,
 body .RecentlySoldTable .recently-sold-timestamp {
   color: #cfcdd4;
 }
@@ -647,9 +652,35 @@ body .dcl.box.asset-status-filter {
   border-radius: 0;
 }
 
+/* Group labels, matched to the shop's rail: #fcfcfc at 14px/600 in sentence case. The marketplace
+   set them at 13px and uppercased them in CSS, and since the strings are already sentence case
+   ("Rarity", "Status", "Network"), dropping the transform is what actually closes the gap. Scoped to
+   the rail rather than folded into the global header rule above, because `.dcl.box-header-text` and
+   `.ui.sub.header` are shared with headers on other pages that should keep their own size.
+
+   The first selector carries `.dcl.box` for specificity, not for reach: decentraland-ui sets these
+   with `.dcl.box .dcl.box-header-text`, four classes, and class count decides before a type selector
+   like `body` ever breaks a tie. Shortening it drops STATUS, CREATORS, COLLECTION and NETWORK back
+   to 13px uppercase while the rest of the rail moves, which is exactly how it looked mid-fix. */
+body .filters-sidebar .dcl.box .dcl.box-header-text,
+body .filters-sidebar .special-filter-header,
+body .filters-sidebar .dui-rarity-filter__name,
+body ul.box-menu.Menu .ui.sub.header {
+  color: #fcfcfc;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* The shop's rail uses ONE type style for every row, measured off /shop/items: #fcfcfc at 14px/600.
+   The marketplace greyed these to #cfcdd4 and set them at 17px/400, which is what made the rail read
+   as disabled next to the shop's rather than merely different. */
 body ul.box-menu.Menu .MenuItem .content,
-body ul.box-menu.Menu .MenuItem:not(.active) .content {
-  color: #cfcdd4;
+body ul.box-menu.Menu .MenuItem:not(.active) .content,
+body ul.box-menu.Menu .MenuItem.active .content {
+  color: #fcfcfc;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Category glyphs in the rail, sized and spaced like the shop's. Kept at the label's own colour via
