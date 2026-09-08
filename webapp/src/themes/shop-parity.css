@@ -170,17 +170,32 @@ body .filters-sidebar .dcl.box .box-header > span {
   color: #ffffff;
 }
 
-/* Chips and option pills. Both libraries pull these from --superGray, so
-   retargeting the two variables covers every one of them at once instead of
-   chasing individual selectors. */
+/* Chips and option pills. Both libraries pull these from --superGray, so retargeting the variables
+   catches the ones that read it late.
+
+   It does NOT catch everything: decentraland-ui declares `--superGray: #37333d` on its own `:root`,
+   same specificity as this one and later in the cascade, so it wins and any element resolving the
+   variable still gets the near-black. Anything that has to change needs an explicit rule below, not
+   a variable. */
 :root {
   --superGray: rgba(255, 255, 255, 0.12);
   --superGrayHovered: rgba(255, 255, 255, 0.2);
 }
 
-body .dui-array-filter__option,
-body .smart-left {
+body .dui-array-filter__option {
   background: rgba(255, 255, 255, 0.12);
+}
+
+/* The SMART pill and the slab behind it were the last near-black pair in the rail. The wrapper is set
+   by `.special-filter .smart-filter .smart-left` and the pill by `.dui-icon-badge`, both resolving
+   --superGray, so both need a selector rather than the variable. Scoped to the rail: the same badge
+   sits on a card footer on the homepage, where the dark fill is correct. */
+body .special-filter .smart-filter .smart-left {
+  background: transparent;
+}
+
+body .special-filter .dui-icon-badge {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* ----------------------------------------------------------------------------
@@ -669,6 +684,22 @@ body ul.box-menu.Menu .ui.sub.header {
   color: #fcfcfc;
   font-size: 14px;
   font-weight: 600;
+  text-transform: none;
+}
+
+/* Field labels inside the price and parcel-size filters. The shop sets these one step quieter than
+   the group titles above them: 12px/400 in #cfcdd4, sentence case. They were being caught by the
+   blanket `.ui.sub.header` white further up, which put them at the same weight as the titles.
+
+   The price filter's own two labels still read MIN and MAX rather than the shop's Min and Max: that
+   copy is hardcoded in decentraland-ui, not in this repo's locales. Forcing it with `lowercase` plus
+   a capitalized `::first-letter` would also rewrite the LAND filter's "Min (Parcels)" as
+   "Min (parcels)", and both filters share this exact structure with no class to tell them apart, so
+   the case is left to an upstream fix. */
+body .ui.min-max-field .dcl.field .ui.sub.header {
+  color: #cfcdd4;
+  font-size: 12px;
+  font-weight: 400;
   text-transform: none;
 }
 

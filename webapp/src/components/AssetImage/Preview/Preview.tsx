@@ -25,6 +25,7 @@ export const Preview: React.FC<Props> = ({
   videoHash,
   wallet,
   isDraggable,
+  isSmall,
   isLoadingVideoHash,
   isTryingOn,
   isUnityWearablePreviewEnabled,
@@ -310,15 +311,17 @@ export const Preview: React.FC<Props> = ({
   /**
    * Cards get the shop's softer rarity wash; the item page keeps the explorer gradient.
    *
-   * This component renders both surfaces, told apart by `isDraggable`: the item page mounts the
-   * interactive 3D preview, a card renders a still image. On a card the wash is what makes a grid
-   * read the way the shop's does, while the item page's full-bleed gradient is deliberate and was
-   * signed off as is.
+   * This component renders three surfaces. The item page, told apart by `isDraggable`, mounts the
+   * interactive 3D preview and keeps its full-bleed gradient, which was signed off as is. A card
+   * renders a still image and takes the wash, which is what makes a grid read the way the shop's
+   * does. A table thumbnail takes neither: the wash is tuned for a card-sized box, so at 48px its
+   * outer stop covers the whole tile and buries the item's silhouette, and both tables already show
+   * rarity in their own column.
    */
-  const backgroundImage = useMemo(
-    () => (isDraggable ? `radial-gradient(${light}, ${dark})` : getRarityWash(rarity)),
-    [isDraggable, light, dark, rarity]
-  )
+  const backgroundImage = useMemo(() => {
+    if (isSmall) return undefined
+    return isDraggable ? `radial-gradient(${light}, ${dark})` : getRarityWash(rarity)
+  }, [isDraggable, isSmall, light, dark, rarity])
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
