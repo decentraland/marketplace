@@ -142,7 +142,10 @@ export function* orderSaga(tradeService: TradeService) {
         return
       }
 
-      yield put(pollCreditsBalanceRequest(address, BigInt(totalCredits) - BigInt(manaWei)))
+      // Clamped like the Transak saga does: credits smaller than the price would otherwise make the poll
+      // wait on a negative balance.
+      const expected = BigInt(totalCredits) - BigInt(manaWei)
+      yield put(pollCreditsBalanceRequest(address, expected > 0n ? expected : 0n))
     } catch (error) {
       // Best effort by design: see above.
     }

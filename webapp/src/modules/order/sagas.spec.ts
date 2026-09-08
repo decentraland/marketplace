@@ -197,7 +197,9 @@ describe('when handling the execute order request action', () => {
 
         beforeEach(() => {
           // What the marketplace converts the listing to at accept time, which is what leaves the balance.
-          manaWei = (BigInt(order.price) * 13n).toString()
+          // Above the listed price and still inside the credits balance, so the assertion is about the
+          // amount and not about the clamp below.
+          manaWei = ((BigInt(order.price) * 3n) / 2n).toString()
         })
 
         it('should poll for the balance the converted amount leaves, not the listed one', () => {
@@ -233,6 +235,28 @@ describe('when handling the execute order request action', () => {
             ])
             .put(executeOrderTransactionSubmitted(order, nft, txHash))
             .put(executeOrderSuccess(txHash, nft))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the credits do not cover the price', () => {
+        it('should poll for an empty balance rather than a negative one', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [
+                matchers.call.fn(resolveCheckoutPriceInMana),
+                { manaWei: (BigInt(mockCredits.totalCredits) * 2n).toString(), isUSDPegged: true }
+              ],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(pollCreditsBalanceRequest(wallet.address, 0n))
             .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
             .run({ silenceTimeout: true })
         })

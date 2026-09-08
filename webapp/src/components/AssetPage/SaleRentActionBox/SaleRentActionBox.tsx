@@ -98,7 +98,9 @@ const SaleRentActionBox = ({
   // read: it only picks which call to action to show, and holding it back would flash "get MANA" on every
   // ordinary listing for as long as the read takes.
   const checkoutPrice = useCheckoutPriceInMana(order?.price ?? '0', nft.network, order?.tradeId)
-  const priceToCompare = checkoutPrice.manaWei ?? order?.price
+  // The fallback is for the transient state only. Once the amount is known to be unresolvable there is
+  // nothing honest to compare against, and no figure means the call to action offers to get MANA instead.
+  const priceToCompare = checkoutPrice.manaWei ?? (checkoutPrice.status === 'resolving' ? order?.price : undefined)
 
   const hasEnoughManaToBuy = useMemo(
     () => !!order && !!currentMana && !!priceToCompare && ethers.utils.parseEther(formatBalance(currentMana)).gte(priceToCompare),
