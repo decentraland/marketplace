@@ -218,6 +218,26 @@ describe('when handling the execute order request action', () => {
         })
       })
 
+      describe('and resolving the price fails after the transaction was submitted', () => {
+        it('should still report the purchase as submitted, since the poll is best effort', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), Promise.reject(new Error('oracle unreachable'))],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(executeOrderTransactionSubmitted(order, nft, txHash))
+            .put(executeOrderSuccess(txHash, nft))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
       describe('and the price cannot be resolved', () => {
         it('should not poll a balance it cannot know', () => {
           return expectSaga(orderSaga, tradeService)
