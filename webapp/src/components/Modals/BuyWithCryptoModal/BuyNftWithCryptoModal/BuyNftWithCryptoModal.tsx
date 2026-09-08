@@ -104,7 +104,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       requiredAllowanceInWei: manaAfterCredits(priceInMana, useCredits ? credits : null),
       onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
     })
-  }, [nft, order, priceInMana, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
+  }, [nft, order, priceInMana, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits, connectedChainId])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)

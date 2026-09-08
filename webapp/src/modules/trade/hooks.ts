@@ -86,13 +86,13 @@ export function useManaUsdRate(chainId?: ChainId, marketplaceAddress?: string | 
  * `ready` carries the figure to use for the price, the balance check, the allowance and the total.
  * `resolving` and `unavailable` carry none, because the amount is not known yet (or at all).
  */
-export type CheckoutPrice = {
-  status: 'resolving' | 'ready' | 'unavailable'
-  /** MANA wei to charge. Set only when `status` is `ready`. */
-  manaWei: string | null
-  /** True once the trade is known to be USD-pegged, so callers can mark the figure as the approximation it is. */
-  isUSDPegged: boolean
-}
+export type CheckoutPrice =
+  /** The trade is still being read; there is no amount yet. */
+  | { status: 'resolving'; manaWei: null; isUSDPegged: boolean }
+  /** `manaWei` is the amount to charge: the price to show, the balance to check, the allowance to ask for. */
+  | { status: 'ready'; manaWei: string; isUSDPegged: boolean }
+  /** The amount could not be determined, so there is none to act on. */
+  | { status: 'unavailable'; manaWei: null; isUSDPegged: boolean }
 
 const RESOLVING: CheckoutPrice = { status: 'resolving', manaWei: null, isUSDPegged: false }
 const UNAVAILABLE: CheckoutPrice = { status: 'unavailable', manaWei: null, isUSDPegged: false }
