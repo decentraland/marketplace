@@ -104,7 +104,7 @@ export const HOVER_POSES = [
   PreviewEmote.WAVE,
   PreviewEmote.CLAP,
   PreviewEmote.FIST_PUMP
-]
+] as const
 
 const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): PreviewOptions => {
   if (src.category !== NFTCategory.WEARABLE) {

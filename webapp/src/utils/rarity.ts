@@ -17,7 +17,13 @@ const SHOP_RARITY_HEX: Record<string, string> = {
 }
 
 const FALLBACK_HEX = '#e6e6e6'
-const NEUTRAL_RGB: [number, number, number] = [230, 230, 230]
+
+/**
+ * Only reached if one of the hexes above stops parsing, which cannot happen while they are all
+ * literals in this file. Kept as a guard, and shared by both entry points so the two dead branches
+ * cannot drift into returning different greys for the same situation.
+ */
+const UNPARSEABLE_RGB: [number, number, number] = [160, 155, 168]
 
 function rarityHex(rarity?: Rarity | string | null): string {
   return SHOP_RARITY_HEX[String(rarity ?? '').toLowerCase()] ?? FALLBACK_HEX
@@ -37,7 +43,7 @@ const rgba = ([r, g, b]: [number, number, number], alpha: number) => `rgba(${r},
  * into blocks of flat colour. Anything without a rarity gets the neutral, never `common`.
  */
 export function getRarityWash(rarity?: Rarity | string | null): string {
-  const color = toRgb(rarityHex(rarity)) ?? NEUTRAL_RGB
+  const color = toRgb(rarityHex(rarity)) ?? UNPARSEABLE_RGB
   return `radial-gradient(circle at 50% 38%, ${rgba(color, 0.04)} 0%, ${rgba(color, 0.3)} 50%, ${rgba(color, 0.62)} 100%)`
 }
 
@@ -51,7 +57,6 @@ const GLOW_OVERRIDES: Record<string, { hex: string; saturation?: number }> = {
 
 const DEFAULT_GLOW_SATURATION = 0.95
 const DEFAULT_GLOW_LIGHTNESS = 0.66
-const UNPARSEABLE_RGB: [number, number, number] = [160, 155, 168]
 
 function glowHex(rarity?: Rarity | string | null): string {
   const key = String(rarity ?? '').toLowerCase()

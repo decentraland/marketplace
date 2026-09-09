@@ -1,4 +1,4 @@
-import { getRarityGlowCoreRgb, getRarityGlowRgb, getRarityWash } from './rarity'
+import { getRarityGlowCoreRgb, getRarityGlowRgb, getRarityGlowStyle, getRarityWash } from './rarity'
 
 const RARITIES = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'exotic', 'mythic', 'unique']
 
@@ -83,6 +83,24 @@ describe('when resolving the glow core for a rarity', () => {
       // saturation push has to be skipped outright.
       expect(getRarityGlowCoreRgb('not-a-real-rarity')).toBe(NEUTRAL)
       expect(getRarityGlowCoreRgb()).toBe(NEUTRAL)
+    })
+  })
+})
+
+describe('when building the glow style for a detail page', () => {
+  it('should name the two custom properties the glow class reads', () => {
+    // The bridge between this module and rarityGlow.css. A rename on either side would take the glow
+    // off all three detail pages silently, since CSS ignores a custom property nobody sets.
+    const style = getRarityGlowStyle('epic') as Record<string, string>
+    expect(style['--glow-rgb']).toBe(getRarityGlowRgb('epic'))
+    expect(style['--glow-core']).toBe(getRarityGlowCoreRgb('epic'))
+  })
+
+  describe('and the rarity is missing', () => {
+    it('should still set both properties so the class never falls back to its cyan default', () => {
+      const style = getRarityGlowStyle() as Record<string, string>
+      expect(style['--glow-rgb']).toBe(NEUTRAL)
+      expect(style['--glow-core']).toBe(NEUTRAL)
     })
   })
 })
