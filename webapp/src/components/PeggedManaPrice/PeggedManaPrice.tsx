@@ -37,8 +37,8 @@ function chainIdOf(network: Props['network']): ChainId | undefined {
  * what would earn a "you charged me a different price" — and the conversion deliberately truncates rather than
  * rounds up so the shown figure never sits above the charge.
  */
-const PeggedManaPrice = ({ usdWei, network, size = 'medium', className, manaClassName, inline }: Props) => {
-  const rate = useManaUsdRate(chainIdOf(network))
+const PeggedManaPrice = ({ usdWei, network, marketplaceAddress, size = 'medium', className, manaClassName, inline }: Props) => {
+  const rate = useManaUsdRate(chainIdOf(network), marketplaceAddress)
   const manaWei = rate ? usdWeiToManaWei(usdWei, rate) : null
 
   // No rate (still reading, or the oracle is unreachable) means there is no honest MANA figure to show. Saying

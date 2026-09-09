@@ -9,6 +9,7 @@ import copyText from '../../lib/copyText'
 import { useTimer } from '../../lib/timer'
 import { getContractNames } from '../../modules/vendor'
 import { shortenAddress } from '../../modules/wallet/utils'
+import { getDeployedOffChainMarketplaceContracts } from '../../utils/trades'
 import { PageLayout } from '../PageLayout'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
@@ -54,16 +55,6 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const offChainMarketplaceEthereum = getContract({
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.ETHEREUM
-  })
-
-  const offChainMarketplaceMatic = getContract({
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.MATIC
-  })
-
   const bidsEthereum = getContract({
     name: contractNames.BIDS,
     network: Network.ETHEREUM
@@ -95,8 +86,6 @@ const SettingsPage = (props: Props) => {
     !collectionStore ||
     !marketplaceEthereum ||
     !marketplaceMatic ||
-    !offChainMarketplaceEthereum ||
-    !offChainMarketplaceMatic ||
     !bidsEthereum ||
     !bidsMatic ||
     !manaEthereum ||
@@ -202,26 +191,38 @@ const SettingsPage = (props: Props) => {
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
-                          <Authorization
-                            authorization={{
-                              address: wallet.address,
-                              authorizedAddress: offChainMarketplaceEthereum.address,
-                              contractAddress: manaEthereum.address,
-                              contractName: ContractName.MANAToken,
-                              chainId: manaEthereum.chainId,
-                              type: AuthorizationType.ALLOWANCE
-                            }}
-                          />
-                          <Authorization
-                            authorization={{
-                              address: wallet.address,
-                              authorizedAddress: offChainMarketplaceMatic.address,
-                              contractAddress: manaMatic.address,
-                              contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
-                              type: AuthorizationType.ALLOWANCE
-                            }}
-                          />
+                          {/*
+                            One row per DEPLOYED off-chain marketplace version, not just the newest. A grant
+                            made against an older version stays live on chain once a newer one ships, and a
+                            row is the only way to see or revoke it. Keyed by address so each version keeps
+                            its own row identity rather than sharing one with its siblings.
+                          */}
+                          {getDeployedOffChainMarketplaceContracts(manaEthereum.chainId).map(({ contract }) => (
+                            <Authorization
+                              key={contract.address}
+                              authorization={{
+                                address: wallet.address,
+                                authorizedAddress: contract.address,
+                                contractAddress: manaEthereum.address,
+                                contractName: ContractName.MANAToken,
+                                chainId: manaEthereum.chainId,
+                                type: AuthorizationType.ALLOWANCE
+                              }}
+                            />
+                          ))}
+                          {getDeployedOffChainMarketplaceContracts(manaMatic.chainId).map(({ contract }) => (
+                            <Authorization
+                              key={contract.address}
+                              authorization={{
+                                address: wallet.address,
+                                authorizedAddress: contract.address,
+                                contractAddress: manaMatic.address,
+                                contractName: ContractName.MANAToken,
+                                chainId: manaMatic.chainId,
+                                type: AuthorizationType.ALLOWANCE
+                              }}
+                            />
+                          ))}
                           <Authorization
                             authorization={{
                               address: wallet.address,

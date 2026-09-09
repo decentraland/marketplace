@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
-import { ContractName, getContract } from 'decentraland-transactions'
+import { getContract, getContractName } from 'decentraland-transactions'
 
 /**
  * The MANA/USD rate a USD-pegged listing will actually settle at.
@@ -10,7 +10,11 @@ import { ContractName, getContract } from 'decentraland-transactions'
  * accept time using its own oracle. This app charges in MANA, so the only honest thing to show a buyer is how
  * much MANA the listing currently costs — not the USD figure, and certainly not a shop-side unit.
  *
- * READ THROUGH THE MARKETPLACE, NEVER A STANDALONE ORACLE. `decentraland-transactions` also ships a
+ * READ THROUGH THE MARKETPLACE THE TRADE SETTLES ON, and never a standalone oracle or a version this module
+ * picks for itself. Each marketplace version holds its own `manaUsdAggregator`, so a listing signed against V2
+ * has to be priced with V2's feed even once V3 exists — reading "the newest" would quote legacy listings at
+ * another contract's rate. The caller passes the address from the same `fetchTrade` that told it the listing
+ * is USD-pegged, which is why there is no fallback here. `decentraland-transactions` also ships a
  * `ChainlinkOracle` entry, and on Polygon it is a DIFFERENT contract from the one the marketplace settles with
  * (`0xe18B1361…` vs the marketplace's `0xA1CbF3Fe…`, measured on chain — and the marketplace's does not even
  * expose `getRate`). Reading the aggregator address off the marketplace itself makes the displayed rate the
@@ -36,16 +40,27 @@ export type ManaUsdRate = {
 const TTL_MS = 60_000
 
 type CacheEntry = { at: number; rate: Promise<ManaUsdRate> }
-const cache = new Map<ChainId, CacheEntry>()
+// Keyed by chain AND marketplace, not chain alone: two versions on one chain can answer different rates, and a
+// chain-only key would serve whichever was read first to both.
+const cache = new Map<string, CacheEntry>()
 
-async function readRate(chainId: ChainId): Promise<ManaUsdRate> {
+function cacheKey(chainId: ChainId, marketplaceAddress: string): string {
+  return `${chainId}-${marketplaceAddress.toLowerCase()}`
+}
+
+async function readRate(chainId: ChainId, marketplaceAddress: string): Promise<ManaUsdRate> {
+  // Resolve the address through the contract registry before calling it. `marketplaceAddress` reaches here
+  // from a server-supplied `trade.contract`, and this is the one path that would otherwise dial it directly:
+  // every transacting path re-resolves and fails closed already. Two things this prevents — pricing off a
+  // contract nobody deployed, and ethers v5 treating a non-address string as an ENS name to go and look up.
+  // An unknown address throws, which the caller renders as "price unavailable".
+  const marketplaceContract = getContract(getContractName(marketplaceAddress), chainId)
   const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get a provider to read the MANA/USD oracle')
   }
   const web3 = new ethers.providers.Web3Provider(provider)
-  const { address } = getContract(ContractName.OffChainMarketplaceV2, chainId)
-  const marketplace = new ethers.Contract(address, MARKETPLACE_ABI, web3)
+  const marketplace = new ethers.Contract(marketplaceContract.address, MARKETPLACE_ABI, web3)
   const aggregatorAddress: string = await marketplace.manaUsdAggregator()
 
   const aggregator = new ethers.Contract(aggregatorAddress, AGGREGATOR_ABI, web3)
@@ -65,18 +80,23 @@ async function readRate(chainId: ChainId): Promise<ManaUsdRate> {
   return { answer, decimals: Number(decimals) }
 }
 
-/** The rate for a chain, cached for {@link TTL_MS}. A failed read is not cached. */
-export function fetchManaUsdRate(chainId: ChainId): Promise<ManaUsdRate> {
-  const hit = cache.get(chainId)
+/**
+ * The rate the given marketplace will settle at, cached for {@link TTL_MS}. A failed read is not cached.
+ *
+ * `marketplaceAddress` is required on purpose — see the module comment. It is the trade's own `contract`.
+ */
+export function fetchManaUsdRate(chainId: ChainId, marketplaceAddress: string): Promise<ManaUsdRate> {
+  const key = cacheKey(chainId, marketplaceAddress)
+  const hit = cache.get(key)
   if (hit && Date.now() - hit.at < TTL_MS) {
     return hit.rate
   }
-  const rate = readRate(chainId).catch(error => {
+  const rate = readRate(chainId, marketplaceAddress).catch(error => {
     // Never pin a failure: the next render should try again rather than inherit a broken price for a minute.
-    cache.delete(chainId)
+    cache.delete(key)
     throw error
   })
-  cache.set(chainId, { at: Date.now(), rate })
+  cache.set(key, { at: Date.now(), rate })
   return rate
 }
 

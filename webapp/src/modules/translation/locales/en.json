@@ -1275,6 +1275,10 @@
       "title": "Temporarily unavailable",
       "body": "NAME registration with credits is temporarily paused due to high network costs. Please try again later."
     },
+    "open_transak_failure": {
+      "title": "Card payment unavailable",
+      "body": "Card payment could not be started for this listing."
+    },
     "cross_chain_tx": {
       "body": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in the links below:",
       "view_transaction": "View transaction"
@@ -1747,6 +1751,10 @@
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Price unavailable"
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "Price unavailable",
+    "description": "We couldn't confirm how much MANA this listing costs right now, so we're not showing you an amount to approve. Please try again in a moment."
   },
   "announcement_bar": {
     "highlight": "Meet the Decentraland Shop",

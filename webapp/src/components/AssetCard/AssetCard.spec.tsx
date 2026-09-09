@@ -4,7 +4,7 @@ import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } fr
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { PageName, SortBy } from '../../modules/routing/types'
-import { useTradePriceDenomination } from '../../modules/trade/hooks'
+import { useTradePricing } from '../../modules/trade/hooks'
 import { renderWithProviders } from '../../utils/test'
 import { HoverPreviewProvider } from '../HoverPreview'
 import AssetCard from './AssetCard'
@@ -16,7 +16,7 @@ const HOVER_INTENT_MS = 120
 // The two reads the pegged path depends on: which unit the listing is in, and the rate to convert it.
 // Both are network calls in production; here they are dials so a test can state the situation it means.
 jest.mock('../../modules/trade/hooks', () => ({
-  useTradePriceDenomination: jest.fn(() => 'mana'),
+  useTradePricing: jest.fn(() => ({ denomination: 'mana', marketplaceAddress: '0xmarketplace' })),
   useManaUsdRate: jest.fn(() => ({ answer: 100000000n, decimals: 8 }))
 }))
 
@@ -146,7 +146,7 @@ describe('AssetCard', () => {
 
     beforeEach(() => {
       // $1 per MANA, so the converted figure is a round number the assertion can name.
-      ;(useTradePriceDenomination as jest.Mock).mockReturnValue('usd-pegged')
+      ;(useTradePricing as jest.Mock).mockReturnValue({ denomination: 'usd-pegged', marketplaceAddress: '0xmarketplace' })
       catalogAsset = {
         ...asset,
         itemId: '0',

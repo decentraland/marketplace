@@ -8,7 +8,7 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getContract as getDecentralandContract, ContractName } from 'decentraland-transactions'
+import { ContractName } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import ERC721ABI from '../../../contracts/ERC721.json'
 import { parseMANANumber } from '../../../lib/mana'
@@ -20,6 +20,7 @@ import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/u
 import { getContractNames } from '../../../modules/vendor'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
+import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import { AssetAction } from '../../AssetAction'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import ErrorBanner from '../../ErrorBanner'
@@ -112,7 +113,7 @@ const SellModal = (props: Props) => {
     return null
   }
 
-  const offchainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
+  const offchainOrdersContract = getLatestOffChainMarketplaceContract(nft.chainId)
 
   const handleCreateOrder = () =>
     onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), contractFingerprint)

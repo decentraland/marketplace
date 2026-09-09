@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import CreditsIcon from '../../../images/icon-credits.svg'
 import { useIsIAP } from '../../../modules/iap/useIAP'
 import { PriceDenomination } from '../../../modules/trade/denomination'
-import { useTradePriceDenomination } from '../../../modules/trade/hooks'
+import { useTradePricing } from '../../../modules/trade/hooks'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -13,7 +13,8 @@ import styles from './PriceComponent.module.css'
 
 const PriceComponent = ({ price, network, useCredits, credits, tradeId, className }: Props) => {
   const isIAP = useIsIAP()
-  const isUSDPegged = useTradePriceDenomination(tradeId) === PriceDenomination.USD_PEGGED
+  const { denomination, marketplaceAddress } = useTradePricing(tradeId)
+  const isUSDPegged = denomination === PriceDenomination.USD_PEGGED
   const getAdjustedPrice = useCallback(
     (originalPrice: string) => {
       if (!useCredits || !credits) return originalPrice
@@ -31,7 +32,7 @@ const PriceComponent = ({ price, network, useCredits, credits, tradeId, classNam
   if (isUSDPegged) {
     return (
       <div className={classNames(styles.PriceContainer, className)}>
-        <PeggedManaPrice usdWei={price} network={network} size="large" />
+        <PeggedManaPrice usdWei={price} network={network} marketplaceAddress={marketplaceAddress} size="large" />
       </div>
     )
   }

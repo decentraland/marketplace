@@ -27,6 +27,7 @@ import { NFT } from '../nft/types'
 import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { openTransak } from '../transak/actions'
 import { VendorName } from '../vendor'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
@@ -191,6 +192,95 @@ describe('when handling the execute order request action', () => {
     })
 
     describe('and credits are enabled and available', () => {
+      describe('and the listing is priced in USD', () => {
+        let manaWei: string
+
+        beforeEach(() => {
+          // What the marketplace converts the listing to at accept time, which is what leaves the balance.
+          // Above the listed price and still inside the credits balance, so the assertion is about the
+          // amount and not about the clamp below.
+          manaWei = ((BigInt(order.price) * 3n) / 2n).toString()
+        })
+
+        it('should poll for the balance the converted amount leaves, not the listed one', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei, isUSDPegged: true }],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(manaWei)))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and resolving the price fails after the transaction was submitted', () => {
+        it('should still report the purchase as submitted, since the poll is best effort', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), Promise.reject(new Error('oracle unreachable'))],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(executeOrderTransactionSubmitted(order, nft, txHash))
+            .put(executeOrderSuccess(txHash, nft))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the credits do not cover the price', () => {
+        it('should poll for an empty balance rather than a negative one', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [
+                matchers.call.fn(resolveCheckoutPriceInMana),
+                { manaWei: (BigInt(mockCredits.totalCredits) * 2n).toString(), isUSDPegged: true }
+              ],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(pollCreditsBalanceRequest(wallet.address, 0n))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the price cannot be resolved', () => {
+        it('should not poll a balance it cannot know', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: null, isUSDPegged: true }],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .not.put.actionType(pollCreditsBalanceRequest(wallet.address, 0n).type)
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
       it('should execute the order with credits and poll the credits balance', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
@@ -200,6 +290,7 @@ describe('when handling the execute order request action', () => {
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), mockCredits],
             [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: order.price, isUSDPegged: false }],
             [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
@@ -279,6 +370,7 @@ describe('when handling the execute order request action', () => {
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), mockCredits],
             [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+            [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: order.price, isUSDPegged: false }],
             [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))

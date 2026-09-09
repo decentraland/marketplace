@@ -51,6 +51,7 @@ export const CROSS_CHAIN_SUCCESS_TEST_ID = 'cross-chain-success'
 export const BuyWithCryptoModal = (props: Props) => {
   const {
     price,
+    isPriceApproximate,
     wallet,
     credits,
     useCredits,
@@ -800,7 +801,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   ) : (
                     <>
                       <Mana network={asset.network} inline withTooltip>
-                        {formatWeiMANA(price)}
+                        {isPriceApproximate ? t('pegged_mana_price.approximate', { amount: formatWeiMANA(price) }) : formatWeiMANA(price)}
                       </Mana>
                       <span className={styles.priceInUSD}>
                         <ManaToFiat mana={price} digits={4} />
@@ -852,6 +853,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <PurchaseTotal
                   selectedToken={selectedToken}
                   price={price}
+                  isPriceApproximate={isPriceApproximate}
                   useMetaTx={useMetaTx}
                   shouldUseCrossChainProvider={shouldUseCrossChainProvider}
                   route={route}

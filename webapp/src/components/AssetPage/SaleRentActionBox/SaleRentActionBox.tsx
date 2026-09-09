@@ -21,11 +21,13 @@ import {
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
+import { useCheckoutPriceInMana } from '../../../modules/trade/hooks'
 import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { LinkedProfile } from '../../LinkedProfile'
+import { ListingPrice } from '../../ListingPrice'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
@@ -91,9 +93,18 @@ const SaleRentActionBox = ({
         ),
     [rental, currentMana, selectedRentalPeriodIndex, isPeriodSelected]
   )
+  // `order.price` is MANA wei on most listings and USD wei on a USD-pegged one, so the balance is compared
+  // against the MANA figure instead. Unlike the checkout, this one stays optimistic while the trade is being
+  // read: it only picks which call to action to show, and holding it back would flash "get MANA" on every
+  // ordinary listing for as long as the read takes.
+  const checkoutPrice = useCheckoutPriceInMana(order?.price ?? '0', nft.network, order?.tradeId)
+  // The fallback is for the transient state only. Once the amount is known to be unresolvable there is
+  // nothing honest to compare against, and no figure means the call to action offers to get MANA instead.
+  const priceToCompare = checkoutPrice.manaWei ?? (checkoutPrice.status === 'resolving' ? order?.price : undefined)
+
   const hasEnoughManaToBuy = useMemo(
-    () => !!order && !!currentMana && ethers.utils.parseEther(formatBalance(currentMana)).gte(order.price),
-    [order, currentMana]
+    () => !!order && !!currentMana && !!priceToCompare && ethers.utils.parseEther(formatBalance(currentMana)).gte(priceToCompare),
+    [order, currentMana, priceToCompare]
   )
 
   return (
@@ -175,12 +186,15 @@ const SaleRentActionBox = ({
               <div className={styles.price}>
                 <div className={styles.title}>{t('global.price')}</div>
                 <div className={styles.content}>
-                  <Mana showTooltip className={styles.priceInMana} withTooltip size="medium" network={order.network}>
-                    {formatWeiMANA(order.price)}
-                  </Mana>
-                  <span className={styles.priceInFiat}>
-                    (<ManaToFiat mana={order.price} />)
-                  </span>
+                  <ListingPrice
+                    price={order.price}
+                    network={order.network}
+                    tradeId={order.tradeId}
+                    showFiat
+                    size="medium"
+                    manaClassName={styles.priceInMana}
+                    showTooltip
+                  />
                 </div>
               </div>
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (

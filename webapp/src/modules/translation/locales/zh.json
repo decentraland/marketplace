@@ -1246,6 +1246,10 @@
       "title": "暂时不可用",
       "body": "由于网络费用较高，使用积分注册 NAME 暂时暂停。请稍后再试。"
     },
+    "open_transak_failure": {
+      "title": "暂不支持银行卡支付",
+      "body": "无法为此商品发起银行卡支付。"
+    },
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
       "view_transaction": "查看交易"
@@ -1713,6 +1717,10 @@
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "价格不可用"
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "价格不可用",
+    "description": "我们目前无法确认此挂单需要多少 MANA，因此不会向你显示待批准的金额。请稍后重试。"
   },
   "announcement_bar": {
     "highlight": "认识 Decentraland Shop",

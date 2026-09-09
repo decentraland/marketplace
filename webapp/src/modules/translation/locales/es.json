@@ -1243,6 +1243,10 @@
       "title": "Temporalmente no disponible",
       "body": "El registro de NAME con créditos está temporalmente pausado por los altos costos de la red. Por favor, inténtalo de nuevo más tarde."
     },
+    "open_transak_failure": {
+      "title": "Pago con tarjeta no disponible",
+      "body": "No se pudo iniciar el pago con tarjeta para esta publicación."
+    },
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"
@@ -1709,6 +1713,10 @@
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Precio no disponible"
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "Precio no disponible",
+    "description": "No pudimos confirmar cuánto MANA cuesta esta publicación en este momento, así que no te mostramos un monto para aprobar. Volvé a intentar en un rato."
   },
   "announcement_bar": {
     "highlight": "Conoce la Decentraland Shop",

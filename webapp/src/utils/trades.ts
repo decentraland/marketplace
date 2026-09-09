@@ -44,25 +44,72 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
   ]
 }
 
+/**
+ * Off-chain marketplace versions, newest first.
+ *
+ * The EIP-712 domain names its verifying contract, so the version a trade is signed against is part of
+ * what the signer signed, and every approval the UI asks for has to name that same contract. V3 is
+ * testnet-only for now, so mainnet has to keep using V2 rather than fail.
+ */
+const OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES = [ContractName.OffChainMarketplaceV3, ContractName.OffChainMarketplaceV2]
+
+/**
+ * The same versions plus V1, for enumerating EXISTING grants rather than choosing where to sign. V1 never
+ * receives a new listing, but a wallet that traded before V2 can still hold an allowance on it.
+ */
+const OFF_CHAIN_MARKETPLACE_SETTINGS_CONTRACT_NAMES = [
+  ContractName.OffChainMarketplaceV3,
+  ContractName.OffChainMarketplaceV2,
+  ContractName.OffChainMarketplace
+]
+
+/**
+ * Every off-chain marketplace version deployed on a chain, newest first.
+ *
+ * Distinct from {@link getLatestOffChainMarketplaceContract}, which answers "where do NEW listings go".
+ * This answers "where might a user already have granted an allowance" — a grant made against an older
+ * version stays live on chain after a newer one ships, so the Settings page has to be able to show and
+ * revoke it. Guarded per candidate because `getContract` throws for a version a chain does not have.
+ */
+export function getDeployedOffChainMarketplaceContracts(chainId: ChainId): { contractName: ContractName; contract: ContractData }[] {
+  return OFF_CHAIN_MARKETPLACE_SETTINGS_CONTRACT_NAMES.reduce<{ contractName: ContractName; contract: ContractData }[]>(
+    (deployed, contractName) => {
+      try {
+        deployed.push({ contractName, contract: getContract(contractName, chainId) })
+      } catch (_error) {
+        // Not deployed on this chain.
+      }
+      return deployed
+    },
+    []
+  )
+}
+
+/**
+ * The newest off-chain marketplace deployed on a chain.
+ *
+ * `getContract` THROWS for a version that is not deployed on the given chain rather than returning a
+ * falsy value, which is why each candidate is tried in turn.
+ */
+export function getLatestOffChainMarketplaceContract(chainId: ChainId): ContractData {
+  for (const contractName of OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES) {
+    try {
+      return getContract(contractName, chainId)
+    } catch (_error) {
+      continue
+    }
+  }
+  throw new Error(`No off-chain marketplace contract exists on chain ${chainId}`)
+}
+
 export async function getOffChainMarketplaceContract(chainId: ChainId) {
   const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get connected provider')
   }
-  const { address, abi } = getContract(ContractName.OffChainMarketplaceV2, chainId)
+  const { address, abi } = getLatestOffChainMarketplaceContract(chainId)
   const instance = new ethers.Contract(address, abi, new ethers.providers.Web3Provider(provider))
   return instance
-}
-
-export async function getOffChainMarketplaceContractInstance(chainId: ChainId) {
-  const provider = await getNetworkProvider(chainId)
-  if (!provider) {
-    throw new Error('Could not get connected provider')
-  }
-
-  const contractData = getContract(ContractName.OffChainMarketplaceV2, chainId)
-  const contract = new ethers.Contract(contractData.address, contractData.abi, new ethers.providers.Web3Provider(provider))
-  return { contractData, contract }
 }
 
 export function getValueForTradeAsset(asset: TradeAsset): string {
@@ -145,12 +192,8 @@ export function getOnChainTrade(trade: Trade, sentBeneficiaryAddress: string): O
   }
 }
 
-export async function getTradeSignature(trade: Omit<TradeCreation, 'signature' | 'contract'>) {
-  const marketplaceContract: ContractData = getContract(ContractName.OffChainMarketplaceV2, trade.chainId)
-
-  if (!marketplaceContract) {
-    throw new Error(`The ${ContractName.OffChainMarketplace} contract doesn't exist on chain ${trade.chainId}`)
-  }
+export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>) {
+  const marketplaceContract: ContractData = getLatestOffChainMarketplaceContract(trade.chainId)
 
   const signer = (await getSigner()) as ethers.providers.JsonRpcSigner
   const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
@@ -175,9 +218,15 @@ export async function estimateTradeGas(
   const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(tradeId)
   // Build the trade data
   const tradeToAccept = getOnChainTrade(trade, buyerAddress)
-  // Estimate the gas
-  const offchainContractName = tradeContractAddress ? getContractName(tradeContractAddress) : ContractName.OffChainMarketplace
-  const contract = getContract(offchainContractName, chainId)
+  // Estimate against the contract this trade actually settles on. The caller's address wins when given,
+  // but the fallback is the trade's own `contract`, never a fixed version: estimating a V2 or V3 trade
+  // against V1 measures a call that would revert, and `accept` reverting is exactly what a buyer needs the
+  // estimate to warn them about. Fail closed if neither is available rather than guess a version.
+  const settlementAddress = tradeContractAddress ?? trade.contract
+  if (!settlementAddress) {
+    throw new Error(`Trade ${tradeId} has no settlement contract to estimate against`)
+  }
+  const contract = getContract(getContractName(settlementAddress), chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
   return c.estimateGas.accept([tradeToAccept], { from: buyerAddress })
 }
