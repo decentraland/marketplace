@@ -85,7 +85,28 @@ const toBodyShape = (urn?: string | null): BodyShape | null =>
  * avatar only when it can actually wear the item, and otherwise fall back to the default mannequin
  * pinned to a shape the item does support.
  */
-const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+/**
+ * Poses a hovered wearable can strike, ported from the shop (decentraland/shop#409).
+ *
+ * It used to be FASHION and only FASHION, so every card in a grid played the identical animation and
+ * the row read as one avatar copy-pasted. Restricted to poses that keep the avatar planted and framed
+ * inside a card-sized viewport: walk, run and jump translate it out of frame, and idle is what the
+ * shopper is hovering to get away from.
+ */
+export const HOVER_POSES = [
+  PreviewEmote.FASHION,
+  PreviewEmote.FASHION_2,
+  PreviewEmote.FASHION_3,
+  PreviewEmote.FASHION_4,
+  PreviewEmote.DANCE,
+  PreviewEmote.LOVE,
+  PreviewEmote.MONEY,
+  PreviewEmote.WAVE,
+  PreviewEmote.CLAP,
+  PreviewEmote.FIST_PUMP
+]
+
+const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): PreviewOptions => {
   if (src.category !== NFTCategory.WEARABLE) {
     return { profile: env.profile }
   }
@@ -95,16 +116,16 @@ const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previ
 
   return {
     type: PreviewType.AVATAR,
-    // Land straight into a fashion pose so the avatar never flashes a T-pose.
-    emote: PreviewEmote.FASHION,
+    // Always a pose, never nothing, so the avatar never flashes a T-pose.
+    emote,
     profile: canBeWornByAvatar ? env.profile : 'default',
     bodyShape: canBeWornByAvatar ? null : shapes[0] ?? null
   }
 }
 
-const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): PreviewOptions => {
   const base: PreviewOptions = {
-    ...getAvatarOptions(src, env),
+    ...getAvatarOptions(src, env, emote),
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
     disableBackground: true
@@ -120,13 +141,24 @@ const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previe
   }
 }
 
-const dispatchUpdate = (src: HoverPreviewSource, env: PreviewEnvConfig): boolean => {
+const dispatchUpdate = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): boolean => {
   const iframe = document.getElementById(PREVIEW_IFRAME_ID) as HTMLIFrameElement | null
   if (!iframe?.contentWindow) return false
   sendMessage(iframe.contentWindow, PreviewMessageType.UPDATE, {
-    options: sourceToOptions(src, env)
+    options: sourceToOptions(src, env, emote)
   })
   return true
+}
+
+/**
+ * A fresh pose per hovered asset, never the same one twice running, since a repeat reads as the
+ * feature not working. Held per asset rather than rolled at dispatch time, because the pending-source
+ * flush dispatches the same hover a second time once the iframe becomes controllable, and re-rolling
+ * there would snap the avatar into a different animation mid-hover.
+ */
+const nextPose = (last: PreviewEmote): PreviewEmote => {
+  const options = HOVER_POSES.filter(pose => pose !== last)
+  return options[Math.floor(Math.random() * options.length)]
 }
 
 // Stable identity of an asset, matching the discriminator used in
@@ -157,6 +189,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   // the iframe doesn't rebuild its scene and never emits a LOAD — a LOAD
   // counter would then drift and leave the spinner stuck forever.
   const currentKeyRef = useRef<string | null>(null)
+  const poseRef = useRef<{ key: string | null; emote: PreviewEmote }>({ key: null, emote: HOVER_POSES[0] })
   const loadedKeyRef = useRef<string | null>(null)
 
   const wallet = useSelector(getWallet)
@@ -242,12 +275,15 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
       setIsVisible(true)
       const key = keyOf(source)
       currentKeyRef.current = key
+      if (poseRef.current.key !== key) {
+        poseRef.current = { key, emote: nextPose(poseRef.current.emote) }
+      }
       // If this asset is already rendered in the iframe the UPDATE won't
       // trigger a rebuild (no LOAD will follow), so don't show a spinner that
       // would never clear. Otherwise wait for its LOAD.
       setIsAssetLoading(key !== loadedKeyRef.current)
       if (isControllable) {
-        dispatchUpdate(source, envConfig)
+        dispatchUpdate(source, envConfig, poseRef.current.emote)
         pendingSourceRef.current = null
       } else {
         pendingSourceRef.current = source
@@ -268,7 +304,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   // Flush any pending hover request once the iframe is controllable.
   useEffect(() => {
     if (isControllable && pendingSourceRef.current) {
-      dispatchUpdate(pendingSourceRef.current, envConfig)
+      dispatchUpdate(pendingSourceRef.current, envConfig, poseRef.current.emote)
       pendingSourceRef.current = null
     }
   }, [isControllable, envConfig])

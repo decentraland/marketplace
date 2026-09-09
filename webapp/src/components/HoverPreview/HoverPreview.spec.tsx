@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-var-requires */
 import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewMessageType, PreviewOptions, PreviewType } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewMessageType, PreviewOptions, PreviewType } from '@dcl/schemas'
 import { RootState } from '../../modules/reducer'
 import { renderWithProviders } from '../../utils/test'
-import { HoverPreviewProvider, HoverPreviewSource, useHoverPreview } from './HoverPreview'
+import { HOVER_POSES, HoverPreviewProvider, HoverPreviewSource, useHoverPreview } from './HoverPreview'
 
 // Capture the latest onLoad/onError handed to the WearablePreview iframe so
 // tests can drive the LOAD lifecycle, and render a real iframe element
@@ -363,14 +363,44 @@ describe('HoverPreview', () => {
           fireLoad() // boot
           const postMessage = spyOnPreviewMessages()
           await userEvent.click(getByText('show'))
-          expect(getLastSentOptions(postMessage)).toEqual(
+          const options = getLastSentOptions(postMessage)
+          expect(options).toEqual(
             expect.objectContaining({
               type: PreviewType.AVATAR,
-              emote: PreviewEmote.FASHION,
               profile: 'default',
               bodyShape: BodyShape.FEMALE
             })
           )
+          // The pose is drawn from the list rather than fixed, so membership is the contract.
+          expect(HOVER_POSES).toContain(options.emote)
+        })
+      })
+
+      describe('and a different wearable is hovered next', () => {
+        it('should draw a fresh pose rather than repeating the previous one', async () => {
+          const otherWearable: HoverPreviewSource = { ...FEMALE_WEARABLE_SOURCE, itemId: '3' }
+          const { getByText, rerender } = renderWithProviders(
+            <HoverPreviewProvider enabled>
+              <Probe source={FEMALE_WEARABLE_SOURCE} />
+            </HoverPreviewProvider>
+          )
+          fireLoad() // boot
+          const postMessage = spyOnPreviewMessages()
+          await userEvent.click(getByText('show'))
+          const first = getLastSentOptions(postMessage).emote
+
+          rerender(
+            <HoverPreviewProvider enabled>
+              <Probe source={otherWearable} />
+            </HoverPreviewProvider>
+          )
+          await userEvent.click(getByText('show'))
+          const second = getLastSentOptions(postMessage).emote
+
+          expect(HOVER_POSES).toContain(first)
+          expect(HOVER_POSES).toContain(second)
+          // A repeat reads as the feature not working, so the previous pose is excluded outright.
+          expect(second).not.toBe(first)
         })
       })
 
