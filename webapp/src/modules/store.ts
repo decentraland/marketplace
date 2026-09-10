@@ -14,6 +14,7 @@ import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/
 import { Locale } from 'decentraland-ui'
 import { config } from '../config'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
+import { getShopUrl } from './iap/shopRedirect'
 import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
 import { getBasename } from './routing/basename'
@@ -52,6 +53,14 @@ export const createHistory = () => {
   const isIAP = viewParam === 'mobile-iap'
 
   if (isIAP) {
+    // Hand the request to the shop when it serves this destination. Runs before the
+    // router exists, so there is no flash of this app's shell.
+    const shopUrl = getShopUrl(window.location.pathname, initialParams)
+    if (shopUrl) {
+      window.location.replace(shopUrl)
+      return history
+    }
+
     const injectParams = (path: string | Location): string | Location => {
       if (typeof path === 'string') {
         const [pathname, search = ''] = path.split('?')
