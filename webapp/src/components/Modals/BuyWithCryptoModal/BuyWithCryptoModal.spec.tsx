@@ -5,6 +5,7 @@ import { BodyShape, ChainId, Item, NFTCategory, Network, Rarity, WearableCategor
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import * as configModule from '../../../config'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Asset } from '../../../modules/asset/types'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { renderWithProviders } from '../../../utils/test'
@@ -396,7 +397,7 @@ const MOCKED_ITEM: Asset = {
   }
 }
 
-async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
+async function renderBuyWithCryptoModal(props: Partial<Props> = {}, initialEntries?: string[]) {
   const defaultProps: Props = {
     name: 'A name',
     metadata: { asset: MOCKED_ITEM },
@@ -431,7 +432,8 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const rendered = renderWithProviders(
     <ResponsiveContext.Provider value={{ width: 900 }}>
       <BuyWithCryptoModal {...defaultProps} {...props} />
-    </ResponsiveContext.Provider>
+    </ResponsiveContext.Provider>,
+    { initialEntries }
   )
 
   await waitFor(() => expect(rendered.findByTestId(PAY_WITH_DATA_TEST_ID)))
@@ -497,6 +499,34 @@ describe('BuyWithCryptoModal', () => {
         }
       } as Wallet
     }
+  })
+
+  // Mobile-IAP mode shows the full price before credits. It used to read the asset's own `price`
+  // field, which carries no unit: on a USD-pegged listing that is USD wei, so the figure on screen
+  // bore no relation to the MANA the purchase would debit. It now comes from the resolved amount
+  // the caller passes.
+  describe('and the checkout is opened in mobile-IAP mode for a USD-pegged item', () => {
+    // 2,529.1 USD at 0.076148 USD/MANA.
+    const rawUsdAmount = '2529100000000000000000'
+    const resolvedMana = '33212953721699847665073'
+
+    it('should show the resolved MANA amount rather than the listed figure', async () => {
+      const { getByText } = await renderBuyWithCryptoModal(
+        {
+          ...modalProps,
+          metadata: { asset: { ...MOCKED_ITEM, price: rawUsdAmount } as Asset },
+          price: resolvedMana,
+          priceBeforeCredits: resolvedMana
+        },
+        ['/?view=mobile-iap']
+      )
+
+      // Scoped to the total, which is the figure the buyer approves against.
+      const total = getByText('Total').parentElement
+
+      expect(total).toHaveTextContent(formatWeiMANA(resolvedMana))
+      expect(total).not.toHaveTextContent(formatWeiMANA(rawUsdAmount))
+    })
   })
 
   describe('and the user is connected to Ethereum network', () => {

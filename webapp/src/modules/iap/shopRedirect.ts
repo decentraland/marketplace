@@ -16,9 +16,19 @@ const BROWSE_SECTION_TO_SHOP_CATEGORY: Record<string, string> = {
 /** `locations.item()` — `/contracts/:contractAddress/items/:itemId`. */
 const ITEM_PATH = /^\/contracts\/(0x[0-9a-fA-F]{40})\/items\/(\d+)\/?$/
 
+// Recognises the basename the way `history` does before React Router sees the path:
+// case-insensitively, and only when the basename ends at a path boundary. Anything
+// stricter here lets a URL the router still resolves skip the redirect below, and
+// anything looser strips a prefix the router keeps.
 export const stripBasename = (pathname: string): string => {
   const basename = getBasename()
-  return basename && pathname.startsWith(basename) ? pathname.slice(basename.length) || '/' : pathname
+  if (!basename) {
+    return pathname
+  }
+  const isBasename =
+    pathname.slice(0, basename.length).toLowerCase() === basename.toLowerCase() &&
+    ['/', '', '?', '#'].includes(pathname.charAt(basename.length))
+  return isBasename ? pathname.slice(basename.length) || '/' : pathname
 }
 
 /** The shop path serving the same destination, or `null` to keep handling it here. */

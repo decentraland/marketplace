@@ -28,6 +28,27 @@ describe('when mapping a marketplace destination to the shop', () => {
     expect(getShopPath('/marketplace/names/claim', params(''))).toBe('/items?category=names')
   })
 
+  // `history` recognises the basename case-insensitively before React Router resolves the
+  // path, so a case variant reaches the very same route. Recognising it differently here
+  // would leave that route served by this app instead of redirecting it.
+  it.each([
+    '/MARKETPLACE/contracts/0xAbC0000000000000000000000000000000000001/items/3',
+    '/MarketPlace/contracts/0xAbC0000000000000000000000000000000000001/items/3',
+    '/marketplace/contracts/0xAbC0000000000000000000000000000000000001/items/3'
+  ])('should map %s the same way the router resolves it', pathname => {
+    expect(getShopPath(pathname, params(''))).toBe('/item/0xabc0000000000000000000000000000000000001/3')
+  })
+
+  it.each(['/MARKETPLACE/browse', '/MarketPlace/names/claim'])('should map the case variant %s', pathname => {
+    expect(getShopPath(pathname, params(''))).not.toBeNull()
+  })
+
+  // The basename has to end at a path boundary, which is also what `history` requires: a
+  // path that merely starts with those characters is a different route and keeps its prefix.
+  it('should not treat a longer first segment as the basename', () => {
+    expect(getShopPath('/marketplacefoo/contracts/0xAbC0000000000000000000000000000000000001/items/3', params(''))).toBeNull()
+  })
+
   it('should leave the purchase flow and everything else on this app', () => {
     expect(getShopPath('/marketplace/buy', params(''))).toBeNull()
     expect(getShopPath('/marketplace/success', params(''))).toBeNull()

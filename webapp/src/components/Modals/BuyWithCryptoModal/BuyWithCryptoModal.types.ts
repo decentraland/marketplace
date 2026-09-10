@@ -30,6 +30,12 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
      * figures rendered from it are marked approximate: the contract recomputes the rate at accept time.
      */
     isPriceApproximate?: boolean
+    /**
+     * The same resolved MANA amount as `price`, before any credits are deducted. Mobile-IAP mode shows the
+     * full price rather than the remainder, and it has to come from here: an asset's own `price` field carries
+     * no unit, so on a USD-pegged listing it is USD wei and bears no relation to what the purchase debits.
+     */
+    priceBeforeCredits?: string
     credits: CreditsResponse | null
     useCredits?: boolean
     wallet: Wallet | null
@@ -56,6 +62,7 @@ export type ContainerProps = Pick<
   | 'metadata'
   | 'price'
   | 'isPriceApproximate'
+  | 'priceBeforeCredits'
   | 'useCredits'
   | 'isBuyingAsset'
   | 'onBuyNatively'

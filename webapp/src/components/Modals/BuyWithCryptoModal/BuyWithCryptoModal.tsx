@@ -52,6 +52,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const {
     price,
     isPriceApproximate,
+    priceBeforeCredits,
     wallet,
     credits,
     useCredits,
@@ -85,20 +86,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   const abortControllerRef = useRef(new AbortController())
 
   const isIAP = useIsIAP()
-  // In IAP mode, show the original asset price (not adjusted by credits).
-  // For items, asset.price has the original. For NFTs, price is already adjusted
-  // (original - credits), so we reconstruct it by adding credits back.
-  const displayPrice = useMemo(() => {
-    if (!isIAP) return price
-    if ('price' in asset) return asset.price
-    if (credits?.totalCredits && price === '0') {
-      return credits.totalCredits.toString()
-    }
-    if (credits?.totalCredits) {
-      return (BigInt(price) + BigInt(credits.totalCredits)).toString()
-    }
-    return price
-  }, [isIAP, asset, price, credits])
+  // IAP mode shows the full price rather than what is left after credits. It comes from the caller, which
+  // resolved it in MANA: reading the asset's own `price` here rendered an unconverted figure on a USD-pegged
+  // listing, and reconstructing it by adding credits back guessed at an amount the caller already knows.
+  const displayPrice = useMemo(() => (isIAP ? priceBeforeCredits ?? price : price), [isIAP, priceBeforeCredits, price])
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())

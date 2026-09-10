@@ -4,7 +4,9 @@ import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthori
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { useIsIAP } from '../../../../modules/iap/useIAP'
 import { useFingerprint } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
@@ -41,6 +43,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   // instead of from `order.price`.
   const checkoutPrice = useCheckoutPriceInMana(order.price, nft.network, order.tradeId)
   const priceInMana = checkoutPrice.manaWei
+  const isIAP = useIsIAP()
 
   // Legacy `safeExecuteOrder` on V1 marketplace verifies the fingerprint
   // against the upgraded EstateRegistry (getFingerprintV2). Use the contract
@@ -148,9 +151,25 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     return <CheckoutPriceUnavailableModal name={name} isLoading={checkoutPrice.status === 'resolving'} onClose={onClose} />
   }
 
+  // A mobile-IAP checkout is presented as a Credits purchase, so it must not fall through to
+  // spending MANA. The credits selection is what the execution branch, the allowance and the
+  // figure on screen all derive from, so without it nothing is put up for approval.
+  if (isIAP && useCredits !== true) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={false}
+        title={t('iap_payment_unavailable.title')}
+        description={t('iap_payment_unavailable.description')}
+        onClose={onClose}
+      />
+    )
+  }
+
   return (
     <BuyWithCryptoModal
       price={price}
+      priceBeforeCredits={priceInMana ?? undefined}
       isPriceApproximate={checkoutPrice.isUSDPegged}
       useCredits={useCredits}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
