@@ -9,8 +9,9 @@
 
 .EmoteDetail .assetImageContainer {
   height: 602px;
-  /* Tighter than the shared default: this preview runs the full width of the page. */
-  --glow-box: 1.5;
+  /* This preview runs the full width of the page, so the glow is sized off the frame's height (see the
+     override below) and kept inside it, same reasoning as the shared default. */
+  --glow-box: 1;
 }
 
 /* A wide band rather than the squarish panel the shared glow assumes: scaling both directions would

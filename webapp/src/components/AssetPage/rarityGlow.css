@@ -8,9 +8,13 @@
   position: relative;
   /* Confines the glow's negative z-index, which would otherwise escape to the root stacking context. */
   isolation: isolate;
-  /* Oversized so the glow reaches past the frame while the gradient still finishes fading inside its
-     own box: the radii cannot exceed 50% without ending outside it and painting a hard rectangle. */
-  --glow-box: 1.76;
+  /* The shop oversizes this to 1.76 so the glow spills onto the page around the preview. Here it stays
+     at 1: the marketplace puts content immediately beside and below the frame (32px to the buy panel,
+     nothing at all above the listings tabs), so a spilling glow lands on that content instead of on the
+     page, and shows through the panel's translucent fill. At 1 the gradient finishes fading exactly at
+     the frame's edge, which contains it without the visible cut a mask would leave. The radii cannot
+     exceed 50% either way, or they end outside the box and paint a hard rectangle. */
+  --glow-box: 1;
 }
 
 /* Opaque at the centre so the item reads backlit rather than washed; the iframe's mask below keeps
