@@ -1645,6 +1645,14 @@
     "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
   },
+  "estate_composition": {
+    "loading": "Checking which LANDs this Estate contains…",
+    "retry": "Try again",
+    "modal_title": "Estate contents unavailable",
+    "unavailable": "We could not read which LANDs this Estate contains. Please refresh the page and try again. If the problem persists, please contact our support team.",
+    "out_of_sync": "This Estate contains {count} {count, plural, one {LAND} other {LANDs}}, which is not what this page is showing. Please refresh the page to see its current contents before continuing.",
+    "changed": "The LANDs this Estate contains changed while you were reviewing it. Please refresh the page to see its current contents before continuing."
+  },
   "names_page": {
     "title": "Claim your NAME, Unlock Your World!",
     "subtitle": "Activate the full potential of Decentraland citizenship with a unique NAME, Voting Power, & your own World!",

@@ -13,7 +13,7 @@ const AcceptButton = (props: Props) => {
 
   // Compare bid.fingerprint against the on-chain getFingerprintV2 (not the
   // locally derived hash) — the contract verifies the bid's `extra` against V2.
-  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
+  const [contractFingerprint, isLoadingFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
   const isCurrentlyLocked = rental && asset && isLandLocked(userAddress, rental, asset)
 

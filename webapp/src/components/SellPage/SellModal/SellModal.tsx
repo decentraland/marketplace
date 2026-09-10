@@ -14,7 +14,7 @@ import ERC721ABI from '../../../contracts/ERC721.json'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { isStubMaticCollectionContract } from '../../../modules/contract/utils'
-import { useFingerprint } from '../../../modules/nft/hooks'
+import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
 import { getContractNames } from '../../../modules/vendor'
@@ -24,6 +24,7 @@ import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import { AssetAction } from '../../AssetAction'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import ErrorBanner from '../../ErrorBanner'
+import { EstateCompositionWarning } from '../../EstateCompositionWarning'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from './utils'
@@ -50,9 +51,11 @@ const SellModal = (props: Props) => {
   const isUpdate = order !== null
   const shouldRemoveListing = order?.tradeId
   const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
-  // The server validates `extra` against on-chain getFingerprintV2, so we must
-  // send the value the contract returns, not the locally derived one.
-  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
+  // The listing records which LANDs the Estate contains, so it is created against
+  // the composition read when this page opened — the one shown alongside it — and
+  // not against whatever the registry holds by the time the listing is signed.
+  const estateComposition = useEstateSnapshot(nft)
+  const [estateCompositionError, setEstateCompositionError] = useState<string>()
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt
@@ -115,13 +118,21 @@ const SellModal = (props: Props) => {
 
   const offchainOrdersContract = getLatestOffChainMarketplaceContract(nft.chainId)
 
-  const handleCreateOrder = () =>
-    onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), contractFingerprint)
+  const handleCreateOrder = () => {
+    void (async () => {
+      if (!(await estateComposition.confirm())) {
+        setEstateCompositionError(t('estate_composition.changed'))
+        return
+      }
+      onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), estateComposition.fingerprint)
+    })()
+  }
 
   const handleCancelTrade = () => order && onCancelOrder(order, nft)
 
   const handleSubmit = () => {
     onClearOrderErrors()
+    setEstateCompositionError(undefined)
     onAuthorizedAction({
       authorizationType: AuthorizationType.APPROVAL,
       authorizedAddress: offchainOrdersContract?.address ?? marketplace.address,
@@ -141,8 +152,8 @@ const SellModal = (props: Props) => {
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isEstateFingerprintNotReady = nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
-  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
+  const isDisabled =
+    !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateSnapshotBlocking(estateComposition)
 
   return (
     <AssetAction asset={nft}>
@@ -187,6 +198,7 @@ const SellModal = (props: Props) => {
                 error={isInvalidDate}
                 message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
               />
+              <EstateCompositionWarning state={estateComposition} />
             </div>
             <div className="buttons">
               <Button as="div" disabled={isLoading} onClick={onGoBack}>
@@ -230,7 +242,7 @@ const SellModal = (props: Props) => {
         }
         onConfirm={handleSubmit}
         valueToConfirm={price}
-        error={authorizationError}
+        error={estateCompositionError || authorizationError}
         network={nft.network}
         onCancel={() => setShowConfirm(false)}
         loading={isCreatingOrder || isLoadingAuthorization}

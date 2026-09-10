@@ -1,11 +1,12 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Contract, NFTCategory } from '@dcl/schemas'
 import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
-import { useFingerprint } from '../../../../modules/nft/hooks'
+import { EstateSnapshotStatus, isEstateSnapshotBlocking, useEstateSnapshot } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
 import { getContractNames } from '../../../../modules/vendor'
@@ -42,10 +43,13 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   const checkoutPrice = useCheckoutPriceInMana(order.price, nft.network, order.tradeId)
   const priceInMana = checkoutPrice.manaWei
 
-  // Legacy `safeExecuteOrder` on V1 marketplace verifies the fingerprint
-  // against the upgraded EstateRegistry (getFingerprintV2). Use the contract
-  // value so the on-chain check passes; the locally derived hash does not match.
-  const [, , contractFingerprint] = useFingerprint(nft)
+  // The purchase records which LANDs the Estate contains. It is made against the
+  // composition read when this checkout opened — the one shown on the asset page
+  // it was opened from — and not against whatever the registry holds by the time
+  // the order is signed.
+  const estateComposition = useEstateSnapshot(nft)
+  const [hasEstateChanged, setHasEstateChanged] = useState(false)
+  const isEstateBlocked = isEstateSnapshotBlocking(estateComposition) || hasEstateChanged
 
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
@@ -102,9 +106,17 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel,
       requiredAllowanceInWei: manaAfterCredits(priceInMana, useCredits ? credits : null),
-      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
+      onAuthorized: (alreadyAuthorized: boolean) => {
+        void (async () => {
+          if (!(await estateComposition.confirm())) {
+            setHasEstateChanged(true)
+            return
+          }
+          onExecuteOrder(order, nft, estateComposition.fingerprint, !alreadyAuthorized, useCredits)
+        })()
+      }
     })
-  }, [nft, order, priceInMana, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits, connectedChainId])
+  }, [nft, order, priceInMana, estateComposition, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits, connectedChainId])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
@@ -133,8 +145,9 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [order, priceInMana, slippage]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, contractFingerprint),
-    [nft, order, contractFingerprint]
+    (selectedToken, chainNativeToken, wallet) =>
+      useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, estateComposition.fingerprint),
+    [nft, order, estateComposition.fingerprint]
   )
 
   const price = useMemo(
@@ -146,6 +159,26 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   // anyone who came through the asset page); `unavailable` is an unreadable trade or an unreachable oracle.
   if (price === null || priceInMana === null) {
     return <CheckoutPriceUnavailableModal name={name} isLoading={checkoutPrice.status === 'resolving'} onClose={onClose} />
+  }
+
+  // Nothing is put up for approval until the LANDs the Estate contains are known to be the ones the asset
+  // page showed. `hasEstateChanged` covers a composition that moved between opening this checkout and signing.
+  if (isEstateBlocked) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={estateComposition.status === EstateSnapshotStatus.LOADING}
+        title={t('estate_composition.modal_title')}
+        description={
+          hasEstateChanged
+            ? t('estate_composition.changed')
+            : estateComposition.status === EstateSnapshotStatus.OUT_OF_SYNC
+              ? t('estate_composition.out_of_sync', { count: estateComposition.snapshot?.parcels.length ?? 0 })
+              : t('estate_composition.unavailable')
+        }
+        onClose={onClose}
+      />
+    )
   }
 
   return (
