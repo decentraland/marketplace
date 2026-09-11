@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux'
+import { fetchAuthorizationsRequest, FetchAuthorizationsRequestAction } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { fetchContractsRequest, FetchContractsRequestAction } from '../../modules/contract/actions'
@@ -14,11 +15,12 @@ export type Props = {
   hasFetchedContracts: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onFetchContracts: typeof fetchContractsRequest
+  onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
 export type MapStateProps = Pick<
   Props,
   'wallet' | 'authorizations' | 'isLoading' | 'isConnecting' | 'hasError' | 'getContract' | 'hasFetchedContracts'
 >
-export type MapDispatchProps = Pick<Props, 'onFetchContracts'>
-export type MapDispatch = Dispatch<FetchContractsRequestAction>
+export type MapDispatchProps = Pick<Props, 'onFetchContracts' | 'onFetchAuthorizations'>
+export type MapDispatch = Dispatch<FetchContractsRequestAction | FetchAuthorizationsRequestAction>

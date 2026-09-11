@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizationType, type Authorization as AuthorizationData } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName } from 'decentraland-transactions'
 import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
 import copyText from '../../lib/copyText'
 import { useTimer } from '../../lib/timer'
 import { getContractNames } from '../../modules/vendor'
+import { nftMarketplaceAPI as nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { getDeployedOffChainMarketplaceContracts } from '../../utils/trades'
 import { PageLayout } from '../PageLayout'
@@ -15,8 +16,18 @@ import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 
+/**
+ * How many of the wallet's collectibles are read to work out which collections to check.
+ *
+ * Selling approvals are per-collection `setApprovalForAll` grants and nothing indexes them, so the only
+ * way to know which collections to ask about is to look at what the wallet holds. One page is enough to
+ * cover the collections a seller actually deals in; a wallet holding more than this may not see every
+ * approval it granted.
+ */
+const HELD_COLLECTIBLES_TO_SCAN = 1000
+
 const SettingsPage = (props: Props) => {
-  const { wallet, authorizations, isLoading, hasError, hasFetchedContracts, getContract, onFetchContracts } = props
+  const { wallet, authorizations, isLoading, hasError, hasFetchedContracts, getContract, onFetchContracts, onFetchAuthorizations } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
 
@@ -27,6 +38,73 @@ const SettingsPage = (props: Props) => {
       onFetchContracts()
     }
   }, [onFetchContracts, hasFetchedContracts, isLoading, wallet])
+
+  /**
+   * Ask about the selling approvals the wallet may hold, so the section below has something to show.
+   *
+   * The page renders whatever selling approvals are in the store, but nothing here ever put any there:
+   * only the sell and rent flows fetch them, for the one collection they are about, and the store is not
+   * persisted. So the section was empty on every visit, and a `setApprovalForAll` granted while listing
+   * an item had nowhere to be revoked.
+   *
+   * These are per-collection grants and nothing indexes them, so which collections to ask about has to be
+   * inferred from what the wallet holds. Cheap to over-ask: the saga checks them in a single multicall
+   * batch, and only the ones actually granted reach the store, so a collection that was never approved
+   * costs a slot in that batch and renders nothing.
+   */
+  useEffect(() => {
+    if (!wallet) {
+      return
+    }
+
+    let cancelled = false
+
+    const askAboutHeldCollections = async () => {
+      const { data } = await nftAPI.fetch({ first: HELD_COLLECTIBLES_TO_SCAN, skip: 0, address: wallet.address })
+      if (cancelled) {
+        return
+      }
+
+      const seen = new Set<string>()
+      const held = data.reduce<AuthorizationData[]>((acc, { nft }) => {
+        const key = `${nft.contractAddress}-${nft.chainId}`
+        if (seen.has(key)) {
+          return acc
+        }
+        seen.add(key)
+
+        // A Polygon wearable or emote is an ERC721CollectionV2; everything else answers as a plain ERC721.
+        // Same pairing the sell flow uses, so the row here describes the grant that flow actually made.
+        const contractName =
+          (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
+            ? ContractName.ERC721CollectionV2
+            : ContractName.ERC721
+
+        for (const { contract } of getDeployedOffChainMarketplaceContracts(nft.chainId)) {
+          acc.push({
+            address: wallet.address,
+            authorizedAddress: contract.address,
+            contractAddress: nft.contractAddress,
+            contractName,
+            chainId: nft.chainId,
+            type: AuthorizationType.APPROVAL
+          })
+        }
+
+        return acc
+      }, [])
+
+      if (held.length > 0) {
+        onFetchAuthorizations(held)
+      }
+    }
+
+    void askAboutHeldCollections()
+
+    return () => {
+      cancelled = true
+    }
+  }, [wallet, onFetchAuthorizations])
 
   const contractNames = getContractNames()
 
