@@ -411,9 +411,12 @@ export const BuyWithCryptoModal = (props: Props) => {
           primary
           disabled={!wallet || isBuying}
           loading={isBuying}
-          // onBuyWithCredits is only defined for ENS claims; for wearable/emote purchases
-          // onBuyNatively handles credits via the useCredits flag passed through metadata
-          onClick={onBuyWithCredits ? onPayWithCredits : onBuyNatively}
+          // Follows the payment source this screen presents, not whichever callback happens to be
+          // supplied: `onBuyWithCredits` exists on the ENS claim path regardless of what the buyer
+          // selected, so keying off its presence alone settled through credits even when they chose
+          // MANA. Where it is absent — wearables, emotes — `onBuyNatively` applies credits itself
+          // from the same flag.
+          onClick={useCredits && onBuyWithCredits ? onPayWithCredits : onBuyNatively}
         >
           {isBuying ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.buy_now')}
         </Button>

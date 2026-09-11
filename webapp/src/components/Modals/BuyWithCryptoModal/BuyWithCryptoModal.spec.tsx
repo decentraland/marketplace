@@ -1,7 +1,9 @@
 import { Context as ResponsiveContext } from 'react-responsive'
 import { fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { BigNumber } from 'ethers'
 import { BodyShape, ChainId, Item, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import * as configModule from '../../../config'
@@ -499,6 +501,42 @@ describe('BuyWithCryptoModal', () => {
         }
       } as Wallet
     }
+  })
+
+  // The mobile-IAP action button used to pick its execution branch from whichever callback was
+  // supplied. `onBuyWithCredits` is passed on the ENS claim path regardless of what the buyer
+  // selected, so the button settled through credits even when they chose MANA. It now follows the
+  // payment source the screen presents.
+  describe('and the mobile-IAP action is pressed on an asset whose flow supplies a credits callback', () => {
+    let onBuyWithCredits: jest.Mock
+    let onBuyNatively: jest.Mock
+
+    beforeEach(() => {
+      onBuyWithCredits = jest.fn()
+      onBuyNatively = jest.fn()
+    })
+
+    it('should settle natively when the buyer did not select credits', async () => {
+      const { getByText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: false, onBuyWithCredits, onBuyNatively }, [
+        '/?view=mobile-iap'
+      ])
+
+      await userEvent.click(getByText(t('buy_with_crypto_modal.buy_now')))
+
+      expect(onBuyNatively).toHaveBeenCalled()
+      expect(onBuyWithCredits).not.toHaveBeenCalled()
+    })
+
+    it('should settle through credits when the buyer did select them', async () => {
+      const { getByText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: true, onBuyWithCredits, onBuyNatively }, [
+        '/?view=mobile-iap'
+      ])
+
+      await userEvent.click(getByText(t('buy_with_crypto_modal.buy_now')))
+
+      expect(onBuyWithCredits).toHaveBeenCalled()
+      expect(onBuyNatively).not.toHaveBeenCalled()
+    })
   })
 
   // Mobile-IAP mode shows the full price before credits. It used to read the asset's own `price`
