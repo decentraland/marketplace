@@ -13,7 +13,7 @@ import styles from './CheckoutPriceUnavailableModal.module.css'
  * showing a figure in the wrong unit. `title` and `description` let a caller reuse it for another detail of
  * the purchase it could not establish, such as which LANDs an Estate contains.
  */
-const CheckoutPriceUnavailableModal = ({ name, isLoading, title, description, onClose }: Props) => (
+const CheckoutPriceUnavailableModal = ({ name, isLoading, title, description, onRetry, onClose }: Props) => (
   <Modal open name={name} size="tiny" className={styles.modal} onClose={onClose}>
     <ModalNavigation title={title ?? t('checkout_price_unavailable_modal.title')} onClose={onClose} />
     <Modal.Content className={styles.content}>
@@ -22,7 +22,12 @@ const CheckoutPriceUnavailableModal = ({ name, isLoading, title, description, on
       ) : (
         <>
           <p className={styles.description}>{description ?? t('checkout_price_unavailable_modal.description')}</p>
-          <Button primary fluid onClick={onClose}>
+          {onRetry ? (
+            <Button primary fluid onClick={onRetry}>
+              {t('estate_composition.retry')}
+            </Button>
+          ) : null}
+          <Button primary={!onRetry} fluid onClick={onClose}>
             {t('global.close')}
           </Button>
         </>

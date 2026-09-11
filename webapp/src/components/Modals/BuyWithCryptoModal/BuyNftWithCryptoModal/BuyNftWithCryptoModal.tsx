@@ -176,6 +176,9 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
               ? t('estate_composition.out_of_sync', { count: estateComposition.snapshot?.parcels.length ?? 0 })
               : t('estate_composition.unavailable')
         }
+        // Only a failed read is worth retrying here: a composition that disagrees with the page needs the
+        // page reloaded, and a pending one is already showing a spinner.
+        onRetry={estateComposition.status === EstateSnapshotStatus.UNAVAILABLE ? estateComposition.retry : undefined}
         onClose={onClose}
       />
     )

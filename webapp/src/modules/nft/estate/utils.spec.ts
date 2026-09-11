@@ -195,6 +195,45 @@ describe('readEstateSnapshot', () => {
     })
   })
 
+  // Every other case here fits in one `aggregate3`. This one spans several, which is where the
+  // chunk arithmetic and the cross-batch ordering live — batches resolve out of order under
+  // concurrency, so the ids have to land at their own index rather than in completion order.
+  describe('when the estate needs more than one multicall batch', () => {
+    // Comfortably over LAND_IDS_PER_CALL, and not a multiple of it, so the last batch is partial.
+    const MANY_LAND_IDS = Array.from({ length: 1201 }, (_, index) => String(BigInt('0x' + 'ab'.repeat(16)) + BigInt(index)))
+    const MANY_FINGERPRINT = computeEstateFingerprint(ESTATE_ID, MANY_LAND_IDS)
+
+    beforeEach(() => {
+      getEstateSize.mockResolvedValue({ toNumber: () => MANY_LAND_IDS.length })
+      getFingerprintV2.mockResolvedValue(MANY_FINGERPRINT)
+      getCode.mockResolvedValue('0x60806040')
+      aggregate3.mockImplementation((calls: unknown[]) => {
+        const indexes = (calls as { callData: string }[]).map(
+          call => JSON.parse(call.callData.slice('estateLandIds('.length, -1))[1] as number
+        )
+        // Later batches resolve first, so a concurrency bug would reorder the result.
+        const delay = MANY_LAND_IDS.length - indexes[0]
+        return new Promise(resolve => setTimeout(() => resolve(indexes.map(index => asReturnData(MANY_LAND_IDS[index]))), delay % 5))
+      })
+    })
+
+    it('should return every land id, in the registry order, across all batches', async () => {
+      const snapshot = await readEstateSnapshot(ESTATE_ID, estateContract, ChainId.ETHEREUM_MAINNET)
+
+      expect(snapshot.landIds).toEqual(MANY_LAND_IDS)
+      expect(snapshot.fingerprint).toBe(MANY_FINGERPRINT)
+    })
+
+    it('should split the reads into whole batches plus a partial last one', async () => {
+      await readEstateSnapshot(ESTATE_ID, estateContract, ChainId.ETHEREUM_MAINNET)
+
+      const batchSizes = aggregate3.mock.calls.map(([calls]: [unknown[]]) => calls.length)
+      expect(batchSizes.reduce((total, size) => total + size, 0)).toBe(MANY_LAND_IDS.length)
+      expect(batchSizes).toHaveLength(3)
+      expect(batchSizes[batchSizes.length - 1]).toBe(MANY_LAND_IDS.length % 500)
+    })
+  })
+
   describe('when the multicall contract is not deployed', () => {
     beforeEach(() => {
       getCode.mockResolvedValue('0x')
