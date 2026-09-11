@@ -138,7 +138,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
 
   // Without a resolved amount there is nothing to confirm. `resolving` is the trade read (a cache hit for
   // anyone who came through the item page); `unavailable` is an unreadable trade or an unreachable oracle.
-  if (price === null) {
+  if (price === null || priceInMana === null) {
     return <CheckoutPriceUnavailableModal name={name} isLoading={checkoutPrice.status === 'resolving'} onClose={onClose} />
   }
 
@@ -160,7 +160,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={price}
-      priceBeforeCredits={priceInMana ?? undefined}
+      priceBeforeCredits={priceInMana}
       isPriceApproximate={checkoutPrice.isUSDPegged}
       useCredits={useCredits}
       isBuyingAsset={isBuyingItemNatively || isBuyingItemCrossChain}

@@ -404,6 +404,7 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}, initialEntri
     name: 'A name',
     metadata: { asset: MOCKED_ITEM },
     price: (MOCKED_ITEM as Item).price,
+    priceBeforeCredits: (MOCKED_ITEM as Item).price,
     wallet: null,
     isBuyingAsset: false,
     isLoadingAuthorization: false,

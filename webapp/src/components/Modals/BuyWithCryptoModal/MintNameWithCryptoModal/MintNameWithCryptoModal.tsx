@@ -177,6 +177,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
+      priceBeforeCredits={PRICE_IN_WEI}
       onBuyWithCredits={onBuyWithCredits}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
