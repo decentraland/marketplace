@@ -33,7 +33,9 @@ export const stripBasename = (pathname: string): string => {
 
 /** The shop path serving the same destination, or `null` to keep handling it here. */
 export const getShopPath = (pathname: string, params: URLSearchParams): string | null => {
-  const path = stripBasename(pathname)
+  // A trailing slash resolves to the same route, so it has to hand off to the shop the same way.
+  // `ITEM_PATH` already tolerates one; the fixed paths below compare against the trimmed form.
+  const path = stripBasename(pathname).replace(/(.)\/$/, '$1')
 
   const item = ITEM_PATH.exec(path)
   if (item) {

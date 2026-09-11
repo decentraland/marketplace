@@ -90,6 +90,11 @@ export const BuyWithCryptoModal = (props: Props) => {
   // resolved it in MANA: reading the asset's own `price` here rendered an unconverted figure on a USD-pegged
   // listing, and reconstructing it by adding credits back guessed at an amount the caller already knows.
   const displayPrice = useMemo(() => (isIAP ? priceBeforeCredits ?? price : price), [isIAP, priceBeforeCredits, price])
+  // Whether to present this as a Credits purchase. The mobile-IAP marker alone is not enough: it rides on the
+  // URL and says nothing about the payment source, so keying the branding off it let flows that settle in MANA
+  // — a LAND or Estate order, an ENS resale, a checkout opened without the credits selection — render a
+  // Credits-branded confirmation for a MANA debit. The icon now follows what is actually going to be spent.
+  const presentsCredits = isIAP && useCredits === true
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
@@ -787,7 +792,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   <span className={styles.assetDescription}>{assetDescription}</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  {isIAP ? (
+                  {presentsCredits ? (
                     <span className={styles.creditsPrice}>
                       <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
                       {formatWeiMANA(displayPrice)}
@@ -834,8 +839,16 @@ export const BuyWithCryptoModal = (props: Props) => {
                   <div className={styles.iapTotalContainer}>
                     <span>{t('buy_with_crypto_modal.total')}</span>
                     <span className={styles.creditsPrice}>
-                      <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
-                      {formatWeiMANA(displayPrice)}
+                      {presentsCredits ? <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} /> : null}
+                      {presentsCredits ? (
+                        formatWeiMANA(displayPrice)
+                      ) : (
+                        <Mana network={asset.network} inline withTooltip>
+                          {isPriceApproximate
+                            ? t('pegged_mana_price.approximate', { amount: formatWeiMANA(displayPrice) })
+                            : formatWeiMANA(displayPrice)}
+                        </Mana>
+                      )}
                     </span>
                   </div>
                   {/* Anchor the Checkout button directly below the Total so the flow reads

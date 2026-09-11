@@ -503,6 +503,24 @@ describe('BuyWithCryptoModal', () => {
     }
   })
 
+  // The mobile-IAP marker rides on the URL and says nothing about the payment source. Keying the
+  // Credits branding off it alone meant a flow that settles in MANA — a LAND or Estate order, an ENS
+  // resale, or a checkout opened without the credits selection — showed a Credits-branded figure for
+  // a MANA debit.
+  describe('and a mobile-IAP checkout will settle in MANA rather than credits', () => {
+    it('should not brand the figures as credits', async () => {
+      const { queryAllByAltText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: false }, ['/?view=mobile-iap'])
+
+      expect(queryAllByAltText('Credits')).toHaveLength(0)
+    })
+
+    it('should brand them as credits once credits are the payment source', async () => {
+      const { queryAllByAltText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: true }, ['/?view=mobile-iap'])
+
+      expect(queryAllByAltText('Credits').length).toBeGreaterThan(0)
+    })
+  })
+
   // The mobile-IAP action button used to pick its execution branch from whichever callback was
   // supplied. `onBuyWithCredits` is passed on the ENS claim path regardless of what the buyer
   // selected, so the button settled through credits even when they chose MANA. It now follows the

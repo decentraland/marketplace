@@ -49,6 +49,14 @@ describe('when mapping a marketplace destination to the shop', () => {
     expect(getShopPath('/marketplacefoo/contracts/0xAbC0000000000000000000000000000000000001/items/3', params(''))).toBeNull()
   })
 
+  // The router resolves a trailing slash to the same route, so the hand-off has to match.
+  it.each(['/marketplace/names/claim/', '/MARKETPLACE/names/claim/', '/marketplace/browse/'])(
+    'should map %s the same way as its slashless form',
+    pathname => {
+      expect(getShopPath(pathname, params(''))).not.toBeNull()
+    }
+  )
+
   it('should leave the purchase flow and everything else on this app', () => {
     expect(getShopPath('/marketplace/buy', params(''))).toBeNull()
     expect(getShopPath('/marketplace/success', params(''))).toBeNull()
