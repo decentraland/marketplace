@@ -99,8 +99,10 @@ export const createHistory = () => {
       originalReplace(injectParams(location as string | Location) as Path & Location, state)
     }
 
-    // In IAP mode, redirect root to /browse on initial load
-    if (isIAP && window.location.pathname === (getBasename() || '/')) {
+    // In IAP mode, redirect root to /browse on initial load. Compared case-insensitively for the
+    // same reason `stripBasename` is: the router resolves a case variant of the basename to the
+    // same route, so recognising it differently here leaves that route unredirected.
+    if (isIAP && window.location.pathname.toLowerCase() === (getBasename() || '/').toLowerCase()) {
       history.replace(`/browse?${initialParams.toString()}`)
     }
   }

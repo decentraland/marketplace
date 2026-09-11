@@ -4,7 +4,9 @@ import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { useIsIAP } from '../../../../modules/iap/useIAP'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
 import { getContractNames } from '../../../../modules/vendor'
@@ -40,6 +42,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   // instead of from `item.price`.
   const checkoutPrice = useCheckoutPriceInMana(item.price, item.network, item.tradeId)
   const priceInMana = checkoutPrice.manaWei
+  const isIAP = useIsIAP()
 
   const onBuyNatively = useCallback(() => {
     // Not reachable from the UI (nothing renders until the price resolves), but this builds an allowance
@@ -135,13 +138,29 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
 
   // Without a resolved amount there is nothing to confirm. `resolving` is the trade read (a cache hit for
   // anyone who came through the item page); `unavailable` is an unreadable trade or an unreachable oracle.
-  if (price === null) {
+  if (price === null || priceInMana === null) {
     return <CheckoutPriceUnavailableModal name={name} isLoading={checkoutPrice.status === 'resolving'} onClose={onClose} />
+  }
+
+  // A mobile-IAP checkout is presented as a Credits purchase, so it must not fall through to
+  // spending MANA. The credits selection is what the execution branch, the allowance and the
+  // figure on screen all derive from, so without it nothing is put up for approval.
+  if (isIAP && useCredits !== true) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={false}
+        title={t('iap_payment_unavailable.title')}
+        description={t('iap_payment_unavailable.description')}
+        onClose={onClose}
+      />
+    )
   }
 
   return (
     <BuyWithCryptoModal
       price={price}
+      priceBeforeCredits={priceInMana}
       isPriceApproximate={checkoutPrice.isUSDPegged}
       useCredits={useCredits}
       isBuyingAsset={isBuyingItemNatively || isBuyingItemCrossChain}

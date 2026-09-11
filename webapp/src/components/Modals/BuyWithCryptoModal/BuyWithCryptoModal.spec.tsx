@@ -1,10 +1,13 @@
 import { Context as ResponsiveContext } from 'react-responsive'
 import { fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { BigNumber } from 'ethers'
 import { BodyShape, ChainId, Item, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import * as configModule from '../../../config'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Asset } from '../../../modules/asset/types'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { renderWithProviders } from '../../../utils/test'
@@ -396,11 +399,12 @@ const MOCKED_ITEM: Asset = {
   }
 }
 
-async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
+async function renderBuyWithCryptoModal(props: Partial<Props> = {}, initialEntries?: string[]) {
   const defaultProps: Props = {
     name: 'A name',
     metadata: { asset: MOCKED_ITEM },
     price: (MOCKED_ITEM as Item).price,
+    priceBeforeCredits: (MOCKED_ITEM as Item).price,
     wallet: null,
     isBuyingAsset: false,
     isLoadingAuthorization: false,
@@ -431,7 +435,8 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const rendered = renderWithProviders(
     <ResponsiveContext.Provider value={{ width: 900 }}>
       <BuyWithCryptoModal {...defaultProps} {...props} />
-    </ResponsiveContext.Provider>
+    </ResponsiveContext.Provider>,
+    { initialEntries }
   )
 
   await waitFor(() => expect(rendered.findByTestId(PAY_WITH_DATA_TEST_ID)))
@@ -497,6 +502,88 @@ describe('BuyWithCryptoModal', () => {
         }
       } as Wallet
     }
+  })
+
+  // The mobile-IAP marker rides on the URL and says nothing about the payment source. Keying the
+  // Credits branding off it alone meant a flow that settles in MANA — a LAND or Estate order, an ENS
+  // resale, or a checkout opened without the credits selection — showed a Credits-branded figure for
+  // a MANA debit.
+  describe('and a mobile-IAP checkout will settle in MANA rather than credits', () => {
+    it('should not brand the figures as credits', async () => {
+      const { queryAllByAltText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: false }, ['/?view=mobile-iap'])
+
+      expect(queryAllByAltText('Credits')).toHaveLength(0)
+    })
+
+    it('should brand them as credits once credits are the payment source', async () => {
+      const { queryAllByAltText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: true }, ['/?view=mobile-iap'])
+
+      expect(queryAllByAltText('Credits').length).toBeGreaterThan(0)
+    })
+  })
+
+  // The mobile-IAP action button used to pick its execution branch from whichever callback was
+  // supplied. `onBuyWithCredits` is passed on the ENS claim path regardless of what the buyer
+  // selected, so the button settled through credits even when they chose MANA. It now follows the
+  // payment source the screen presents.
+  describe('and the mobile-IAP action is pressed on an asset whose flow supplies a credits callback', () => {
+    let onBuyWithCredits: jest.Mock
+    let onBuyNatively: jest.Mock
+
+    beforeEach(() => {
+      onBuyWithCredits = jest.fn()
+      onBuyNatively = jest.fn()
+    })
+
+    it('should settle natively when the buyer did not select credits', async () => {
+      const { getByText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: false, onBuyWithCredits, onBuyNatively }, [
+        '/?view=mobile-iap'
+      ])
+
+      await userEvent.click(getByText(t('buy_with_crypto_modal.buy_now')))
+
+      expect(onBuyNatively).toHaveBeenCalled()
+      expect(onBuyWithCredits).not.toHaveBeenCalled()
+    })
+
+    it('should settle through credits when the buyer did select them', async () => {
+      const { getByText } = await renderBuyWithCryptoModal({ ...modalProps, useCredits: true, onBuyWithCredits, onBuyNatively }, [
+        '/?view=mobile-iap'
+      ])
+
+      await userEvent.click(getByText(t('buy_with_crypto_modal.buy_now')))
+
+      expect(onBuyWithCredits).toHaveBeenCalled()
+      expect(onBuyNatively).not.toHaveBeenCalled()
+    })
+  })
+
+  // Mobile-IAP mode shows the full price before credits. It used to read the asset's own `price`
+  // field, which carries no unit: on a USD-pegged listing that is USD wei, so the figure on screen
+  // bore no relation to the MANA the purchase would debit. It now comes from the resolved amount
+  // the caller passes.
+  describe('and the checkout is opened in mobile-IAP mode for a USD-pegged item', () => {
+    // 2,529.1 USD at 0.076148 USD/MANA.
+    const rawUsdAmount = '2529100000000000000000'
+    const resolvedMana = '33212953721699847665073'
+
+    it('should show the resolved MANA amount rather than the listed figure', async () => {
+      const { getByText } = await renderBuyWithCryptoModal(
+        {
+          ...modalProps,
+          metadata: { asset: { ...MOCKED_ITEM, price: rawUsdAmount } as Asset },
+          price: resolvedMana,
+          priceBeforeCredits: resolvedMana
+        },
+        ['/?view=mobile-iap']
+      )
+
+      // Scoped to the total, which is the figure the buyer approves against.
+      const total = getByText('Total').parentElement
+
+      expect(total).toHaveTextContent(formatWeiMANA(resolvedMana))
+      expect(total).not.toHaveTextContent(formatWeiMANA(rawUsdAmount))
+    })
   })
 
   describe('and the user is connected to Ethereum network', () => {
