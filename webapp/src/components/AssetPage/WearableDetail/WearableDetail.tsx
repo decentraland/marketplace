@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import classNames from 'classnames'
 import { OrderSortBy, Wearable } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -6,6 +7,7 @@ import { Icon, Popup } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
 import { useIsIAP } from '../../../modules/iap/useIAP'
 import { Section } from '../../../modules/vendor/decentraland'
+import { getRarityGlowStyle } from '../../../utils/rarity'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
@@ -19,6 +21,7 @@ import { Description } from '../Description'
 import { ListingsTable } from '../ListingsTable'
 import OnBack from '../OnBack'
 import { Owner } from '../Owner'
+import '../rarityGlow.css'
 import { RequiredPermissions } from '../RequiredPermissions'
 import SmartBadge from '../SmartBadge'
 import Title from '../Title'
@@ -66,7 +69,7 @@ const WearableDetail = ({ nft }: Props) => {
   return (
     <div className={styles.WearableDetail}>
       <OnBack asset={nft} />
-      <div className={styles.assetImageContainer}>
+      <div className={classNames(styles.assetImageContainer, 'rarity-glow')} style={getRarityGlowStyle(wearable.rarity)}>
         <AssetImage asset={nft} isDraggable />
       </div>
       <div className={styles.wearableInformationContainer}>

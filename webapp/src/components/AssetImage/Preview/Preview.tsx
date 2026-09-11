@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer, PreviewUnityMode } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewRenderer, PreviewType, PreviewUnityMode, Rarity } from '@dcl/schemas'
 import { SocialEmoteAnimation } from '@dcl/schemas/dist/dapps/preview/social-emote-animation'
 import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Center, Loader, Popup, Icon } from 'decentraland-ui'
+import { Button, Center, Icon, Loader, Popup } from 'decentraland-ui'
 import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 'decentraland-ui2'
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
+import { getRarityWash } from '../../../utils/rarity'
 import AvailableForMintPopup from '../AvailableForMintPopup'
-import { getEthereumItemUrn, colorToHex } from '../utils'
+import { colorToHex, getEthereumItemUrn } from '../utils'
 import { PlayButton } from './PlayButton'
 import { Props } from './Preview.types'
 import './Preview.css'
@@ -24,6 +25,7 @@ export const Preview: React.FC<Props> = ({
   videoHash,
   wallet,
   isDraggable,
+  isSmall,
   isLoadingVideoHash,
   isTryingOn,
   isUnityWearablePreviewEnabled,
@@ -304,9 +306,13 @@ export const Preview: React.FC<Props> = ({
     return asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON
   }, [asset])
 
-  const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
-
-  const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
+  /**
+   * Only a card paints a stage. The detail page (`isDraggable`) paints nothing so the page's field is
+   * the scene's backdrop and the renderer's own shadow lands on it, with rarity carried by the glow
+   * the detail pages draw. A thumbnail paints nothing either: the wash is tuned for a card-sized box,
+   * so at 48px its outer stop buries the item's silhouette.
+   */
+  const backgroundImage = useMemo(() => (isSmall || isDraggable ? undefined : getRarityWash(rarity)), [isDraggable, isSmall, rarity])
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
@@ -321,9 +327,10 @@ export const Preview: React.FC<Props> = ({
   const className = useMemo(
     () =>
       classNames('Preview', 'rarity-background', {
-        'is-loading-wearable-preview': isLoadingWearablePreview
+        'is-loading-wearable-preview': isLoadingWearablePreview,
+        small: isSmall
       }),
-    [isLoadingWearablePreview]
+    [isLoadingWearablePreview, isSmall]
   )
 
   return (
@@ -332,7 +339,8 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            background={Rarity.getColor(rarity)}
+            // Transparent down to the page's field; a full-saturation rarity scene would be too loud.
+            disableBackground
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}

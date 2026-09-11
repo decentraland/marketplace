@@ -3,7 +3,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Card, Loader } from 'decentraland-ui'
+import { Card } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { ExtendedHistory } from '../../modules/types'
@@ -11,6 +11,7 @@ import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
 import { InfiniteScroll } from '../InfiniteScroll'
+import { SkeletonCards } from '../SkeletonCards'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -109,15 +110,15 @@ const AssetList = (props: Props) => {
 
   return (
     <div className="AssetsList">
-      {isLoading ? (
-        <>
-          <div className="overlay" />
-          <div className="transparentOverlay">
-            <Loader size="massive" active className="asset-loader" />
-          </div>
-        </>
+      {/* Skeleton cards rather than a scrim over the grid: placeholders hold the shape of what is
+          coming, where the scrim hid what was already there and said nothing about how much was left.
+          A short run is appended while paging so the existing cards stay readable. */}
+      {assets.length > 0 || isLoading ? (
+        <Card.Group>
+          {assets.length > 0 ? renderAssetCards() : null}
+          {isLoading ? <SkeletonCards count={assets.length > 0 ? 4 : 12} /> : null}
+        </Card.Group>
       ) : null}
-      {assets.length > 0 ? <Card.Group> {renderAssetCards()} </Card.Group> : null}
       <InfiniteScroll page={page} hasMorePages={hasMorePages} onLoadMore={handleLoadMore} isLoading={isLoading} maxScrollPages={3}>
         {shouldRenderEmptyState ? renderEmptyState() : null}
       </InfiniteScroll>

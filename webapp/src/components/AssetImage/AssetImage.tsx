@@ -74,7 +74,17 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.WEARABLE:
     case NFTCategory.EMOTE: {
-      return <Preview asset={asset} avatar={avatar} item={item} wallet={wallet} isDraggable={isDraggable} hasBadges={hasBadges} />
+      return (
+        <Preview
+          asset={asset}
+          avatar={avatar}
+          item={item}
+          wallet={wallet}
+          isDraggable={isDraggable}
+          isSmall={isSmall}
+          hasBadges={hasBadges}
+        />
+      )
     }
 
     case NFTCategory.ENS: {

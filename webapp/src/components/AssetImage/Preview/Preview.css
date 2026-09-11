@@ -121,3 +121,9 @@
 .Preview .asset-emote-controls .ui.button.sound-button.enabled::before {
   background-image: url('../../../images/emotes/volume.svg');
 }
+
+/* Small thumbnails carry no rarity gradient, and the search dropdown and buy modal never paint
+   .AssetImage themselves, so without this they would be transparent. */
+.Preview.rarity-background.small {
+  background-color: rgba(115, 110, 125, 0.24);
+}

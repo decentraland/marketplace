@@ -17,6 +17,7 @@ export type Props = {
   wallet?: Wallet | null
   wearablePreviewController?: IPreviewController | null
   isDraggable?: boolean
+  isSmall?: boolean
   isLoadingVideoHash?: boolean
   isTryingOn?: boolean
   isUnityWearablePreviewEnabled?: boolean
@@ -28,7 +29,7 @@ export type Props = {
   onPlaySmartWearableVideoShowcase: (videoHash: string) => ReturnType<typeof openModal>
 }
 
-export type OwnProps = Pick<Props, 'asset' | 'avatar' | 'children' | 'item' | 'wallet' | 'isDraggable' | 'hasBadges'>
+export type OwnProps = Pick<Props, 'asset' | 'avatar' | 'children' | 'item' | 'wallet' | 'isDraggable' | 'isSmall' | 'hasBadges'>
 
 export type MapStateProps = Pick<
   Props,

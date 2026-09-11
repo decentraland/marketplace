@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Image } from 'decentraland-ui'
+import { getCategoryIcon } from '../../../utils/categoryIcons'
 import { Props } from './MenuItem.types'
 import './MenuItem.css'
 
@@ -21,6 +22,8 @@ const MenuItem = <T extends string | number>(props: Props<T>) => {
     [handleOnClick]
   )
 
+  const categoryIcon = getCategoryIcon(value)
+
   const containerClass = classNames('MenuItem', className, {
     active: currentValue === value,
     [`sub sub-${nestedLevel}`]: nestedLevel
@@ -29,6 +32,9 @@ const MenuItem = <T extends string | number>(props: Props<T>) => {
   return (
     <li className={containerClass} onClick={handleOnClick} tabIndex={0} onKeyDown={handleOnKeyDown}>
       {image && <Image alt={image} src={image} width="25" circular />}
+      {/* The shop marks each wearable/emote category with a glyph. Sections without one (LAND, ENS,
+          the group rows) render as before, which is how the shop leaves them too. */}
+      {categoryIcon ? <img className="category-icon" src={categoryIcon} alt="" aria-hidden /> : null}
 
       <div className="content">
         {t(`menu.${value}`)}
