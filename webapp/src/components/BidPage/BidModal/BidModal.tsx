@@ -11,6 +11,7 @@ import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isNFT, isOwnedBy } from '../../../modules/asset/utils'
 import { getBidStatus, getError } from '../../../modules/bid/selectors'
+import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
 import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { isLand } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
@@ -37,6 +38,9 @@ const BidModal = (props: Props) => {
   // composition read when this form opened — the one shown alongside it — and not
   // against whatever the registry holds by the time the bid is signed.
   const estateComposition = useEstateSnapshot(isNFT(asset) ? asset : null)
+  // Draw the Estate from the registry rather than from the indexed copy, so what is on screen is the
+  // composition the signature will be bound to even while the indexer is behind.
+  const displayedAsset = estateComposition.snapshot && isNFT(asset) ? applyEstateSnapshot(asset, estateComposition.snapshot) : asset
   const isEstateBlocked = isEstateSnapshotBlocking(estateComposition)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
@@ -111,7 +115,7 @@ const BidModal = (props: Props) => {
     isEstateBlocked
 
   return (
-    <AssetAction asset={asset}>
+    <AssetAction asset={displayedAsset}>
       <div className="bid-action">
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">

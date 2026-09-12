@@ -1,6 +1,7 @@
-import { ChainId } from '@dcl/schemas'
+import { ChainId, NFTCategory } from '@dcl/schemas'
 import { Contract } from '../../vendor/services'
-import { computeEstateFingerprint, decodeLandTokenId, isSameEstateComposition, readEstateSnapshot } from './utils'
+import { NFT } from '../types'
+import { applyEstateSnapshot, computeEstateFingerprint, decodeLandTokenId, isSameEstateComposition, readEstateSnapshot } from './utils'
 
 const getBlockNumber = jest.fn()
 const getCode = jest.fn()
@@ -146,6 +147,49 @@ describe('isSameEstateComposition', () => {
   it('should compare coordinates by value rather than by type', () => {
     const asStrings = PARCELS.map(parcel => ({ x: String(parcel.x), y: String(parcel.y) })) as unknown as typeof PARCELS
     expect(isSameEstateComposition(PARCELS, asStrings)).toBe(true)
+  })
+})
+
+// What draws an Estate — the atlas selection, its centre, the LAND count — all reads `data.estate`,
+// so substituting it there is what puts the registry's composition on screen instead of the indexed one.
+describe('applyEstateSnapshot', () => {
+  const nft = {
+    tokenId: ESTATE_ID,
+    category: NFTCategory.ESTATE,
+    name: 'an estate',
+    data: {
+      estate: {
+        size: 2,
+        description: 'unchanged',
+        parcels: [
+          { x: 0, y: 0 },
+          { x: 0, y: 1 }
+        ]
+      }
+    }
+  } as unknown as NFT
+
+  const snapshot = { blockNumber: 1, landIds: LAND_IDS, parcels: PARCELS, fingerprint: FINGERPRINT }
+
+  it('should replace the parcels and the size with the ones the registry holds', () => {
+    const applied = applyEstateSnapshot(nft, snapshot)
+
+    expect(applied.data.estate?.parcels).toEqual(PARCELS)
+    expect(applied.data.estate?.size).toBe(PARCELS.length)
+  })
+
+  it('should leave the rest of the asset alone', () => {
+    const applied = applyEstateSnapshot(nft, snapshot)
+
+    expect(applied.name).toBe(nft.name)
+    expect(applied.data.estate?.description).toBe('unchanged')
+    expect(nft.data.estate?.parcels).toHaveLength(2)
+  })
+
+  it('should pass a non-estate through untouched', () => {
+    const parcel = { category: NFTCategory.PARCEL, data: {} } as unknown as NFT
+
+    expect(applyEstateSnapshot(parcel, snapshot)).toBe(parcel)
   })
 })
 

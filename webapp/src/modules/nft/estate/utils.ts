@@ -174,6 +174,23 @@ export async function readEstateSnapshot(estateId: string, estateContract: Contr
   }
 }
 
+// Returns the NFT as the registry describes it: same asset, but with the composition read from the
+// chain in place of the indexed one. What renders an Estate — the atlas selection, its centre, the
+// LAND count — all reads `data.estate`, so substituting it there shows the buyer or bidder the
+// composition their action will actually be bound to, rather than one an indexer may be behind on.
+export function applyEstateSnapshot(nft: NFT, snapshot: EstateSnapshot): NFT {
+  if (!nft.data.estate) {
+    return nft
+  }
+  return {
+    ...nft,
+    data: {
+      ...nft.data,
+      estate: { ...nft.data.estate, parcels: snapshot.parcels, size: snapshot.parcels.length }
+    }
+  }
+}
+
 export async function getFingerprint(estateId: string, estateContract: Contract, chainId: ChainId) {
   const provider = await getNetworkProvider(chainId)
   if (provider) {

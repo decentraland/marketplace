@@ -14,6 +14,7 @@ import ERC721ABI from '../../../contracts/ERC721.json'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { isStubMaticCollectionContract } from '../../../modules/contract/utils'
+import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
 import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
@@ -55,6 +56,9 @@ const SellModal = (props: Props) => {
   // the composition read when this page opened — the one shown alongside it — and
   // not against whatever the registry holds by the time the listing is signed.
   const estateComposition = useEstateSnapshot(nft)
+  // Draw the Estate from the registry rather than from the indexed copy, so what is on screen is the
+  // composition the signature will be bound to even while the indexer is behind.
+  const displayedAsset = estateComposition.snapshot ? applyEstateSnapshot(nft, estateComposition.snapshot) : nft
   const [estateCompositionError, setEstateCompositionError] = useState<string>()
 
   const [expiresAt, setExpiresAt] = useState(() => {
@@ -156,7 +160,7 @@ const SellModal = (props: Props) => {
     !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateSnapshotBlocking(estateComposition)
 
   return (
-    <AssetAction asset={nft}>
+    <AssetAction asset={displayedAsset}>
       <Header size="large">{t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}</Header>
 
       {shouldRemoveListing ? (
