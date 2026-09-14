@@ -71,6 +71,9 @@ html {
   background-attachment: fixed;
 }
 
+/* The one blanket override in this file: ui2's DclThemeProvider mounts MUI's CssBaseline, which sets the
+   body background at runtime and would otherwise paint over the field. Anything that later needs a real
+   background on <body> has to work around this rather than set it. */
 body {
   background: transparent !important;
 }

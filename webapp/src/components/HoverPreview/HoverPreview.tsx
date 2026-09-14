@@ -192,6 +192,9 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   const [isBootScheduled, setIsBootScheduled] = useState(false)
   const [item, setItem] = useState<Item | null>(null)
   const [isFavoritesHovered, setIsFavoritesHovered] = useState(false)
+  // Identity of the card being previewed. `rect` cannot stand in for it: it is recomputed every frame,
+  // so it changes identity throughout the hover lift and any scroll.
+  const [anchorKey, setAnchorKey] = useState<string | null>(null)
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
@@ -289,6 +292,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
       setIsVisible(true)
       const key = keyOf(source)
       currentKeyRef.current = key
+      setAnchorKey(key)
       if (poseRef.current.key !== key) {
         poseRef.current = { key, emote: nextPose(poseRef.current.emote) }
       }
@@ -402,7 +406,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
       real.removeEventListener('mouseleave', onLeave)
       setIsFavoritesHovered(false)
     }
-  }, [isVisible, rect])
+  }, [isVisible, anchorKey])
 
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
