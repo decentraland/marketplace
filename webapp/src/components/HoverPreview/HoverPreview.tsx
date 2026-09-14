@@ -395,8 +395,9 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
    *
    * The card's own heart sits inside the card, whose hover state opens a stacking context at z-index 5,
    * so it can never rise above this overlay however high its own z-index goes. Rather than restack the
-   * grid, the control is drawn again here as a sibling of the preview: same portal, one level up, and
-   * `pointer-events` back on because the preview itself has them off.
+   * grid, the control is drawn again here as a sibling of the preview, one level above it. This copy is
+   * for the eyes only: it does not take the pointer, so the click reaches the card's own control
+   * directly underneath and the card never loses the hover that opened the preview.
    */
   const favourites =
     isVisible && item && rect ? (
