@@ -232,6 +232,19 @@ body ul.box-menu.Menu {
 /* The row carries an explicit width (the category rail's --menu-item-width), so a lateral margin
    shifted it right without shrinking it: a selected SUBcategory ran 12px past the rail's right edge.
    `width: auto` lets the margins reduce the box instead of displacing it. */
+/* Hover matches the active pill's geometry, so the highlight does not jump width or corner radius as
+   the pointer crosses the rail. Only the fill differs, at the shop's two alphas: 0.08 hovering, 0.14
+   selected. The theme paints this from --card, which this layer turned translucent dark, and that read
+   as a black bar over the purple. Horizontal margins only: changing the vertical ones would shift every
+   row below on hover. */
+body ul.box-menu.Menu > .MenuItem:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  margin-left: 12px;
+  margin-right: 12px;
+  width: auto;
+}
+
 body ul.box-menu.Menu > .MenuItem.active {
   background-color: rgba(255, 255, 255, 0.14);
   border-radius: 8px;
@@ -383,6 +396,16 @@ body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option {
    position. That is why this is scoped to .dui-rarity-filter, where the order is
    fixed by the Rarity enum, and why it stops at a pseudo-element. Giving the
    option a rarity attribute upstream is the real fix. */
+/* Applied chip, measured off the shop: it marks the selection with a solid white hairline and a darker
+   fill rather than flooding the chip. The marketplace filled it with --primary, the DCL red, which on
+   this page read as an error state rather than a selection. The selector repeats `__option` because the
+   rule it overrides carries both classes on the same element, and a shorter one loses on class count. */
+body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option.dui-array-filter__selected-option {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: #fcfcfc;
+  color: #fcfcfc;
+}
+
 body .dui-rarity-filter .dui-array-filter__options .dui-array-filter__option::before {
   content: '';
   width: 16px;
@@ -771,4 +794,17 @@ body::before {
   body::before {
     animation: none;
   }
+}
+
+/* Footer social marks. They are SVGs embedded as background images with their colour baked in, so the
+   surrounding `color` never reached them and they stayed near-black on the purple. `brightness(0)`
+   flattens whatever colour the sprite carries and `invert(1)` lifts it to white, which works for all of
+   them without touching the assets. */
+body .dcl.footer .social-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+body .dcl.footer .social-icon:hover {
+  opacity: 1;
 }
