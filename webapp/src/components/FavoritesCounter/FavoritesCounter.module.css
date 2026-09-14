@@ -2,19 +2,25 @@
   display: flex;
 }
 
+/* The bubble is revealed by hovering the card it sits in. The hover preview redraws this control over
+   itself, outside any card (see HoverPreview.tsx), so that copy needs its own reveal or it stays at
+   opacity 0 while the preview is precisely what is covering the original. It carries the extra class
+   because `.FavoritesCounter .bubble` below sets opacity 0 at the same specificity and wins on order;
+   the sibling hover selectors only clear it because `:hover` counts toward theirs. */
+:global(.HoverPreview__favorites) .FavoritesCounter .bubble,
 :global(.ui.cards a.card:hover) .bubble,
 :global(.ui.link.card:hover) .bubble,
 :global(.ui.link.cards .card:hover) .bubble,
 :global(a.ui.card:hover) .bubble {
   opacity: 1;
-  transition: opacity .2s ease-out;
-  -webkit-transition: opacity .2s ease-out;
-  -moz-transition: opacity .2s ease-out;
-  -o-transition: opacity .2s ease-out;
+  transition: opacity 0.2s ease-out;
+  -webkit-transition: opacity 0.2s ease-out;
+  -moz-transition: opacity 0.2s ease-out;
+  -o-transition: opacity 0.2s ease-out;
 }
 
 .FavoritesCounter :global(.ui.loader).loader {
-  margin: 0 .25rem 0 0;
+  margin: 0 0.25rem 0 0;
 }
 
 .FavoritesCounter :global(.ui.loader:before) {
@@ -29,7 +35,10 @@
   border-color: rgba(35, 31, 32, 1) transparent transparent !important;
 }
 
-.FavoritesCounter:hover .bubble {
+.FavoritesCounter:hover .bubble,
+/* The hover preview draws a copy of this control over itself; it cannot match `:hover` because it is
+   transparent to the pointer, so the state is mirrored onto it as a class (see HoverPreview.tsx). */
+:global(.HoverPreview__favorites.is-hovered) .FavoritesCounter .bubble {
   background-color: rgba(35, 31, 32, 1);
 }
 
@@ -77,10 +86,10 @@
   justify-content: center;
   align-items: center;
   column-gap: 1px;
-  transition: background-color .5s;
-  -webkit-transition: background-color .5s;
-  -moz-transition: background-color .5s;
-  -o-transition: background-color .5s;
+  transition: background-color 0.5s;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
   cursor: pointer;
 }
 
@@ -88,8 +97,8 @@
   min-width: 38px;
   min-height: 33px;
   border-radius: 13px;
-  background-color: #231F20;
-  border: .25px solid var(--text);
+  background-color: #231f20;
+  border: 0.25px solid var(--text);
   display: flex;
   align-items: center;
   opacity: 1;

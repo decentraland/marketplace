@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
+import { Button, Icon, Mobile, Tabs, useMobileMediaQuery } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { locations } from '../../modules/routing/locations'
@@ -13,7 +13,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import * as decentraland from '../../modules/vendor/decentraland'
 import * as events from '../../utils/events'
 import { AssetStatusFilter } from '../../utils/filters'
-import { Props, NavigationTab } from './Navigation.types'
+import { NavigationTab, Props } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
@@ -80,9 +80,6 @@ const Navigation = (props: Props) => {
               <Link to={locations.defaultCurrentAccount()}>
                 <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
               </Link>
-              <Link to={locations.lists()}>
-                <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
-              </Link>
               <Mobile>
                 <Link to={locations.activity()}>
                   <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
@@ -93,6 +90,12 @@ const Navigation = (props: Props) => {
         </Tabs.Left>
         {!isMobile && !isIAP ? (
           <Tabs.Right>
+            {/* The shop reaches its lists through a heart rather than a labelled tab, and places it
+                BEFORE the CTA so the button stays the last thing in the bar. The label stays as the
+                accessible name, so the control is still announced as "My Lists" to a screen reader. */}
+            <Link to={locations.lists()} className="my-lists-heart" aria-label={t('navigation.my_lists')} title={t('navigation.my_lists')}>
+              <Icon name={activeTab === NavigationTab.MY_LISTS ? 'heart' : 'heart outline'} fitted />
+            </Link>
             <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>

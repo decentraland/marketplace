@@ -143,7 +143,9 @@ const AssetCard = (props: Props) => {
         urn: 'urn' in asset ? asset.urn ?? null : null,
         network: asset.network,
         rarity: asset.data.emote?.rarity ?? asset.data.wearable?.rarity,
-        bodyShapes: asset.data.wearable?.bodyShapes
+        bodyShapes: asset.data.wearable?.bodyShapes,
+        // Lets the preview redraw the favourite control on top of itself; the card's own is covered.
+        item: !isNFT(asset) ? asset : null
       })
     }, HOVER_INTENT_MS)
   }, [hoverPreview, canShowHoverPreview, asset])

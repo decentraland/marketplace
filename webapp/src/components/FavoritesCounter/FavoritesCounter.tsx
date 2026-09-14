@@ -60,7 +60,7 @@ const FavoritesCounter = (props: Props) => {
           {isLoading ? (
             <Loader active inline size="tiny" className={styles.loader} />
           ) : (
-            <Icon size="large" fitted={isCollapsed} name={isPickedByUser ? 'bookmark' : 'bookmark outline'} />
+            <Icon size="large" fitted={isCollapsed} name={isPickedByUser ? 'heart' : 'heart outline'} />
           )}
         </span>
         {!isCollapsed ? counter : null}

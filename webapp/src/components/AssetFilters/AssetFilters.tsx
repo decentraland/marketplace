@@ -237,14 +237,20 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
-      <SpecialFilter
-        isOnlySmart={onlySmart}
-        withCredits={isIAP ? true : withCredits}
-        withCreditsDisabled={isIAP}
-        onSmartChange={shouldRenderFilter(AssetFilter.OnlySmart) ? handleOnlySmartChange : undefined}
-        onWithCreditsChange={isIAP ? undefined : handleWithCreditsToggleChange}
-        defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Special]}
-      />
+      {/* Gated like every other filter in this list. It was the only one rendered unconditionally,
+          which is why NAMEs showed a "Get with Credits" toggle: credits are Polygon-only, and a NAME
+          is an Ethereum L1 asset, so the toggle could never do anything there. Section.ENS simply
+          does not carry AssetFilter.Special. */}
+      {shouldRenderFilter(AssetFilter.Special) && (
+        <SpecialFilter
+          isOnlySmart={onlySmart}
+          withCredits={isIAP ? true : withCredits}
+          withCreditsDisabled={isIAP}
+          onSmartChange={shouldRenderFilter(AssetFilter.OnlySmart) ? handleOnlySmartChange : undefined}
+          onWithCreditsChange={isIAP ? undefined : handleWithCreditsToggleChange}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Special]}
+        />
+      )}
       {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmoteAttributesFilter
           onChange={handleEmoteAttributesChange}

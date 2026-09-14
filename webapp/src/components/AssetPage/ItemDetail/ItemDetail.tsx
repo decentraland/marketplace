@@ -11,6 +11,7 @@ import { useIsIAP } from '../../../modules/iap/useIAP'
 import { RootState } from '../../../modules/reducer'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
+import { getRarityGlowStyle } from '../../../utils/rarity'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
@@ -23,6 +24,7 @@ import IconBadge from '../LinkedIconBadge'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
 import OnBack from '../OnBack'
 import { Owner } from '../Owner'
+import '../rarityGlow.css'
 import { RequiredPermissions } from '../RequiredPermissions'
 import SmartBadge from '../SmartBadge'
 import Title from '../Title'
@@ -100,7 +102,7 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
     >
       <OnBack asset={item} />
       <div className={styles.informationContainer}>
-        <div className={styles.assetImageContainer}>
+        <div className={classNames(styles.assetImageContainer, 'rarity-glow')} style={getRarityGlowStyle(item.rarity)}>
           <AssetImage asset={item} isDraggable />
         </div>
         <div className={styles.information}>

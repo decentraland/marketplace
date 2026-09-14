@@ -1,0 +1,25 @@
+/* Placeholder fill ported from the shop (styles/index.css `.skeleton` + SkeletonCards.styles), so a
+   loading grid shimmers the same way in both storefronts. */
+.skeletonCard {
+  --skeleton-lo: rgba(255, 255, 255, 0.07);
+  --skeleton-hi: rgba(255, 255, 255, 0.16);
+
+  min-height: 360px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: linear-gradient(100deg, var(--skeleton-lo) 30%, var(--skeleton-hi) 50%, var(--skeleton-lo) 70%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonCard {
+    animation: none;
+  }
+}

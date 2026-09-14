@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import classNames from 'classnames'
 import { EmoteOutcomeType, EmotePlayMode, OrderSortBy } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -6,6 +7,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { useIsIAP } from '../../../modules/iap/useIAP'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
+import { getRarityGlowStyle } from '../../../utils/rarity'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import TableContainer from '../../Table/TableContainer'
@@ -18,6 +20,7 @@ import IconBadge from '../LinkedIconBadge'
 import { ListingsTable } from '../ListingsTable'
 import OnBack from '../OnBack'
 import { Owner } from '../Owner'
+import '../rarityGlow.css'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
@@ -93,7 +96,7 @@ const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
   return (
     <div className={styles.EmoteDetail}>
       <OnBack asset={nft} />
-      <div className={styles.assetImageContainer}>
+      <div className={classNames(styles.assetImageContainer, 'rarity-glow')} style={getRarityGlowStyle(emote.rarity)}>
         <AssetImage asset={nft} isDraggable />
       </div>
       <div className={styles.wearableInformationContainer}>

@@ -1,5 +1,9 @@
 .WearableTags {
   display: flex;
+  /* Spaces whatever combination of badges a card happens to show. It replaces a `margin-left` that used
+     to hang off the smart badge and stopped applying when decentraland-ui renamed its class, which is
+     what left the pills touching. 12px is what the shop puts between its own chips. */
+  gap: 12px;
 }
 
 .WearableTags .rarity {
@@ -90,22 +94,22 @@
   background-image: url(../../../images/wearables/SkinIcon.svg);
 }
 
-.WearableTags .IconBadge.SmartBadge {
-  margin-left: 6px;
-}
-
-.ui.link.card.AssetCard.catalog:hover .WearableTags .IconBadge.SmartBadge {
+/* The badge collapses to its icon on a catalog card and opens on hover. These selectors name
+   `dui-icon-badge` because that is what decentraland-ui renders now: they were written against the older
+   `IconBadge` class and stopped matching silently when it was renamed, which left the badge permanently
+   open and unanimated. The spacing rule that lived here is gone; the row's `gap` handles it. */
+.ui.link.card.AssetCard.catalog:hover .WearableTags .dui-icon-badge.SmartBadge {
   mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
   -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
   animation: shimmer 2.5s infinite;
 }
 
-.WearableTags .IconBadge.SmartBadge .custom-icon {
+.WearableTags .dui-icon-badge.SmartBadge .dui-icon-badge__icon {
   margin: 0px;
 }
 
-.WearableTags .IconBadge.SmartBadge .text {
-  transition: opacity .5s ease-in;
+.WearableTags .dui-icon-badge.SmartBadge .text {
+  transition: opacity 0.5s ease-in;
   opacity: 0;
   height: 0;
   width: 0;
@@ -113,7 +117,7 @@
   margin-left: 0px;
 }
 
-.ui.link.card.AssetCard.catalog:hover .WearableTags .IconBadge.SmartBadge .text {
+.ui.link.card.AssetCard.catalog:hover .WearableTags .dui-icon-badge.SmartBadge .text {
   opacity: 1;
   height: auto;
   width: auto;
