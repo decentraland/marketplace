@@ -727,6 +727,9 @@ body .MenuItem .category-icon {
   height: 16px;
   margin-right: 10px;
   flex-shrink: 0;
+  /* The row is a flex container that does not centre its items, so a fixed-height glyph sits against the
+     top of the line box instead of on the label's optical centre. */
+  align-self: center;
   opacity: 0.85;
 }
 
