@@ -463,9 +463,11 @@ describe('when listing every off-chain marketplace deployed on a chain', () => {
     })
   })
 
-  describe('and the chain has no V3 deployment', () => {
-    it('should return only the versions that are actually there', () => {
+  describe('and the chain is a mainnet', () => {
+    // A wallet can hold a grant on any of the three at once, so Settings has to offer all three rows.
+    it('should return all three there as well, newest first', () => {
       expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_MAINNET).map(({ contractName }) => contractName)).toEqual([
+        ContractName.OffChainMarketplaceV3,
         ContractName.OffChainMarketplaceV2,
         ContractName.OffChainMarketplace
       ])
@@ -492,13 +494,15 @@ describe('when getting the latest off-chain marketplace contract', () => {
     })
   })
 
-  describe('and the chain has no V3 deployment', () => {
+  describe('and the chain is a mainnet, where V2 is still deployed beside V3', () => {
     beforeEach(() => {
       chainId = ChainId.ETHEREUM_MAINNET
     })
 
-    it('should fall back to V2 rather than throw', () => {
-      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV2, chainId))
+    // Both versions are live during the rollout, and signing against the older one would produce trades
+    // the marketplace no longer settles.
+    it('should still return V3 rather than the version that came before it', () => {
+      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV3, chainId))
     })
   })
 
