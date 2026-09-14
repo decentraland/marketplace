@@ -1718,6 +1718,10 @@
     "approximate": "~{amount}",
     "unavailable": "价格不可用"
   },
+  "iap_payment_unavailable": {
+    "title": "无法结账",
+    "description": "此结账页面呈现为使用 Credits 付款，但 Credits 付款未能完成，因此我们不会请您授权任何交易。请从商店重新打开该商品后重试。"
+  },
   "checkout_price_unavailable_modal": {
     "title": "价格不可用",
     "description": "我们目前无法确认此挂单需要多少 MANA，因此不会向你显示待批准的金额。请稍后重试。"

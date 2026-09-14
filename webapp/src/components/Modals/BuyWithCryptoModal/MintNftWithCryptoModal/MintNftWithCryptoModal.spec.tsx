@@ -1,4 +1,5 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ChainId, Item, Network } from '@dcl/schemas'
@@ -38,7 +39,7 @@ jest.mock('../BuyWithCryptoModal.container', () => ({
 
 const mockedUseCheckoutPriceInMana = useCheckoutPriceInMana as jest.MockedFunction<typeof useCheckoutPriceInMana>
 
-function renderModal(overrides: Partial<Props> = {}) {
+function renderModal(overrides: Partial<Props> = {}, url = '/') {
   const item = {
     price: '2529100000000000000000',
     network: Network.MATIC,
@@ -63,7 +64,12 @@ function renderModal(overrides: Partial<Props> = {}) {
     ...overrides
   } as unknown as Props
 
-  return render(<MintNftWithCryptoModal {...props} />)
+  // The modal reads the mobile-IAP marker off the URL, so it renders inside a router.
+  return render(
+    <MemoryRouter initialEntries={[url]}>
+      <MintNftWithCryptoModal {...props} />
+    </MemoryRouter>
+  )
 }
 
 describe('when minting an item whose listing is priced in USD', () => {
@@ -131,5 +137,54 @@ describe('when minting an item whose listing is priced in USD', () => {
 
       expect(screen.getByText(t('checkout_price_unavailable_modal.title'))).toBeInTheDocument()
     })
+  })
+})
+
+// A mobile-IAP checkout is branded as a Credits purchase. Reaching it without the credits
+// selection used to leave the flag falsey, which authorised and settled in MANA behind that
+// branding, and on a USD-pegged listing for a different figure than the one on screen.
+describe('when a mobile-IAP checkout is opened without the credits selection', () => {
+  beforeEach(() => {
+    mockedUseCheckoutPriceInMana.mockReturnValue({
+      status: 'ready',
+      manaWei: '33212953721699847665073',
+      isUSDPegged: true
+    } as CheckoutPrice)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it.each([{ useCredits: undefined }, { useCredits: false }])(
+    'should withhold the confirmation when useCredits is %p',
+    metadataOverride => {
+      const item = {
+        price: '2529100000000000000000',
+        network: Network.MATIC,
+        chainId: ChainId.MATIC_MAINNET,
+        tradeId: 'a-trade',
+        tradeContractAddress: '0xmarketplace'
+      } as Item
+
+      renderModal({ metadata: { item, ...metadataOverride } } as Partial<Props>, '/?view=mobile-iap')
+
+      expect(screen.queryByTestId('confirmation')).not.toBeInTheDocument()
+      expect(screen.getByText(t('iap_payment_unavailable.title'))).toBeInTheDocument()
+    }
+  )
+
+  it('should present the confirmation once the credits selection is present', () => {
+    const item = {
+      price: '2529100000000000000000',
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET,
+      tradeId: 'a-trade',
+      tradeContractAddress: '0xmarketplace'
+    } as Item
+
+    renderModal({ metadata: { item, useCredits: true } } as Partial<Props>, '/?view=mobile-iap')
+
+    expect(screen.getByTestId('confirmation')).toBeInTheDocument()
   })
 })

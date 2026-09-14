@@ -1752,6 +1752,10 @@
     "approximate": "~{amount}",
     "unavailable": "Price unavailable"
   },
+  "iap_payment_unavailable": {
+    "title": "Checkout unavailable",
+    "description": "This checkout is presented as a Credits purchase, but the Credits payment did not come through, so we are not asking you to approve anything. Please open the item again from the store and retry."
+  },
   "checkout_price_unavailable_modal": {
     "title": "Price unavailable",
     "description": "We couldn't confirm how much MANA this listing costs right now, so we're not showing you an amount to approve. Please try again in a moment."

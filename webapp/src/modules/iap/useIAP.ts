@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
-const IAP_VIEW_PARAM = 'view'
-const IAP_VIEW_VALUE = 'mobile-iap'
+export const IAP_VIEW_PARAM = 'view'
+export const IAP_VIEW_VALUE = 'mobile-iap'
 
 export const useIsIAP = (): boolean => {
   const { search } = useLocation()

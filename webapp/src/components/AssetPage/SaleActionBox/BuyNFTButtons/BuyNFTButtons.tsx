@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { BigNumber } from 'ethers'
@@ -20,6 +21,32 @@ import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
 import { Props } from './BuyNFTButtons.types'
 import styles from './BuyNFTButtons.module.css'
+
+// A `buyWithCrypto=true` deep link opens the checkout on arrival. It runs from an effect
+// rather than during render, and exactly once per mount: the previous call sat in the render
+// body, so it re-dispatched on every render, and it called the dispatch prop directly, which
+// dropped the credits selection that `handleBuyWithCrypto` carries.
+const AutoOpenCheckout = ({
+  asset,
+  order,
+  onOpen
+}: {
+  asset: Asset
+  order: Order | null
+  onOpen: (asset: Asset, order: Order | null) => void
+}) => {
+  const hasOpened = useRef(false)
+
+  useEffect(() => {
+    if (hasOpened.current) {
+      return
+    }
+    hasOpened.current = true
+    onOpen(asset, order)
+  }, [asset, order, onOpen])
+
+  return null
+}
 
 const BuyNFTButtons = ({
   credits,
@@ -87,9 +114,14 @@ const BuyNFTButtons = ({
       <AssetProvider type={assetType} contractAddress={asset.contractAddress} tokenId={tokenId}>
         {(asset, order) => {
           if (!asset) return <Loader active size="medium" className={styles.loading_asset} />
-          if (asset && shouldOpenBuyWithCryptoModal) {
-            onBuyWithCrypto(asset, order)
-          }
+          // Every branch below carries the same auto-open, so a deep link behaves the same
+          // whichever call to action the asset resolves to.
+          const withAutoOpen = (children: ReactNode) => (
+            <>
+              {shouldOpenBuyWithCryptoModal ? <AutoOpenCheckout asset={asset} order={order} onOpen={handleBuyWithCrypto} /> : null}
+              {children}
+            </>
+          )
           const isItemFree = !isNFT(asset) && asset.price === '0'
           const isBuyingEntirelyWithCredits =
             useCredits &&
@@ -102,7 +134,7 @@ const BuyNFTButtons = ({
             if (!wallet) {
               const basename = getBasename()
               const redirectTo = `${basename}${location.pathname}${location.search}`
-              return (
+              return withAutoOpen(
                 <Button
                   primary
                   fluid
@@ -116,7 +148,7 @@ const BuyNFTButtons = ({
 
             // NFT without an active order cannot be purchased
             if (isNFT(asset) && !order) {
-              return (
+              return withAutoOpen(
                 <Button primary fluid className={styles.buyWithCryptoButton} disabled>
                   <span>{t('asset_page.actions.checkout')}</span>
                 </Button>
@@ -126,7 +158,7 @@ const BuyNFTButtons = ({
             const assetPrice = !isNFT(asset) ? asset.price : order!.price
             const hasEnoughCredits = !!credits && BigInt(credits.totalCredits) >= BigInt(assetPrice)
 
-            return (
+            return withAutoOpen(
               <Button
                 primary
                 fluid
@@ -139,7 +171,7 @@ const BuyNFTButtons = ({
             )
           }
 
-          return (
+          return withAutoOpen(
             <>
               {/* Credits toggle is only available for items with price > 1 MANA or for NFTs as well if the secondary sales are enabled */}
               {((isCreditsEnabled && !isNFT(asset) && BigNumber.from(asset.price).gte(getMinSaleValueInWei() || '')) ||
