@@ -75,9 +75,12 @@ body {
   background: transparent !important;
 }
 
-/* Page shells paint their own near-black over the gradient; let it through. */
-body .ui.page,
-body .ui.page.dcl,
+/* Page shells paint their own near-black over the gradient; let it through.
+
+   `:not(.dimmer)` is load-bearing: Semantic UI's modal backdrop is `ui page modals dimmer`, so it
+   carries `page` too and this rule was clearing the scrim behind every modal in the app. */
+body .ui.page:not(.dimmer),
+body .ui.page.dcl:not(.dimmer),
 body .AssetBrowse,
 body .HomePage {
   background: transparent;
