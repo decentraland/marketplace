@@ -191,6 +191,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   const [isAssetLoading, setIsAssetLoading] = useState(false)
   const [isBootScheduled, setIsBootScheduled] = useState(false)
   const [item, setItem] = useState<Item | null>(null)
+  const [isFavoritesHovered, setIsFavoritesHovered] = useState(false)
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
@@ -379,6 +380,30 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     [hide]
   )
 
+  /**
+   * Mirrors the hover of the card's own favourite control onto the copy drawn over the preview.
+   *
+   * The copy is transparent to the pointer so the card keeps its own hover, which means it never gets
+   * `:hover` itself. The control underneath does get it, so its state is read from there and handed to
+   * the copy as a class.
+   */
+  useEffect(() => {
+    const anchor = targetRef.current
+    if (!isVisible || !anchor) return
+    const real = anchor.closest('.AssetCard')?.querySelector<HTMLElement>('[class*="FavoritesCounter"]')
+    if (!real) return
+
+    const onEnter = () => setIsFavoritesHovered(true)
+    const onLeave = () => setIsFavoritesHovered(false)
+    real.addEventListener('mouseenter', onEnter)
+    real.addEventListener('mouseleave', onLeave)
+    return () => {
+      real.removeEventListener('mouseenter', onEnter)
+      real.removeEventListener('mouseleave', onLeave)
+      setIsFavoritesHovered(false)
+    }
+  }, [isVisible, rect])
+
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
     return {
@@ -401,7 +426,10 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
    */
   const favourites =
     isVisible && item && rect ? (
-      <div className="HoverPreview__favorites" style={{ top: rect.top + FAVORITES_INSET, left: rect.left + FAVORITES_INSET }}>
+      <div
+        className={`HoverPreview__favorites${isFavoritesHovered ? ' is-hovered' : ''}`}
+        style={{ top: rect.top + FAVORITES_INSET, left: rect.left + FAVORITES_INSET }}
+      >
         <FavoritesCounter item={item} />
       </div>
     ) : null
