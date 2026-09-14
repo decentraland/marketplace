@@ -1,5 +1,10 @@
 .WearableTags {
   display: flex;
+  /* The pills used to be spaced by `.WearableTags .IconBadge.SmartBadge { margin-left }` below, but the
+     badge renders as `dui-icon-badge` now, so that selector stopped matching and they ended up touching.
+     A gap on the row spaces whatever combination of badges a card happens to show. 12px is what the shop
+     puts between its own chips. */
+  gap: 12px;
 }
 
 .WearableTags .rarity {
@@ -105,7 +110,7 @@
 }
 
 .WearableTags .IconBadge.SmartBadge .text {
-  transition: opacity .5s ease-in;
+  transition: opacity 0.5s ease-in;
   opacity: 0;
   height: 0;
   width: 0;

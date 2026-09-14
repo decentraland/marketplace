@@ -11,7 +11,8 @@ import {
   PreviewType,
   PreviewUnityMode,
   Rarity,
-  sendMessage
+  sendMessage,
+  Item
 } from '@dcl/schemas'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { Loader } from 'decentraland-ui'
@@ -19,9 +20,13 @@ import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
 import { getRarityWash } from '../../utils/rarity'
+import { FavoritesCounter } from '../FavoritesCounter'
 import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
+
+// Matches `.AssetCard .FavoritesCounterBubble`, so the repeated control lands exactly on the card's own.
+const FAVORITES_INSET = 8
 
 // The preview renders INSIDE a cross-origin iframe, and its scene background can only be a flat
 // colour, never a gradient. So the scene is made transparent and the rarity wash is painted on the
@@ -43,6 +48,12 @@ export type HoverPreviewSource = {
   rarity?: Rarity
   // Wearables only: the body shapes the item declares a representation for.
   bodyShapes?: BodyShape[]
+  /**
+   * The catalog item behind the card, when there is one. Only used to keep the favourite control
+   * reachable while the preview covers the card: the card's own heart is trapped in the card's
+   * stacking context (z-index 5) and this overlay is portaled to the body above it.
+   */
+  item?: Item | null
 }
 
 type HoverPreviewContextValue = {
@@ -179,6 +190,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   const [isControllable, setIsControllable] = useState(false)
   const [isAssetLoading, setIsAssetLoading] = useState(false)
   const [isBootScheduled, setIsBootScheduled] = useState(false)
+  const [item, setItem] = useState<Item | null>(null)
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
@@ -270,6 +282,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     (target: HTMLElement, source: HoverPreviewSource) => {
       targetRef.current = target
       setRarity(source.rarity ?? Rarity.COMMON)
+      setItem(source.item ?? null)
       const r = target.getBoundingClientRect()
       setRect({ top: r.top, left: r.left, width: r.width, height: r.height })
       setIsVisible(true)
@@ -377,6 +390,21 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     }
   }, [isVisible, rect, rarity])
 
+  /**
+   * The favourite control, repeated over the preview.
+   *
+   * The card's own heart sits inside the card, whose hover state opens a stacking context at z-index 5,
+   * so it can never rise above this overlay however high its own z-index goes. Rather than restack the
+   * grid, the control is drawn again here as a sibling of the preview: same portal, one level up, and
+   * `pointer-events` back on because the preview itself has them off.
+   */
+  const favourites =
+    isVisible && item && rect ? (
+      <div className="HoverPreview__favorites" style={{ top: rect.top + FAVORITES_INSET, left: rect.left + FAVORITES_INSET }}>
+        <FavoritesCounter item={item} />
+      </div>
+    ) : null
+
   const overlay =
     enabled && isBootScheduled ? (
       <div className={`HoverPreview ${isVisible ? 'is-visible' : 'is-warming'}`} style={overlayStyle} aria-hidden>
@@ -407,7 +435,15 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   return (
     <HoverPreviewContext.Provider value={contextValue}>
       {children}
-      {overlay && typeof document !== 'undefined' ? createPortal(overlay, document.body) : null}
+      {overlay && typeof document !== 'undefined'
+        ? createPortal(
+            <>
+              {overlay}
+              {favourites}
+            </>,
+            document.body
+          )
+        : null}
     </HoverPreviewContext.Provider>
   )
 }

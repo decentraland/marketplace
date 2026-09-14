@@ -312,7 +312,7 @@ export const Preview: React.FC<Props> = ({
    * the detail pages draw. A thumbnail paints nothing either: the wash is tuned for a card-sized box,
    * so at 48px its outer stop buries the item's silhouette.
    */
-  const backgroundImage = useMemo(() => (isSmall || isDraggable ? undefined : getRarityWash(rarity)), [isDraggable, isSmall, rarity])
+  const backgroundImage = useMemo(() => (isDraggable ? undefined : getRarityWash(rarity)), [isDraggable, rarity])
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
