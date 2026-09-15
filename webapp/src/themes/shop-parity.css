@@ -827,13 +827,15 @@ body .dcl.footer .social-icon:hover {
    gives .dcl.tabs a 24px bottom margin, which left a band of bare purple
    between the tab row and the artwork.
 
-   Only the homepage wants that. Its first block is a full-bleed hero, which is
-   meant to start at the tab row; every other page opens with content that needs
-   the breathing room, and closing the gap there pinned the search field to the
-   sub-nav. The tab strip is a sibling of the page, not an ancestor, so the
-   page's own class is only reachable from the root. */
+   Only the pages that open with a campaign banner want that: the artwork is
+   full-bleed and meant to start at the tab row. Overview and Collectibles both
+   carry one, Land, NAMEs and My Assets do not, and on those the gap is the
+   breathing room before the content proper, so closing it pinned the search
+   field to the sub-nav. Keyed on the banner rather than on any one page so a
+   page that gains or loses one needs no change here. The tab strip is a sibling
+   of the content, not an ancestor, hence the match from the root. */
 
-body:has(.HomePage) .Navigation .dcl.tabs {
+body:has(.CampaignBanner) .Navigation .dcl.tabs {
   margin-bottom: 0;
 }
 
