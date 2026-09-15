@@ -946,25 +946,24 @@ body .AccountSidebar ul.Menu > .MenuItem.sub-2 {
   border-radius: 8px;
 }
 
-body .AccountSidebar ul.Menu > .MenuItem:hover:not(.active) {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-body .AccountSidebar ul.Menu > .MenuItem.active {
-  background-color: rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
-}
-
-/* The Originals / Collectibles rows above the categories. Same two alphas, so
-   the whole rail responds to the pointer the same way top to bottom. */
+/* The Originals / Collectibles rows above the categories take the same pill, but
+   their geometry is their own: they carry their own padding and sit outside the
+   categories list. */
 body .AccountSidebar .alternative-menu-item {
   border-radius: 8px;
 }
 
+/* Both halves of the rail share the two fills, so they respond to the pointer
+   the same way top to bottom. */
+body .AccountSidebar ul.Menu > .MenuItem:hover:not(.active),
 body .AccountSidebar .alternative-menu-item:hover {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+/* No border-radius repeat here, unlike the rail above: AccountSidebar.css does
+   not square its active row off, so the base rule's 8px stands. Selected comes
+   after hover so it wins the tie when a selected row is hovered. */
+body .AccountSidebar ul.Menu > .MenuItem.active,
 body .AccountSidebar .alternative-menu-item.selected {
   background-color: rgba(255, 255, 255, 0.14);
 }
