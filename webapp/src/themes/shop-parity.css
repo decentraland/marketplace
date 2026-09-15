@@ -976,3 +976,41 @@ body ul.box-menu.Menu > .MenuItem.sub,
 body .AccountSidebar ul.Menu > .MenuItem.sub {
   color: #cfcdd4;
 }
+
+/* ----------------------------------------------------------------------------
+   Filter header affordances
+
+   The last three things still carrying #736e7d, the grey the contrast pass
+   replaced everywhere else. They survived because none of them answers to
+   `color`: both info icons bake the fill into their SVG, and the collapse
+   chevron is dimmed by an opacity on top of the hex. On the purple they
+   measured 2.0:1 and 1.7:1, which is why they read as decoration.
+
+   They land on the same register as the subtitles and subcategory rows rather
+   than on white: they sit beside a white label and are secondary to it, so
+   matching it would make the icon compete with the filter's name.
+   ---------------------------------------------------------------------------- */
+
+/* `brightness(0)` flattens whatever the sprite carries and `invert(1)` lifts it
+   to white, which the alpha then settles onto the page. Used rather than a mask
+   because it needs no reference to the artwork: the ui2 trigger inlines its own
+   copy as a data URI, so there is no path to point a mask at. */
+body .InfoTooltip,
+body .dui-info-tooltip__trigger {
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+body .InfoTooltip:hover,
+body .dui-info-tooltip__trigger:hover {
+  opacity: 1;
+}
+
+/* A font glyph, so this one does take a colour. decentraland-ui pins it with six
+   classes (.dcl.box .box-header .ui.button.collapse-btn i), so the selector has
+   to be spelled out in full to reach it. The 0.8 is Semantic's own on a basic
+   button's icon and has to go with the hex. */
+body .dcl.box .box-header .ui.button.collapse-btn i {
+  color: #cfcdd4;
+  opacity: 1;
+}
