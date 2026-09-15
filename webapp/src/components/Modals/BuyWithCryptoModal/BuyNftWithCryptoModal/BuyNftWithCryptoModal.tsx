@@ -203,6 +203,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       isLoadingAuthorization={isLoadingAuthorization}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: nft }}
+      strictEstateSelection={!!estateComposition.snapshot}
       name={name}
       onClose={onClose}
     />

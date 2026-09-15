@@ -35,8 +35,8 @@ jest.mock('decentraland-transactions', () => ({
 // The shared confirmation modal is replaced by a probe that exposes the buy action.
 jest.mock('../BuyWithCryptoModal.container', () => ({
   __esModule: true,
-  default: (props: { onBuyNatively: () => void }) => (
-    <div data-testid="confirmation">
+  default: (props: { onBuyNatively: () => void; strictEstateSelection?: boolean }) => (
+    <div data-testid="confirmation" data-strict={String(!!props.strictEstateSelection)}>
       <button onClick={props.onBuyNatively}>buy</button>
     </div>
   )
@@ -110,6 +110,17 @@ async function buy(onAuthorizedAction: jest.Mock) {
 }
 
 describe('when the estate composition on screen is the one the registry holds', () => {
+  // The checkout map must draw the frozen composition strictly, not expand it from a stale tile layer.
+  it('should tell the confirmation to draw the estate strictly', () => {
+    renderModal({
+      status: EstateSnapshotStatus.READY,
+      fingerprint: FROZEN_FINGERPRINT,
+      snapshot: { blockNumber: 1, landIds: [], parcels: [], fingerprint: FROZEN_FINGERPRINT }
+    })
+
+    expect(screen.getByTestId('confirmation')).toHaveAttribute('data-strict', 'true')
+  })
+
   it('should show the confirmation and execute against the frozen fingerprint', async () => {
     const { confirm, onExecuteOrder, onAuthorizedAction } = renderModal({
       status: EstateSnapshotStatus.READY,

@@ -53,6 +53,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     price,
     isPriceApproximate,
     priceBeforeCredits,
+    strictEstateSelection,
     wallet,
     credits,
     useCredits,
@@ -796,7 +797,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           ) : (
             <>
               <div className={styles.assetContainer}>
-                <AssetImage asset={asset} isSmall />
+                <AssetImage asset={asset} isSmall strictEstateSelection={strictEstateSelection} />
                 <div className={styles.assetDetails}>
                   <span className={styles.assetName}>{assetName}</span>
                   <span className={styles.assetDescription}>{assetDescription}</span>

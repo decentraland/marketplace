@@ -30,6 +30,9 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
      * figures rendered from it are marked approximate: the contract recomputes the rate at accept time.
      */
     isPriceApproximate?: boolean
+    // Draw the Estate in the checkout strictly from its selection (the authoritative composition), not
+    // expanded from a stale tile layer, so the map matches what the purchase binds to.
+    strictEstateSelection?: boolean
     /**
      * The same resolved MANA amount as `price`, before any credits are deducted. Mobile-IAP mode shows the
      * full price rather than the remainder, and it has to come from here: an asset's own `price` field carries
@@ -63,6 +66,7 @@ export type ContainerProps = Pick<
   | 'metadata'
   | 'price'
   | 'isPriceApproximate'
+  | 'strictEstateSelection'
   | 'priceBeforeCredits'
   | 'useCredits'
   | 'isBuyingAsset'
