@@ -115,7 +115,7 @@ const BidModal = (props: Props) => {
     isEstateBlocked
 
   return (
-    <AssetAction asset={displayedAsset}>
+    <AssetAction asset={displayedAsset} strictEstateSelection={!!estateComposition.snapshot}>
       <div className="bid-action">
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">

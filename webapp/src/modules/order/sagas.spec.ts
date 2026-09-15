@@ -3,7 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { v4 as uuidv4 } from 'uuid'
-import { ChainId, Network, Order, RentalListing, RentalStatus, Trade } from '@dcl/schemas'
+import { ChainId, NFTCategory, Network, Order, RentalListing, RentalStatus, Trade, TradeAssetType } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
@@ -719,6 +719,85 @@ describe('when handling the set purchase action', () => {
             .run({ silenceTimeout: true })
         })
       })
+    })
+  })
+})
+
+describe('when accepting an off-chain order for an estate', () => {
+  let estateNft: NFT
+  let estateOrder: Order
+  let baseTrade: Trade
+  const reviewedFingerprint = '0xaaaa'
+
+  beforeEach(() => {
+    estateNft = { ...nft, category: NFTCategory.ESTATE, contractAddress: '0xestate', tokenId: '6503' } as NFT
+    estateOrder = { ...order, contractAddress: '0xestate', tokenId: '6503', tradeId: uuidv4() } as Order
+    baseTrade = {
+      id: estateOrder.tradeId!,
+      signer: wallet.address,
+      signature: '0x1',
+      type: 'public_nft_order',
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA,
+      contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+      createdAt: Date.now(),
+      checks: {
+        expiration: Date.now() + 100000000000,
+        effective: Date.now(),
+        uses: 1,
+        salt: '0x',
+        allowedRoot: '0x',
+        contractSignatureIndex: 0,
+        externalChecks: [],
+        signerSignatureIndex: 0
+      },
+      received: []
+    } as unknown as Trade
+  })
+
+  // The seller signs the composition into the trade; accepting it settles that composition. The buyer
+  // must not be able to accept a trade bound to a different LAND set than the one they reviewed.
+  describe('and the trade binds a different composition than the one reviewed', () => {
+    it('should fail without accepting the trade', () => {
+      const trade = {
+        ...baseTrade,
+        sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xestate', tokenId: '6503', extra: '0xbbbb' }]
+      } as unknown as Trade
+
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .not.call.fn(TradeService.prototype.accept)
+        .put(executeOrderFailure(estateOrder, estateNft, 'The Estate composition changed since it was reviewed'))
+        .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the trade binds the reviewed composition', () => {
+    it('should accept the trade', () => {
+      const trade = {
+        ...baseTrade,
+        sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xestate', tokenId: '6503', extra: reviewedFingerprint }]
+      } as unknown as Trade
+
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .call.fn(TradeService.prototype.accept)
+        .put(executeOrderTransactionSubmitted(estateOrder, estateNft, txHash))
+        .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
+        .run({ silenceTimeout: true })
     })
   })
 })

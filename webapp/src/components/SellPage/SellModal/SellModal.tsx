@@ -160,7 +160,7 @@ const SellModal = (props: Props) => {
     !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateSnapshotBlocking(estateComposition)
 
   return (
-    <AssetAction asset={displayedAsset}>
+    <AssetAction asset={displayedAsset} strictEstateSelection={!!estateComposition.snapshot}>
       <Header size="large">{t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}</Header>
 
       {shouldRemoveListing ? (
