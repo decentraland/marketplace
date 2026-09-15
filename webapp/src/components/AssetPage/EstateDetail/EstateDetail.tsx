@@ -69,14 +69,14 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
         <>
           <Description text={estate.description} />
           <Owner asset={nft} />
-          <ProximityHighlights nft={nft} />
+          <ProximityHighlights nft={reviewedNft} />
         </>
       }
       box={<></>}
       below={
         <>
           <BidList nft={nft} />
-          {estate.size > 0 && <ParcelCoordinates parcelCoordinates={nft.data.estate?.parcels || []} total={nft.data.estate?.size || 0} />}
+          {estate.size > 0 && <ParcelCoordinates parcelCoordinates={estate.parcels} total={estate.size} />}
           <TransactionHistory asset={nft} />
           <RentalHistory asset={nft} />
         </>
