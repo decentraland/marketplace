@@ -819,3 +819,157 @@ body .dcl.footer .social-icon {
 body .dcl.footer .social-icon:hover {
   opacity: 1;
 }
+
+/* ----------------------------------------------------------------------------
+   Sub-nav to content
+
+   The shop runs its sub-nav straight into the page below it. Here the theme
+   gives .dcl.tabs a 24px bottom margin, which on a full-bleed page opened a
+   band of bare purple between the tab row and the hero. Scoped to .Navigation
+   so the tab strips INSIDE the rankings and recently-sold cards keep theirs.
+   ---------------------------------------------------------------------------- */
+
+body .Navigation .dcl.tabs {
+  margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Chevrons
+
+   Two different mechanisms drew them, and neither answered to `color`, which is
+   why the contrast pass above whitened the labels and left every arrow red.
+   ---------------------------------------------------------------------------- */
+
+/* The carousel's "EXPLORE ALL" caret is a background-image, and forward.svg
+   bakes fill="#FF2D55" into the file. Masking hands the colour back to CSS, the
+   same technique .Slideshow .arrow-container already used for the page arrows.
+   Scoped to .ui.basic.button (the view-all button) so those circular arrows,
+   which are secondary buttons, keep their own rule. */
+body .ui.basic.button i.caret {
+  background-image: none;
+  background-color: currentColor;
+  -webkit-mask: url('../images/forward.svg') no-repeat 50% 50%;
+  mask: url('../images/forward.svg') no-repeat 50% 50%;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  /* The glyph is 8x14. Contained in the old 16x13 box it drew ~7.4px wide and
+     left 8px of dead space, reading as a gap between label and arrow rather
+     than as a wide arrow. This sizes the box to the glyph and spaces it
+     deliberately, landing it on the 7.6x12 the dropdown carets already use. */
+  width: 7px;
+  height: 12px;
+  margin-left: 8px;
+}
+
+/* The filter and sort carets are font glyphs (font-family: Dropdown), so they
+   DO answer to `color` and simply inherited the red. Their hosts are flex rows
+   aligning on the baseline, and the glyph sits high in its em box, which left
+   every one of them 4.5px above its host's centre. The sidebar's expand carets
+   are not inside a .ui.dropdown, so they keep their grey. */
+body .ui.dropdown > i.dropdown.icon {
+  color: #ffffff;
+}
+
+/* The sidebar's expand carets are the same glyph in the same kind of flex row,
+   so they sat 3.5px high too. They are NOT inside a .ui.dropdown, so they keep
+   inheriting their row's colour rather than going white, which is what holds
+   an unexpanded subcategory a step quieter than an expanded one. */
+body .ui.dropdown > i.dropdown.icon,
+body .MenuItem > i.dropdown.icon {
+  align-self: center;
+}
+
+/* ----------------------------------------------------------------------------
+   Rankings and recently-sold creator links
+
+   The creator and account links were the only red text left in the two slabs,
+   at 3.2:1 on the purple. Every other cell in the row is white, so the red read
+   as an error state rather than as a link. They keep their bold weight, which
+   is what separates the creator from the item name beside it (white, 500) the
+   way the shop does it, and the underline on hover carries the affordance.
+   ---------------------------------------------------------------------------- */
+
+body .RankingsTable .ui.table .rankings-item-data-creator a,
+body .RecentlySoldTable .ui.table .rankings-item-data-creator a,
+body .RecentlySoldTable .ui.table a.account-link {
+  color: #ffffff;
+}
+
+body .RankingsTable .ui.table .rankings-item-data-creator a:hover,
+body .RecentlySoldTable .ui.table .rankings-item-data-creator a:hover,
+body .RecentlySoldTable .ui.table a.account-link:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   My Assets rail
+
+   AccountSidebar.css is a near-copy of themes/components/Menu.css, scoped to
+   `.AccountSidebar ul.Menu` instead of `ul.box-menu.Menu`. None of the rail
+   rules above reach it, so My Assets kept the pre-parity sidebar: near-black
+   panels, a #37333d active row and square full-bleed rows, next to a
+   Collectibles page that had already moved. Everything here mirrors the rail
+   section above value for value, so the two pages stay in step.
+   ---------------------------------------------------------------------------- */
+
+/* Both menus sit directly on the page under a hairline, like the browse rail.
+   The filters half is the worse of the two: it painted `var(--background)`,
+   which this file retargeted to the page gradient's OUTER stop, so it drew that
+   one flat colour as a solid slab over the lighter purple around it. */
+body .AccountSidebar ul.Menu,
+body .AccountSidebar ul.Menu.filters-sidebar {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0;
+  padding-bottom: 16px;
+}
+
+body .AccountSidebar ul.Menu.other-account-menu {
+  padding-bottom: 0;
+}
+
+/* The pill geometry, always applied rather than on :hover, for the reason given
+   in the rail section: the row transitions `all`, so insetting it on hover
+   animates margin and width and slides the icon on every pass. `.sub-1` and
+   `.sub-2` are spelled out because this stylesheet pins them back to
+   `margin-left: 0; width: var(--sidebar-width)` with one class more. */
+body .AccountSidebar ul.Menu > .MenuItem,
+body .AccountSidebar ul.Menu > .MenuItem.sub-1,
+body .AccountSidebar ul.Menu > .MenuItem.sub-2 {
+  margin-left: 12px;
+  margin-right: 12px;
+  width: auto;
+  border-radius: 8px;
+}
+
+body .AccountSidebar ul.Menu > .MenuItem:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body .AccountSidebar ul.Menu > .MenuItem.active {
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+}
+
+/* The Originals / Collectibles rows above the categories. Same two alphas, so
+   the whole rail responds to the pointer the same way top to bottom. */
+body .AccountSidebar .alternative-menu-item {
+  border-radius: 8px;
+}
+
+body .AccountSidebar .alternative-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body .AccountSidebar .alternative-menu-item.selected {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Subcategory rows. decentraland-ui draws them at #9791a3, which measured
+   3.2:1 on the purple: this is the "letras grises" of the sidebar, and it is
+   the same on Collectibles, so both rails are lifted together. They stay a step
+   quieter than their parent rows (#f0f0f0) to keep the nesting readable. */
+body ul.box-menu.Menu > .MenuItem.sub,
+body .AccountSidebar ul.Menu > .MenuItem.sub {
+  color: #cfcdd4;
+}
