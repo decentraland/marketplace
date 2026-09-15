@@ -71,6 +71,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     onBuyCrossChain,
     onBuyWithCredits,
     onGetMana,
+    onRouteError,
     onClose,
     onGoBack,
     onClearCreditsClaimProgress
@@ -150,6 +151,13 @@ export const BuyWithCryptoModal = (props: Props) => {
 
     void initializeCrossChainProvider()
   }, [])
+
+  // Show toast when route calculation fails
+  useEffect(() => {
+    if (routeFailed && onRouteError) {
+      onRouteError()
+    }
+  }, [routeFailed, onRouteError])
 
   const { isFetchingBalance, tokenBalance: selectedTokenBalance } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
 
