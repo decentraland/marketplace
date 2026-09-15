@@ -801,3 +801,47 @@ describe('when accepting an off-chain order for an estate', () => {
     })
   })
 })
+
+describe('when buying an estate with credits on a legacy order', () => {
+  let estateNft: NFT
+  let legacyOrder: Order
+  let mockCredits: CreditsResponse
+
+  beforeEach(() => {
+    estateNft = { ...nft, category: NFTCategory.ESTATE, contractAddress: '0xestate', tokenId: '6503' } as NFT
+    // No tradeId -> the legacy branch, whose credits path settles through executeOrder (no fingerprint).
+    legacyOrder = { ...order, contractAddress: '0xestate', tokenId: '6503' } as Order
+    mockCredits = {
+      totalCredits: 200000000000,
+      credits: [
+        {
+          id: '1',
+          amount: '200000000000',
+          availableAmount: '200000000000',
+          contract: '0x123',
+          expiresAt: '1000',
+          season: 1,
+          signature: '123',
+          timestamp: '1000',
+          userAddress: wallet.address
+        }
+      ]
+    }
+  })
+
+  it('should refuse it rather than settle without binding the composition', () => {
+    return expectSaga(orderSaga, tradeService)
+      .provide([
+        [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+        [select(getIsOffchainPublicNFTOrdersEnabled), true],
+        [select(getWallet), wallet],
+        [select(getIsCreditsEnabled), true],
+        [select(getCredits, wallet.address), mockCredits],
+        [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
+      ])
+      .not.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace)
+      .put(executeOrderFailure(legacyOrder, estateNft, 'Credits cannot be used to buy an Estate on this listing', undefined, false))
+      .dispatch(executeOrderRequest(legacyOrder, estateNft, fingerprint, false, true))
+      .run({ silenceTimeout: true })
+  })
+})

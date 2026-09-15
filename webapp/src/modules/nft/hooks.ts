@@ -88,6 +88,10 @@ export const useEstateSnapshot = (nft: NFT | null): EstateSnapshotState => {
   // does not swap the reference the user already has in front of them.
   const readKey = estateId && estateAddress && chainId ? `${chainId}-${estateAddress}-${estateId}#${attempt}` : undefined
   const currentKey = useRef<string>()
+  // Bumped on every read. The key alone cannot tell two reads of the same Estate apart, so an A → B → A
+  // navigation could let the first A read resolve after the second and overwrite the newer snapshot; the
+  // generation does. A resolved read is only published when it is still the latest one started.
+  const generation = useRef(0)
   const isMounted = useRef(true)
 
   useEffect(() => {
@@ -102,21 +106,22 @@ export const useEstateSnapshot = (nft: NFT | null): EstateSnapshotState => {
       return
     }
     currentKey.current = readKey
+    const readGeneration = ++generation.current
 
     setSnapshot(undefined)
     setHasFailed(false)
 
-    // Guarded on the key rather than on a per-effect flag so that a read still in
-    // flight is only discarded when it is for another Estate.
+    // Only the latest read may publish: a read still in flight for another Estate, or an earlier read of
+    // this same Estate, is discarded when its generation is no longer the current one.
     readEstateSnapshot(estateId, estate, chainId)
       .then(result => {
-        if (isMounted.current && currentKey.current === readKey) {
+        if (isMounted.current && generation.current === readGeneration) {
           setSnapshot(result)
         }
       })
       .catch(error => {
         console.error(`Error reading the composition of estate ${estateId}`, error)
-        if (isMounted.current && currentKey.current === readKey) {
+        if (isMounted.current && generation.current === readGeneration) {
           setHasFailed(true)
         }
       })

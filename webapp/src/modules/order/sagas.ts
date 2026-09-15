@@ -214,6 +214,12 @@ export function* orderSaga(tradeService: TradeService) {
         const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
         if (useCredits && credits) {
+          // The legacy credits path settles through `executeOrder`, which carries no fingerprint, so it
+          // cannot bind the composition an Estate buyer reviewed. Refuse it rather than settle unbound —
+          // the fingerprint-carrying `safeExecuteOrder` path below is the only Estate-safe legacy route.
+          if (nft.category === NFTCategory.ESTATE) {
+            throw new Error('Credits cannot be used to buy an Estate on this listing')
+          }
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
           yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {

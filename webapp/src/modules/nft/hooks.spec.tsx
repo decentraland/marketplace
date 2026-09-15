@@ -66,6 +66,29 @@ const buildSnapshot = (parcels = PARCELS, fingerprint = FINGERPRINT): EstateSnap
   fingerprint
 })
 
+// A different Estate, to key the effect off a different readKey on navigation.
+const OTHER_PARCELS = [
+  { x: 9, y: 9 },
+  { x: 9, y: 8 }
+]
+const buildOtherEstate = (): NFT =>
+  ({
+    id: 'estate-other',
+    tokenId: '6504',
+    chainId: ChainId.ETHEREUM_SEPOLIA,
+    category: NFTCategory.ESTATE,
+    data: { estate: { size: OTHER_PARCELS.length, description: null, parcels: OTHER_PARCELS } }
+  }) as NFT
+
+// A promise whose resolution is controlled by the test, to order two in-flight reads.
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>(r => {
+    resolve = r
+  })
+  return { promise, resolve }
+}
+
 beforeEach(() => {
   jest.clearAllMocks()
   ;(useSelector as jest.Mock).mockImplementation((callback: (state: unknown) => unknown) => callback(appState))
@@ -136,6 +159,42 @@ describe('useEstateSnapshot', () => {
 
       await waitFor(() => expect(result.current.status).toBe(EstateSnapshotStatus.READY))
       expect(readEstateSnapshot).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  // Jarvis P1: on A -> B -> A the first A read can resolve after the second and must not overwrite it.
+  describe('when the same estate is navigated away from and back to', () => {
+    it('should not let an earlier read of it overwrite a later one', async () => {
+      const first = deferred<EstateSnapshot>()
+      const second = deferred<EstateSnapshot>()
+      ;(readEstateSnapshot as jest.Mock)
+        .mockReturnValueOnce(first.promise) // read for A (first mount)
+        .mockResolvedValueOnce(buildSnapshot(OTHER_PARCELS)) // read for B
+        .mockReturnValueOnce(second.promise) // read for A (after returning)
+
+      const { result, rerender } = renderHook(({ nft }: { nft: NFT }) => useEstateSnapshot(nft), {
+        initialProps: { nft: buildEstate() }
+      })
+
+      rerender({ nft: buildOtherEstate() }) // navigate to B
+      rerender({ nft: buildEstate() }) // back to A
+
+      // The later A read resolves first with the fresh composition, then the earlier one resolves stale.
+      const fresh = buildSnapshot(
+        [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 }
+        ],
+        '0xfresh'
+      )
+      const stale = buildSnapshot([{ x: 1, y: 1 }], '0xstale')
+      act(() => {
+        second.resolve(fresh)
+        first.resolve(stale)
+      })
+
+      await waitFor(() => expect(result.current.snapshot).toBeDefined())
+      expect(result.current.snapshot).toBe(fresh)
     })
   })
 
