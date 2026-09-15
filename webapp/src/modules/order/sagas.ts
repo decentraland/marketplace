@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
-import { ListingStatus, Order, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { ListingStatus, NFTCategory, Order, RentalStatus, Trade, TradeAssetType, TradeCreation } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
@@ -185,6 +185,25 @@ export function* orderSaga(tradeService: TradeService) {
         }
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
+
+        // An Estate's transfer is bound to a fingerprint the seller signed into the trade, and the
+        // registry verifies it at settlement. Accepting that trade means receiving whatever composition
+        // the seller signed for — which can differ from the one the buyer reviewed. `fingerprint` is the
+        // buyer's frozen review snapshot; reject if the trade does not bind that exact composition so a
+        // buyer cannot be settled onto a different LAND set than the one they saw.
+        if (nft.category === NFTCategory.ESTATE) {
+          const estateAsset = trade.sent.find(
+            asset =>
+              asset.assetType === TradeAssetType.ERC721 &&
+              asset.contractAddress.toLowerCase() === nft.contractAddress.toLowerCase() &&
+              asset.tokenId === nft.tokenId
+          )
+          const tradeFingerprint = estateAsset?.extra
+          if (!fingerprint || !tradeFingerprint || tradeFingerprint.toLowerCase() !== fingerprint.toLowerCase()) {
+            throw new Error('The Estate composition changed since it was reviewed')
+          }
+        }
+
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
           yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
@@ -195,6 +214,12 @@ export function* orderSaga(tradeService: TradeService) {
         const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
         if (useCredits && credits) {
+          // The legacy credits path settles through `executeOrder`, which carries no fingerprint, so it
+          // cannot bind the composition an Estate buyer reviewed. Refuse it rather than settle unbound —
+          // the fingerprint-carrying `safeExecuteOrder` path below is the only Estate-safe legacy route.
+          if (nft.category === NFTCategory.ESTATE) {
+            throw new Error('Credits cannot be used to buy an Estate on this listing')
+          }
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
           yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {

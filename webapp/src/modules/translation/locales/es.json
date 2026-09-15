@@ -1607,6 +1607,14 @@
     "info": "<strong>Los datos del mapa pueden estar desactualizados</strong>Encuentre los detalles de la LAND más recientes en la sección debajo de este mapa. Refrescar esta página puede actualizar la información. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
     "fingerprint_missmatch": "La información de esta LAND puede no estar actualizada. Actualice la página para obtener la información más reciente. Si el problema persiste, comuníquese con nuestro equipo de soporte."
   },
+  "estate_composition": {
+    "loading": "Verificando qué LANDs contiene este Estate…",
+    "retry": "Reintentar",
+    "modal_title": "Contenido del Estate no disponible",
+    "unavailable": "No pudimos leer qué LANDs contiene este Estate. Actualice la página e inténtelo de nuevo. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
+    "out_of_sync": "Este Estate contiene {count} {count, plural, one {LAND} other {LANDs}}, que no es lo que muestra esta página. Actualice la página para ver su contenido actual antes de continuar.",
+    "changed": "Las LANDs que contiene este Estate cambiaron mientras lo revisaba. Actualice la página para ver su contenido actual antes de continuar."
+  },
   "names_page": {
     "title": "Reclama tu NOMBRE, desbloquea tu Mundo!",
     "subtitle": "Obtené tu nombre único",

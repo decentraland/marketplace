@@ -35,6 +35,12 @@ type Props = {
   useCredits?: boolean
   totalCredits?: string
   hasCredits?: boolean
+  /**
+   * Pins the payment to the asset's own chain and currency. Set for an asset whose transfer the registry
+   * gates on a fingerprint: the cross-chain route settles through a call that carries no fingerprint, so
+   * offering another chain or token would offer a purchase that cannot complete.
+   */
+  isPinnedToAssetChain?: boolean
 }
 
 const getUsdRouteCost = (routeFeeCost: RouteFeeCost, tokens: Token[]): string => {
@@ -61,6 +67,7 @@ const PaymentSelector = (props: Props) => {
     isFetchingBalance,
     onShowChainSelector,
     onShowTokenSelector,
+    isPinnedToAssetChain = false,
     useCredits
   } = props
 
@@ -90,10 +97,10 @@ const PaymentSelector = (props: Props) => {
             <div
               className={classNames(
                 styles.tokenAndChainSelector,
-                isBuyingAsset || useCredits ? styles.dropdownDisabled : styles.dropdownEnabled
+                isBuyingAsset || useCredits || isPinnedToAssetChain ? styles.dropdownDisabled : styles.dropdownEnabled
               )}
               data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-              onClick={!isBuyingAsset && !useCredits ? onShowChainSelector : undefined}
+              onClick={!isBuyingAsset && !useCredits && !isPinnedToAssetChain ? onShowChainSelector : undefined}
             >
               <img src={selectedProviderChain?.nativeCurrency.icon} alt={selectedProviderChain?.nativeCurrency.name} />
               <span className={styles.tokenAndChainSelectorName}> {selectedProviderChain?.networkName} </span>
@@ -105,17 +112,17 @@ const PaymentSelector = (props: Props) => {
               className={classNames(
                 styles.tokenAndChainSelector,
                 styles.tokenDropdown,
-                isBuyingAsset || useCredits ? styles.dropdownDisabled : styles.dropdownEnabled
+                isBuyingAsset || useCredits || isPinnedToAssetChain ? styles.dropdownDisabled : styles.dropdownEnabled
               )}
               data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-              onClick={!isBuyingAsset && !useCredits ? onShowTokenSelector : undefined}
+              onClick={!isBuyingAsset && !useCredits && !isPinnedToAssetChain ? onShowTokenSelector : undefined}
             >
               <img src={selectedToken.logoURI} alt={selectedToken.name} />
               <span className={styles.tokenAndChainSelectorName}>{selectedToken.symbol} </span>
               <div className={styles.balanceContainer}>
                 {t('buy_with_crypto_modal.balance')}: {renderTokenBalance()}
               </div>
-              {!isBuyingAsset && !useCredits && <Icon name="chevron down" />}
+              {!isBuyingAsset && !useCredits && !isPinnedToAssetChain && <Icon name="chevron down" />}
             </div>
           </div>
         </div>

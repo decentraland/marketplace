@@ -11,7 +11,7 @@ const WarningMessage = (props: Props) => {
 
   // Compare bid.fingerprint against the on-chain getFingerprintV2 (not the
   // locally derived hash) — the contract verifies the bid's `extra` against V2.
-  const [, , contractFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
+  const [contractFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
 
   useEffect(() => {
