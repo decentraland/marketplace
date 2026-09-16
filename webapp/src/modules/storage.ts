@@ -11,7 +11,7 @@ import { SET_IS_TRYING_ON } from './ui/preview/actions'
  * loader merges with lodash.merge, which combines arrays by index rather than replacing them,
  * so a branch like `archived` only restores cleanly while its destination is still empty.
  */
-export const PERSISTED_PATHS: string[][] = [
+export const PERSISTED_PATHS: [string, ...string[]][] = [
   ['ui', 'asset', 'bid', 'archived'],
   ['ui', 'preview', 'isTryingOn']
 ]
