@@ -20,8 +20,21 @@ import './AssetImage.css'
 const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const AssetImage = (props: Props) => {
-  const { asset, isDraggable, withNavigation, hasPopup, zoom, isSmall, avatar, showUpdatedDateWarning, children, hasBadges, item, wallet } =
-    props
+  const {
+    asset,
+    isDraggable,
+    withNavigation,
+    hasPopup,
+    zoom,
+    isSmall,
+    avatar,
+    showUpdatedDateWarning,
+    strictEstateSelection,
+    children,
+    hasBadges,
+    item,
+    wallet
+  } = props
   const { parcel, estate, ens } = asset.data
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
@@ -65,6 +78,7 @@ const AssetImage = (props: Props) => {
           showOnSale={false}
           showOwned={false}
           isEstate
+          strictSelection={strictEstateSelection}
           lastUpdated={showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined}
         >
           {hasBadges && children}

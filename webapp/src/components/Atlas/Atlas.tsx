@@ -10,6 +10,7 @@ import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { nftMarketplaceAPI as nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import ErrorBanner from '../ErrorBanner'
+import { isTileInSelection } from './Atlas.utils'
 import Popup from './Popup'
 import { Props, Tile } from './Atlas.types'
 import './Atlas.css'
@@ -20,6 +21,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const {
     tiles,
     isEstate,
+    strictSelection,
     withNavigation,
     nfts,
     nftsOnRent,
@@ -94,20 +96,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const isSelected = useCallback(
-    (x: number, y: number) => {
-      if (selection.has(getCoords(x, y))) return true
-      // This is a workaround to paint the large estates, because GraphQL can return only up to 1000 results
-      // and some Estates have more parcels than thats
-      if (!tiles) return false
-      const id = selection.values().next().value as string
-      const center = tiles[id] as Tile
-      const tile = tiles[getCoords(x, y)] as Tile
-      if (center && tile && center.estate_id && tile.estate_id && center.estate_id === tile.estate_id && isEstate) {
-        return true
-      }
-      return false
-    },
-    [selection, tiles, isEstate]
+    (x: number, y: number) => isTileInSelection(selection, tiles, x, y, !!isEstate, !!strictSelection),
+    [selection, tiles, isEstate, strictSelection]
   )
 
   const forSaleOrRentLayer: Layer = useCallback(

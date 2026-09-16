@@ -13,12 +13,13 @@ import { ContractName, getContract as getDecentralandContract } from 'decentrala
 import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { useFingerprint } from '../../../modules/nft/hooks'
+import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor'
 import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import ErrorBanner from '../../ErrorBanner'
+import { EstateCompositionWarning } from '../../EstateCompositionWarning'
 import { ListingPrice } from '../../ListingPrice'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
@@ -81,18 +82,25 @@ const SellModal = ({
   const offChainOrdersContract = getLatestOffChainMarketplaceContract(nft.chainId)
 
   const authorizedContract = offChainOrdersContract || marketplaceContract
-  // The server validates `extra` against on-chain getFingerprintV2, so we must
-  // send the value the contract returns, not the locally derived one.
-  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
+  // The listing records which LANDs the Estate contains, so it is created against
+  // the composition read when this modal opened — the one shown alongside it — and
+  // not against whatever the registry holds by the time the listing is signed.
+  const estateComposition = useEstateSnapshot(nft)
+  const [estateCompositionError, setEstateCompositionError] = useState<string>()
 
   if (!wallet) {
     return null
   }
 
-  const handleCreateOrder = useCallback(
-    () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), contractFingerprint),
-    [expiresAt, contractFingerprint, nft, price, onCreateOrder]
-  )
+  const handleCreateOrder = useCallback(() => {
+    void (async () => {
+      if (!(await estateComposition.confirm())) {
+        setEstateCompositionError(t('estate_composition.changed'))
+        return
+      }
+      onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), estateComposition.fingerprint)
+    })()
+  }, [expiresAt, estateComposition, nft, price, onCreateOrder])
 
   const handleOnConfirm = useCallback(() => {
     const tokenContract = getContract({
@@ -105,6 +113,7 @@ const SellModal = ({
       return
     }
 
+    setEstateCompositionError(undefined)
     onAuthorizedAction({
       targetContractName:
         (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
@@ -122,9 +131,8 @@ const SellModal = ({
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = useMemo(() => parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price), [price])
-  const isEstateFingerprintNotReady = nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
   const isDisabledSell =
-    !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
+    !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateSnapshotBlocking(estateComposition)
 
   const handleBackOrCancel = useCallback(() => {
     if (isUpdate) {
@@ -182,6 +190,7 @@ const SellModal = ({
             error={isInvalidDate}
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
+          <EstateCompositionWarning state={estateComposition} />
         </div>
       ),
       actions: (
@@ -242,8 +251,8 @@ const SellModal = ({
               setConfirmedInput(props.value)
             }}
           />
-          {error || authorizationError ? (
-            <Message error size="tiny" visible content={error || authorizationError} header={t('global.error')} />
+          {estateCompositionError || error || authorizationError ? (
+            <Message error size="tiny" visible content={estateCompositionError || error || authorizationError} header={t('global.error')} />
           ) : null}
         </div>
       ),
