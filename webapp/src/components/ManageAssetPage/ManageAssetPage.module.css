@@ -27,7 +27,9 @@
 .assetDescription {
   display: flex;
   flex-direction: column;
-  background: #242129;
+  /* Was the pre-parity near-black, which on the purple page read as a hole punched in it. --card is
+     the 40%-black the homepage slabs already use. */
+  background: var(--card);
   border-radius: 12px;
   padding: 24px;
 }
@@ -61,15 +63,17 @@
   align-items: flex-start;
 }
 
+/* White outline over white label, the shop's secondary button, instead of red on near-black. */
 .transfer:global(.ui.button) {
-  border: 1px solid var(--gray);
+  /* --gray is the old palette grey at 40%, which all but vanished on the purple. */
+  border: 1px solid var(--clear-divider);
   padding: 7px 15px;
   min-width: unset;
-  color: var(--primary);
+  color: #ffffff;
 }
 
 .transfer:global(.ui.button):hover {
-  color: var(--primary);
+  color: #ffffff;
 }
 
 .highlights {

@@ -1016,3 +1016,72 @@ body .dcl.box .box-header .ui.button.collapse-btn i {
   color: #cfcdd4;
   opacity: 1;
 }
+
+/* ----------------------------------------------------------------------------
+   Toggle switches
+
+   Transcribed from the shop's Filters.styles.ts (Figma "Switch" 2094:409127): a
+   24x14 pill track that FILLS with the red when on, and a 12x12 knob that stays
+   soft-white in both states so only its position animates.
+
+   The marketplace had the two roles swapped, painting the KNOB red when on and a
+   flat grey when off, over a track that barely showed. That is what made the same
+   control read as a different one between the two products.
+
+   The selectors are long because decentraland-ui pins this control hard: it sizes
+   the track through `input[type=checkbox].hidden + label` (five classes) and fills
+   it with `!important`, and it greys the knob through a `:not(.checked)` variant
+   that adds a sixth. Every rule below has to clear the matching one.
+   ---------------------------------------------------------------------------- */
+
+body .ui.toggle.checkbox,
+body .ui.toggle.checkbox label {
+  min-height: 14px;
+}
+
+body .ui.toggle.checkbox label {
+  /* The 24px track plus the 13px gap the old 32px one left, so no label shifts. */
+  padding-left: 37px;
+  line-height: 14px;
+}
+
+/* The track. `!important` only because the rule it has to clear carries one. */
+body .ui.toggle.checkbox input[type='checkbox'].hidden + label::before,
+body .ui.toggle.checkbox input[type='checkbox'].hidden + .box::before {
+  width: 24px;
+  height: 14px;
+  top: 0;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transition: background 0.15s ease;
+}
+
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + label::before,
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + .box::before {
+  background: #ff2d55 !important;
+}
+
+/* The knob. Soft-white in both states: only `left` changes. */
+body .ui.toggle.checkbox:not(.checked) input[type='checkbox'].hidden + label::after,
+body .ui.toggle.checkbox:not(.checked) input[type='checkbox'].hidden + .box::after,
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + label::after,
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + .box::after {
+  width: 12px;
+  height: 12px;
+  top: 1px;
+  border-radius: 50%;
+  background: #fcfcfc;
+  box-shadow: 0 1px 2px rgba(22, 21, 24, 0.3);
+  transition: left 0.15s ease;
+}
+
+body .ui.toggle.checkbox:not(.checked) input[type='checkbox'].hidden + label::after,
+body .ui.toggle.checkbox:not(.checked) input[type='checkbox'].hidden + .box::after {
+  left: 0;
+}
+
+/* calc(100% - 12px) on a 24px track. */
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + label::after,
+body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + .box::after {
+  left: 12px;
+}

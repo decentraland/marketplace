@@ -14,6 +14,13 @@
   column-gap: 8px;
 }
 
+/* Was #979797, 3.33:1 on the purple page. Matches its label rather than sitting under it: the two
+   are already separated by the row layout, so the value does not need to be a step quieter as well. */
 .infoContent {
-  color: #979797;
+  color: var(--primary-text);
+}
+
+/* The owner is a bare <a>, so it took the global link red over the row's colour. */
+.infoContent a {
+  color: inherit;
 }
