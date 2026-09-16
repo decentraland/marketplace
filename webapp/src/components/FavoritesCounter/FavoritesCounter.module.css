@@ -97,7 +97,9 @@
   min-width: 38px;
   min-height: 33px;
   border-radius: 13px;
-  background-color: #231f20;
+  /* Was a near-opaque near-black, the darkest thing on the detail page. The same 40%-black the
+     page's panels use lets the gradient through while the border still reads the control's edge. */
+  background-color: rgba(0, 0, 0, 0.4);
   border: 0.25px solid var(--text);
   display: flex;
   align-items: center;

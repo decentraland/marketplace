@@ -1,5 +1,7 @@
 .box {
-  border: 2px solid var(--secondary);
+  /* --secondary is the solid dark purple for modals; as an outline on the purple page it was all but
+     invisible. A translucent light hairline is how the shop draws a panel edge over the gradient. */
+  border: 1px solid var(--divider);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -10,7 +12,7 @@
   margin-top: 13px;
   margin-bottom: 13px;
   text-transform: uppercase;
-  color: #736e7d;
+  color: #ffffff;
   font-weight: 600;
   font-size: 13px;
 }
