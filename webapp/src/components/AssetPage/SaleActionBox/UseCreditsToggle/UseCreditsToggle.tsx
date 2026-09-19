@@ -60,8 +60,8 @@ const UseCreditsToggle = ({ assetPrice, credits, isOwner, useCredits, onUseCredi
               <div className={styles.tooltipContent}>
                 {t('credits.offline_message', {
                   discord_link: (
-                    <a href="https://discord.gg/decentraland" target="_blank" rel="noopener noreferrer" className={styles.discordLink}>
-                      discord.gg/decentraland
+                    <a href="https://discord.gg/n4kzQvgux7" target="_blank" rel="noopener noreferrer" className={styles.discordLink}>
+                      discord.gg/n4kzQvgux7
                     </a>
                   ),
                   br: <br />
