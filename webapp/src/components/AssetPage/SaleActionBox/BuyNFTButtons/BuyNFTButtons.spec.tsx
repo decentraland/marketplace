@@ -30,7 +30,7 @@ jest.mock('../../../AssetProvider', () => ({
   AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(mockProvidedAsset, null)
 }))
 
-beforeEach(() => {
+afterEach(() => {
   mockProvidedAsset = ITEM
 })
 
@@ -101,34 +101,35 @@ describe('when no deep link asks for it', () => {
 })
 
 describe('when the listing settles on a marketplace version Transak has no registration for', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     mockProvidedAsset = {
       ...ITEM,
       tradeId: 'a-trade',
       tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_MAINNET).address
     } as unknown as Asset
+    renderButtons('/')
+    await screen.findByText('buy')
   })
 
-  it('should not offer the card, since the widget could not execute the purchase', async () => {
-    renderButtons('/')
-
-    await waitFor(() => expect(screen.getByText('buy')).toBeInTheDocument())
+  it('should not offer the card, since the widget could not execute the purchase', () => {
     expect(screen.queryByText('card')).not.toBeInTheDocument()
   })
 })
 
 describe('when the listing settles on a marketplace version Transak knows', () => {
-  beforeEach(() => {
+  let card: HTMLElement
+
+  beforeEach(async () => {
     mockProvidedAsset = {
       ...ITEM,
       tradeId: 'a-trade',
       tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
     } as unknown as Asset
+    renderButtons('/')
+    card = await screen.findByText('card')
   })
 
-  it('should offer the card', async () => {
-    renderButtons('/')
-
-    await waitFor(() => expect(screen.getByText('card')).toBeInTheDocument())
+  it('should offer the card', () => {
+    expect(card).toBeInTheDocument()
   })
 })
