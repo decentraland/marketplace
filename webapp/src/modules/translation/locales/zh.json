@@ -107,14 +107,14 @@
     "names": "姓名",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的清单",
     "my_bids": "我的出价",
     "activity": "活动",
     "buy_mana_with_fiat": "买法力"
   },
   "user_menu": {
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的列表"
   },
   "menu": {
@@ -1572,8 +1572,8 @@
   },
   "expired_listings_modal": {
     "title": "您的一些资产需要您的关注",
-    "description": "请转到“我的资产”并查看您的列表<br></br>, 因为其中一些列表需要更新",
-    "go_to_my_assets": "前往我的资产",
+    "description": "请转到“我的物品”并查看您的列表<br></br>, 因为其中一些列表需要更新",
+    "go_to_my_assets": "前往我的物品",
     "do_not_show_again": "不要再给我看这个"
   },
   "list_card": {
