@@ -6,7 +6,7 @@ import BuyWithCardExplanationModal from './BuyWithCardExplanationModal'
 import { MapDispatch, MapDispatchProps } from './BuyWithCardExplanationModal.types'
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onContinue: (asset: Asset, order?: Order) => dispatch(openTransak(asset, order))
+  onContinue: (asset: Asset, order?: Order, useCredits?: boolean) => dispatch(openTransak(asset, order, useCredits))
 })
 
 export default connect(null, mapDispatch)(BuyWithCardExplanationModal)

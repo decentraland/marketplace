@@ -107,7 +107,10 @@ export function* buyAssetWithCard(asset: Asset, order?: Order, useCredits: boole
     return
   }
 
-  yield put(openModal('BuyWithCardExplanationModal', { asset, order }))
+  // `useCredits` rides along: without it the modal's continue dispatches a card purchase that pays no
+  // credits, which is both the wrong price and, for a marketplace version Transak has no registration
+  // for, the difference between a purchase that works and one that cannot open at all.
+  yield put(openModal('BuyWithCardExplanationModal', { asset, order, useCredits }))
 
   const { close } = (yield race({
     continue: take(SET_PURCHASE),

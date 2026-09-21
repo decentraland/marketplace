@@ -7,6 +7,8 @@ import { openTransak, OpenTransakAction } from '../../../modules/transak/actions
 export type Metadata = {
   asset: Asset
   order?: Order
+  /** The buyer's credits choice, carried through so continuing does not silently drop it. */
+  useCredits?: boolean
 }
 
 export type Props = Omit<ModalProps, 'metadata'> & {

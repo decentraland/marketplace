@@ -551,7 +551,7 @@ describe('when handling the execute order with card action', () => {
     it('should not set nft in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
-        .put(openModal('BuyWithCardExplanationModal', { asset: nft, order: undefined }))
+        .put(openModal('BuyWithCardExplanationModal', { asset: nft, order: undefined, useCredits: false }))
         .dispatch(executeOrderWithCardRequest(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })

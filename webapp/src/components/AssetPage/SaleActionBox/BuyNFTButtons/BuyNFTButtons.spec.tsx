@@ -1,6 +1,7 @@
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
 import { renderWithProviders } from '../../../../utils/test'
 import BuyNFTButtons from './BuyNFTButtons'
@@ -19,11 +20,19 @@ const ITEM = {
   isOnSale: true
 } as unknown as Asset
 
+// What the mocked provider hands the render callback. Mutable so a test can list the same item on a
+// different marketplace version; reset before each one.
+let mockProvidedAsset: Asset = ITEM
+
 // Supplies the loaded asset the real provider would resolve, so the render callback under test runs
 // without the store and network machinery behind it.
 jest.mock('../../../AssetProvider', () => ({
-  AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(ITEM, null)
+  AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(mockProvidedAsset, null)
 }))
+
+beforeEach(() => {
+  mockProvidedAsset = ITEM
+})
 
 jest.mock('../UseCreditsToggle', () => ({ __esModule: true, default: () => null }))
 jest.mock('./BuyWithCryptoButton', () => ({ BuyWithCryptoButton: () => <button>buy</button> }))
@@ -88,5 +97,38 @@ describe('when no deep link asks for it', () => {
 
     await waitFor(() => expect(screen.getByText('buy')).toBeInTheDocument())
     expect(onBuyWithCrypto).not.toHaveBeenCalled()
+  })
+})
+
+describe('when the listing settles on a marketplace version Transak has no registration for', () => {
+  beforeEach(() => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+  })
+
+  it('should not offer the card, since the widget could not execute the purchase', async () => {
+    renderButtons('/')
+
+    await waitFor(() => expect(screen.getByText('buy')).toBeInTheDocument())
+    expect(screen.queryByText('card')).not.toBeInTheDocument()
+  })
+})
+
+describe('when the listing settles on a marketplace version Transak knows', () => {
+  beforeEach(() => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+  })
+
+  it('should offer the card', async () => {
+    renderButtons('/')
+
+    await waitFor(() => expect(screen.getByText('card')).toBeInTheDocument())
   })
 })
