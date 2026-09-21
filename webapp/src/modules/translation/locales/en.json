@@ -109,14 +109,14 @@
     "names": "NAMEs",
     "collectibles": "Collectibles",
     "partners": "Partners",
-    "my_assets": "My Assets",
+    "my_assets": "My Items",
     "my_lists": "My Lists",
     "my_bids": "My Bids",
     "activity": "Activity",
     "buy_mana_with_fiat": "Buy MANA"
   },
   "user_menu": {
-    "my_assets": "My Assets",
+    "my_assets": "My Items",
     "my_lists": "My Lists"
   },
   "menu": {
@@ -1606,8 +1606,8 @@
   },
   "expired_listings_modal": {
     "title": "Some of your assets need attention",
-    "description": "Please go to My Assets and review your listings <br></br> as some of them have to be updated",
-    "go_to_my_assets": "Go to My Assets",
+    "description": "Please go to My Items and review your listings <br></br> as some of them have to be updated",
+    "go_to_my_assets": "Go to My Items",
     "do_not_show_again": "Don't show me this again"
   },
   "list_card": {
@@ -1644,6 +1644,14 @@
   "atlas_updated_warning": {
     "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
+  },
+  "estate_composition": {
+    "loading": "Checking which LANDs this Estate contains…",
+    "retry": "Try again",
+    "modal_title": "Estate contents unavailable",
+    "unavailable": "We could not read which LANDs this Estate contains. Please refresh the page and try again. If the problem persists, please contact our support team.",
+    "out_of_sync": "This Estate contains {count} {count, plural, one {LAND} other {LANDs}}, which is not what this page is showing. Please refresh the page to see its current contents before continuing.",
+    "changed": "The LANDs this Estate contains changed while you were reviewing it. Please refresh the page to see its current contents before continuing."
   },
   "names_page": {
     "title": "Claim your NAME, Unlock Your World!",

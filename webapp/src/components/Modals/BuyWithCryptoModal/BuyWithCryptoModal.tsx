@@ -53,6 +53,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     price,
     isPriceApproximate,
     priceBeforeCredits,
+    strictEstateSelection,
     wallet,
     credits,
     useCredits,
@@ -86,6 +87,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   const abortControllerRef = useRef(new AbortController())
 
   const isIAP = useIsIAP()
+  // An Estate's transfer is gated on a fingerprint the registry verifies at settlement, and the cross-chain
+  // route settles through a marketplace call that carries none — so a purchase routed that way cannot
+  // complete. The payment stays on the Estate's own chain, in MANA, which is the path that does.
+  const isPinnedToAssetChain = !!asset.data.estate
   // IAP mode shows the full price rather than what is left after credits. It comes from the caller, which
   // resolved it in MANA: reading the asset's own `price` here rendered an unconverted figure on a USD-pegged
   // listing, and reconstructing it by adding credits back guessed at an amount the caller already knows.
@@ -722,12 +727,18 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [creditsClaimProgress, handleCloseCreditsClaimModal])
 
   const handleShowChainSelector = useCallback(() => {
+    if (isPinnedToAssetChain) {
+      return
+    }
     setShowChainSelector(true)
-  }, [])
+  }, [isPinnedToAssetChain])
 
   const handleShowTokenSelector = useCallback(() => {
+    if (isPinnedToAssetChain) {
+      return
+    }
     setShowTokenSelector(true)
-  }, [])
+  }, [isPinnedToAssetChain])
 
   const assetName = useMemo(() => {
     return asset.data.ens ? (
@@ -786,7 +797,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           ) : (
             <>
               <div className={styles.assetContainer}>
-                <AssetImage asset={asset} isSmall />
+                <AssetImage asset={asset} isSmall strictEstateSelection={strictEstateSelection} />
                 <div className={styles.assetDetails}>
                   <span className={styles.assetName}>{assetName}</span>
                   <span className={styles.assetDescription}>{assetDescription}</span>
@@ -826,6 +837,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   selectedTokenBalance={selectedTokenBalance}
                   onShowChainSelector={handleShowChainSelector}
                   onShowTokenSelector={handleShowTokenSelector}
+                  isPinnedToAssetChain={isPinnedToAssetChain}
                   amountInSelectedToken={fromAmount}
                   route={route}
                   routeFeeCost={routeFeeCost}

@@ -107,14 +107,14 @@
     "names": "姓名",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的清单",
     "my_bids": "我的出价",
     "activity": "活动",
     "buy_mana_with_fiat": "买法力"
   },
   "user_menu": {
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的列表"
   },
   "menu": {
@@ -1572,8 +1572,8 @@
   },
   "expired_listings_modal": {
     "title": "您的一些资产需要您的关注",
-    "description": "请转到“我的资产”并查看您的列表<br></br>, 因为其中一些列表需要更新",
-    "go_to_my_assets": "前往我的资产",
+    "description": "请转到“我的物品”并查看您的列表<br></br>, 因为其中一些列表需要更新",
+    "go_to_my_assets": "前往我的物品",
     "do_not_show_again": "不要再给我看这个"
   },
   "list_card": {
@@ -1610,6 +1610,14 @@
   "atlas_updated_warning": {
     "info": "<strong>地图数据可能过时</strong>Find the moST在此地图下方的部分中的最新土地详细信息。刷新此页面可能会更新信息。如果问题仍然存在，请联系我们的支持团队。",
     "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
+  },
+  "estate_composition": {
+    "loading": "正在检查此地产包含哪些土地…",
+    "retry": "重试",
+    "modal_title": "无法确认地产内容",
+    "unavailable": "我们无法读取此地产包含哪些土地。请刷新页面后重试。如果问题仍然存在，请联系我们的支持团队。",
+    "out_of_sync": "此地产包含 {count} 块土地，与本页面所示不符。请先刷新页面以查看其当前内容，然后再继续。",
+    "changed": "在您查看期间，此地产包含的土地发生了变化。请先刷新页面以查看其当前内容，然后再继续。"
   },
   "names_page": {
     "title": "索取您的 NAME，解锁您的世界！",

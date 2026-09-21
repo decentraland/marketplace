@@ -6,4 +6,6 @@ export type Props = Pick<ModalProps, 'name' | 'onClose'> & {
   /** Overrides the wording for a checkout that something other than the price is holding up. */
   title?: string
   description?: string
+  /** Offered when the read that is holding the checkout up can be attempted again. */
+  onRetry?: () => void
 }

@@ -24,12 +24,14 @@
   margin-top: 22px;
 }
 
+/* --card, the 40%-black the homepage slabs use, rather than --secondary: that token is the SOLID
+   surface for modals and dropdowns, and as a full-width block it read as a hole in the page. */
 .tableContainer {
   display: flex;
   flex-direction: column;
   border-radius: 12px;
   margin-top: 48px;
-  background-color: var(--secondary);
+  background-color: var(--card);
 }
 
 .tableContainer .sortByDropdown {

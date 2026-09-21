@@ -7,21 +7,19 @@ import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analy
 import { fetchCampaignRequest } from 'decentraland-dapps/dist/modules/campaign/actions'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
-import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 import { fetchTranslationsRequest } from 'decentraland-dapps/dist/modules/translation/actions'
 import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Locale } from 'decentraland-ui'
 import { config } from '../config'
-import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { getShopUrl } from './iap/shopRedirect'
 import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
 import { getBasename } from './routing/basename'
 import { rootSaga } from './sagas'
+import { PERSISTED_ACTIONS, PERSISTED_PATHS } from './storage'
 import { fetchTilesRequest } from './tile/actions'
 import { ExtendedHistory } from './types'
-import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
 export const createHistory = () => {
   const history = createBrowserHistory({ basename: getBasename() || undefined }) as ExtendedHistory
@@ -136,11 +134,8 @@ export function initStore(history: History) {
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-    paths: [
-      ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn']
-    ], // array of paths from state to be persisted (optional)
-    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
+    paths: PERSISTED_PATHS, // array of paths from state to be persisted (optional)
+    actions: PERSISTED_ACTIONS, // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
   // analytics.js is served from a first party proxy where configured, ad blockers drop the requests to Segment's CDN
@@ -180,11 +175,8 @@ export function initTestStore(preloadedState = {}) {
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-    paths: [
-      ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn']
-    ], // array of paths from state to be persisted (optional)
-    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
+    paths: PERSISTED_PATHS, // array of paths from state to be persisted (optional)
+    actions: PERSISTED_ACTIONS, // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 
