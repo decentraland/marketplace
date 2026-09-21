@@ -192,11 +192,11 @@ const BuyNFTButtons = ({
                 isFree={isFree}
                 useCredits={useCredits}
               />
-              {/* Only when Transak can actually execute this listing. Its widget needs a registration for the
-                  contract the purchase runs through, and a listing on a marketplace version it has never been
-                  told about has none — offering the rail there takes the buyer through checkout to a failure
-                  the click could have avoided. */}
-              {isTransakSupported({ ...getTransakPurchase(asset, order), canUseCredits: isCreditsEnabled }) ? (
+              {/* Only when Transak can actually execute what this click would send. The widget needs a
+                  registration for the contract the purchase runs through, and it has none for a marketplace
+                  version it was never told about, nor for a credits purchase — offering the rail in either
+                  case takes the buyer through checkout to a failure the click could have avoided. */}
+              {isTransakSupported({ ...getTransakPurchase(asset, order), useCredits }) ? (
                 <BuyWithCardButton
                   className={classNames(buyWithCardClassName, { [styles.visibilityHidden]: isFree && useCredits })}
                   onClick={() => handleBuyWithCard(asset, order || undefined)}

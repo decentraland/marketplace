@@ -138,34 +138,68 @@ describe('when deciding whether to offer the card rail', () => {
   })
 
   describe('and the listing settles on a version Transak does not know', () => {
-    describe('and no credits route is available either', () => {
+    beforeEach(() => {
+      supported = isTransakSupported({
+        kind: 'trade',
+        network: Network.MATIC,
+        chainId: ChainId.MATIC_MAINNET,
+        marketplaceAddress: MARKETPLACE_V3_POLYGON
+      })
+    })
+
+    it('should not offer it, so the buyer never reaches a widget that cannot execute', () => {
+      expect(supported).toBe(false)
+    })
+  })
+
+  describe('and the buyer has selected credits', () => {
+    describe('and the listing settles on a version Transak knows', () => {
       beforeEach(() => {
         supported = isTransakSupported({
           kind: 'trade',
           network: Network.MATIC,
           chainId: ChainId.MATIC_MAINNET,
-          marketplaceAddress: MARKETPLACE_V3_POLYGON
+          marketplaceAddress: MARKETPLACE_V2_POLYGON,
+          useCredits: true
         })
       })
 
-      it('should not offer it, so the buyer never reaches a widget that cannot execute', () => {
+      it('should not offer it, since credits and the card are not a supported pair', () => {
         expect(supported).toBe(false)
       })
     })
 
-    describe('and the buyer could pay with credits on a chain that registers them', () => {
+    describe('and the chain registers a credits manager of its own', () => {
       beforeEach(() => {
         supported = isTransakSupported({
           kind: 'trade',
           network: Network.MATIC,
           chainId: ChainId.MATIC_AMOY,
           marketplaceAddress: MARKETPLACE_V3_AMOY,
-          canUseCredits: true
+          useCredits: true
         })
       })
 
-      it('should offer it, since that route settles through the credits manager', () => {
-        expect(supported).toBe(true)
+      it('should still not offer it, so the registration alone cannot bring the pair back', () => {
+        expect(supported).toBe(false)
+      })
+    })
+  })
+
+  describe('and the buyer has not selected credits', () => {
+    describe('and only the credits route is registered on the chain', () => {
+      beforeEach(() => {
+        supported = isTransakSupported({
+          kind: 'trade',
+          network: Network.MATIC,
+          chainId: ChainId.MATIC_AMOY,
+          marketplaceAddress: MARKETPLACE_V3_AMOY,
+          useCredits: false
+        })
+      })
+
+      it('should not offer it, because the click would take the unregistered direct route', () => {
+        expect(supported).toBe(false)
       })
     })
   })

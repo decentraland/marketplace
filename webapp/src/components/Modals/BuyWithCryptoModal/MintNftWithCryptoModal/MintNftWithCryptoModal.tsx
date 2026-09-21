@@ -169,11 +169,9 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       // The card flow buys a fixed amount of MANA up front, so it cannot cover a price the contract
       // recomputes from its oracle at accept time. Not offered for a pegged listing until it can.
       onBuyWithCard={
-        // As above, plus: a mint listed on a marketplace version Transak has no registration for cannot be
-        // executed by the widget at all.
-        checkoutPrice.isUSDPegged || !isTransakSupported({ ...getTransakPurchase(item), canUseCredits: useCredits })
-          ? undefined
-          : onBuyWithCard
+        // As above, plus: the widget cannot execute a mint on a marketplace version it has no registration
+        // for, nor a credits purchase.
+        checkoutPrice.isUSDPegged || !isTransakSupported({ ...getTransakPurchase(item), useCredits }) ? undefined : onBuyWithCard
       }
       onBuyCrossChain={onBuyItemCrossChain}
       onGetGasCost={onGetGasCost}

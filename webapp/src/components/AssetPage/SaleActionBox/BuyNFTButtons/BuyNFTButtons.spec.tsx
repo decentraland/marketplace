@@ -1,5 +1,5 @@
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
@@ -34,7 +34,10 @@ afterEach(() => {
   mockProvidedAsset = ITEM
 })
 
-jest.mock('../UseCreditsToggle', () => ({ __esModule: true, default: () => null }))
+jest.mock('../UseCreditsToggle', () => ({
+  __esModule: true,
+  default: ({ onUseCredits }: { onUseCredits: (value: boolean) => void }) => <button onClick={() => onUseCredits(true)}>use credits</button>
+}))
 jest.mock('./BuyWithCryptoButton', () => ({ BuyWithCryptoButton: () => <button>buy</button> }))
 jest.mock('./BuyWithCardButton', () => ({ BuyWithCardButton: () => <button>card</button> }))
 
@@ -131,5 +134,21 @@ describe('when the listing settles on a marketplace version Transak knows', () =
 
   it('should offer the card', () => {
     expect(card).toBeInTheDocument()
+  })
+})
+
+describe('when the buyer selects credits on a listing Transak would otherwise take', () => {
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+    renderButtons('/', { isCreditsEnabled: true })
+    fireEvent.click(await screen.findByText('use credits'))
+  })
+
+  it('should withdraw the card, since credits and the card are not a supported pair', async () => {
+    await waitFor(() => expect(screen.queryByText('card')).not.toBeInTheDocument())
   })
 })

@@ -200,8 +200,9 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
         nft.category === NFTCategory.PARCEL ||
         checkoutPrice.isUSDPegged ||
         // Transak calls `accept` on the marketplace this listing was signed against, so a version it has
-        // no registration for cannot be executed at all — withheld like the pegged case above.
-        !isTransakSupported({ ...getTransakPurchase(nft, order), canUseCredits: useCredits })
+        // no registration for cannot be executed at all, and neither can a credits purchase — withheld
+        // like the pegged case above.
+        !isTransakSupported({ ...getTransakPurchase(nft, order), useCredits })
           ? undefined
           : onBuyWithCard
       }
