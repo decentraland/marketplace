@@ -251,10 +251,12 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleExecuteOrderWithCardRequest(action: ExecuteOrderWithCardRequestAction) {
-    const { nft, order } = action.payload
+    const { nft, order, useCredits } = action.payload
 
     try {
-      yield call(buyAssetWithCard, nft, order)
+      // Forwarded, as the item saga does: dropping it sent a buyer who chose credits down the direct
+      // marketplace route, which charges the full amount and has no Transak registration for V3.
+      yield call(buyAssetWithCard, nft, order, useCredits)
     } catch (error) {
       yield put(executeOrderWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }

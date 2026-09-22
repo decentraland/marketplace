@@ -561,6 +561,32 @@ describe('when handling the execute order with card action', () => {
     })
   })
 
+  describe('when the buyer chose to pay with credits', () => {
+    let args: unknown[] | undefined
+
+    beforeEach(async () => {
+      args = undefined
+      await expectSaga(orderSaga, tradeService)
+        .provide([
+          {
+            call: (effect, next) => {
+              if (effect.fn === buyAssetWithCard) {
+                args = effect.args
+                return undefined
+              }
+              return next()
+            }
+          }
+        ])
+        .dispatch(executeOrderWithCardRequest(nft, order, true))
+        .run({ silenceTimeout: true })
+    })
+
+    it('should carry that choice into the card purchase, which decides both the route and the amount', () => {
+      expect(args).toEqual([nft, order, true])
+    })
+  })
+
   describe('when opening Transak Widget fails', () => {
     let errorMessage: string
 
@@ -570,7 +596,7 @@ describe('when handling the execute order with card action', () => {
 
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(orderSaga, tradeService)
-        .provide([[call(buyAssetWithCard, nft, undefined), Promise.reject(new Error(errorMessage))]])
+        .provide([[call(buyAssetWithCard, nft, undefined, false), Promise.reject(new Error(errorMessage))]])
         .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
