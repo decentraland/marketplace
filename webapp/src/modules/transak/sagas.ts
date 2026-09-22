@@ -23,58 +23,8 @@ import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction, openTransakFailure } from './actions'
-import { encodeTokenId } from './utils'
+import { getTransakContractId, encodeTokenId } from './utils'
 
-/**
- * The one registration that existed before V3: Transak registered a single contract per chain, and both V1
- * and V2 were served by it. Named once and referenced twice below so "the same registrations" is a fact of
- * the code rather than a comment above two identical literals.
- */
-const PRE_V3_MARKETPLACE_CONTRACT_IDS: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
-  [Network.MATIC]: {
-    [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
-    [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
-  },
-  [Network.ETHEREUM]: {
-    [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
-    [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
-  }
-}
-
-/**
- * Transak's own id for each marketplace contract it will execute against. These are registrations on
- * Transak's side, not addresses, so a contract Transak has never been told about simply has no id here.
- *
- * Keyed by marketplace VERSION as well as chain. A trade carries the contract it was signed against, and
- * Transak has to execute `accept` on that same contract — the signature is bound to it. A single id per chain
- * cannot serve two versions at once: pointing it at V3 would break every V2-signed listing, and leaving it on
- * the older one breaks the V3 ones.
- *
- * V3 is deliberately absent until it is registered with Transak. A missing entry fails closed (see below)
- * rather than executing a V3 trade against a pre-V3 registration, which would revert on-chain anyway.
- */
-const OffChainMarketplaceContractIds: Partial<
-  Record<ContractName, Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM>>
-> = {
-  [ContractName.OffChainMarketplace]: PRE_V3_MARKETPLACE_CONTRACT_IDS,
-  [ContractName.OffChainMarketplaceV2]: PRE_V3_MARKETPLACE_CONTRACT_IDS
-}
-const CreditsManagerContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC> = {
-  [Network.MATIC]: {
-    [ChainId.MATIC_AMOY]: '67dd4ceda7e28cc91ce4c391',
-    [ChainId.MATIC_MAINNET]: ''
-  }
-}
-const MarketplaceV2ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
-  [Network.MATIC]: {
-    [ChainId.MATIC_AMOY]: '670e86dd2bbeb54123b3a2a3',
-    [ChainId.MATIC_MAINNET]: '6717e6dac00223b9cc8e51cd'
-  },
-  [Network.ETHEREUM]: {
-    [ChainId.ETHEREUM_MAINNET]: '672100572fb1688e111c2bdb',
-    [ChainId.ETHEREUM_SEPOLIA]: '671f9815945ac8890fbae4c6'
-  }
-}
 const TransakMulticallContracts: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
   [Network.MATIC]: {
     [ChainId.MATIC_AMOY]: '0xCB9bD5aCD627e8FcCf9EB8d4ba72AEb1Cd8Ff5EF',
@@ -136,7 +86,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
 
         // if credits are enabled and useCredits is true, we need to use credits
         if (useCredits && credits) {
-          contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+          contractId = getTransakContractId({ kind: 'trade', network: asset.network, chainId: asset.chainId, useCredits: true })
           if (!contractId) {
             throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
           }
@@ -161,7 +111,12 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
           // registration for THIS version. The credits route above does not — the CreditsManager is the
           // registered contract there, and it resolves the marketplace from the trade on chain.
           const marketplaceName = getContractName(trade.contract)
-          contractId = OffChainMarketplaceContractIds[marketplaceName]?.[asset.network]?.[asset.chainId]
+          contractId = getTransakContractId({
+            kind: 'trade',
+            network: asset.network,
+            chainId: asset.chainId,
+            marketplaceAddress: trade.contract
+          })
           if (!contractId) {
             // Fail closed. Executing against another version's registration would send `accept` to a contract
             // the signature does not authorise, so the purchase reverts after the buyer has already paid.
@@ -173,7 +128,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         }
       } else if (order && isNFT(asset)) {
         // Legacy Marketplace
-        contractId = MarketplaceV2ContractIds[asset.network]?.[asset.chainId]
+        contractId = getTransakContractId({ kind: 'order', network: asset.network, chainId: asset.chainId })
         if (!contractId) {
           throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
         }
@@ -181,7 +136,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         const contract = getContract(contractName, order.chainId)
 
         if (useCredits && credits) {
-          contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+          contractId = getTransakContractId({ kind: 'order', network: asset.network, chainId: asset.chainId, useCredits: true })
           if (!contractId) {
             throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
           }
@@ -208,7 +163,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
       } else if (!isNFT(asset)) {
         // CollectionStore
         if (useCredits && credits) {
-          contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+          contractId = getTransakContractId({ kind: 'order', network: asset.network, chainId: asset.chainId, useCredits: true })
           if (!contractId) {
             throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
           }
@@ -228,7 +183,12 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
           // encode useCredits function data
           calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
         } else {
-          contractId = asset.chainId === ChainId.MATIC_AMOY ? '670e8b512bbeb54123b3a2b4' : '6717e6e62fb1688e111c1a87' // CollectionStore contractId
+          contractId = getTransakContractId({ kind: 'mint', network: asset.network, chainId: asset.chainId })
+          if (!contractId) {
+            // Checked like every sibling branch: the id used to be inline and always present, so opening the
+            // widget without one became reachable only once it came from the table.
+            throw new Error(`CollectionStore is not registered with Transak on chainId ${asset.chainId}`)
+          }
           const contract = getContract(ContractName.CollectionStore, asset.chainId)
           const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
           calldata = CollectionStoreInterface.encodeFunctionData('buy', [

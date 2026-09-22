@@ -9,6 +9,7 @@ import { ContractName, getContractName, getContract as getDCLContract } from 'de
 import { useIsIAP } from '../../../../modules/iap/useIAP'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
+import { getTransakPurchase, isTransakSupported } from '../../../../modules/transak/utils'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import * as events from '../../../../utils/events'
@@ -167,7 +168,11 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       onBuyNatively={onBuyNatively}
       // The card flow buys a fixed amount of MANA up front, so it cannot cover a price the contract
       // recomputes from its oracle at accept time. Not offered for a pegged listing until it can.
-      onBuyWithCard={checkoutPrice.isUSDPegged ? undefined : onBuyWithCard}
+      onBuyWithCard={
+        // As above, plus: the widget cannot execute a mint on a marketplace version it has no registration
+        // for, nor a credits purchase.
+        checkoutPrice.isUSDPegged || !isTransakSupported({ ...getTransakPurchase(item), useCredits }) ? undefined : onBuyWithCard
+      }
       onBuyCrossChain={onBuyItemCrossChain}
       onGetGasCost={onGetGasCost}
       isUsingMagic={isUsingMagic}

@@ -417,6 +417,37 @@ describe('when handling the open transak action', () => {
         })
       })
 
+      describe('and the asset is a collection store item on a chain Transak has no store registration for', () => {
+        let unregisteredStoreAsset: Asset
+
+        beforeEach(() => {
+          // An ITEM, so it takes the collection store branch: isNFT keys on `tokenId`, so an asset carrying
+          // one never reaches it. Sepolia clears the multicall check that runs earlier but registers no store.
+          const { tokenId: _tokenId, ...item } = mockAsset as Asset & { tokenId?: string }
+          unregisteredStoreAsset = {
+            ...item,
+            itemId: '1',
+            network: Network.ETHEREUM,
+            chainId: ChainId.ETHEREUM_SEPOLIA
+          } as unknown as Asset
+        })
+
+        it('should fail without opening the widget, rather than open one with no contract to execute', () => {
+          return expectSaga(transakSaga, () => undefined)
+            .provide([
+              [select(getWallet), mockWallet],
+              [select(getAddress), mockWallet.address],
+              [select(getIsCreditsEnabled), false]
+            ])
+            .dispatch(openTransak(unregisteredStoreAsset))
+            .put(openTransakFailure(`CollectionStore is not registered with Transak on chainId ${ChainId.ETHEREUM_SEPOLIA}`))
+            .run({ silenceTimeout: true, timeout: 500 })
+            .then(() => {
+              expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
+            })
+        })
+      })
+
       describe('and the asset is a collection store item', () => {
         it('should open the Transak widget with the correct configuration for collection store', () => {
           const collectionStoreAsset: Asset = {

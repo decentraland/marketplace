@@ -13,6 +13,7 @@ import { isNFT } from '../../../../modules/asset/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
 import { getBasename } from '../../../../modules/routing/basename'
 import { locations } from '../../../../modules/routing/locations'
+import { getTransakPurchase, isTransakSupported } from '../../../../modules/transak/utils'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
 import { getMinSaleValueInWei } from '../../../BuyPage/utils'
@@ -191,10 +192,16 @@ const BuyNFTButtons = ({
                 isFree={isFree}
                 useCredits={useCredits}
               />
-              <BuyWithCardButton
-                className={classNames(buyWithCardClassName, { [styles.visibilityHidden]: isFree && useCredits })}
-                onClick={() => handleBuyWithCard(asset, order || undefined)}
-              />
+              {/* Only when Transak can actually execute what this click would send. The widget needs a
+                  registration for the contract the purchase runs through, and it has none for a marketplace
+                  version it was never told about, nor for a credits purchase — offering the rail in either
+                  case takes the buyer through checkout to a failure the click could have avoided. */}
+              {isTransakSupported({ ...getTransakPurchase(asset, order), useCredits }) ? (
+                <BuyWithCardButton
+                  className={classNames(buyWithCardClassName, { [styles.visibilityHidden]: isFree && useCredits })}
+                  onClick={() => handleBuyWithCard(asset, order || undefined)}
+                />
+              ) : null}
             </>
           )
         }}

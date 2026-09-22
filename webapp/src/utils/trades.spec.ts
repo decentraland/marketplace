@@ -453,9 +453,16 @@ describe('when estimating trade gas', () => {
  * of that comparison and pass — this is the check that would not.
  */
 describe('when listing every off-chain marketplace deployed on a chain', () => {
-  describe('and the chain has all three versions', () => {
-    it('should return them newest first', () => {
-      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_SEPOLIA).map(({ contractName }) => contractName)).toEqual([
+  let contractNames: ContractName[]
+
+  // A wallet can hold a grant on any of the versions at once, so Settings has to offer every row.
+  describe.each([ChainId.ETHEREUM_SEPOLIA, ChainId.ETHEREUM_MAINNET])('and the chain is %s', chainId => {
+    beforeEach(() => {
+      contractNames = getDeployedOffChainMarketplaceContracts(chainId).map(({ contractName }) => contractName)
+    })
+
+    it('should return every deployed version, newest first', () => {
+      expect(contractNames).toEqual([
         ContractName.OffChainMarketplaceV3,
         ContractName.OffChainMarketplaceV2,
         ContractName.OffChainMarketplace
@@ -463,42 +470,31 @@ describe('when listing every off-chain marketplace deployed on a chain', () => {
     })
   })
 
-  describe('and the chain has no V3 deployment', () => {
-    it('should return only the versions that are actually there', () => {
-      expect(getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_MAINNET).map(({ contractName }) => contractName)).toEqual([
-        ContractName.OffChainMarketplaceV2,
-        ContractName.OffChainMarketplace
-      ])
-    })
-  })
-
   describe('and the chain has no off-chain marketplace at all', () => {
+    beforeEach(() => {
+      contractNames = getDeployedOffChainMarketplaceContracts(ChainId.ARBITRUM_MAINNET).map(({ contractName }) => contractName)
+    })
+
     it('should return nothing instead of throwing', () => {
-      expect(getDeployedOffChainMarketplaceContracts(ChainId.ARBITRUM_MAINNET)).toEqual([])
+      expect(contractNames).toEqual([])
     })
   })
 })
 
 describe('when getting the latest off-chain marketplace contract', () => {
   let chainId: ChainId
+  let latest: ReturnType<typeof getLatestOffChainMarketplaceContract>
 
-  describe('and the chain has a V3 deployment', () => {
+  // Every version is live during the rollout, and signing against an older one would produce trades
+  // the marketplace no longer settles.
+  describe.each([ChainId.ETHEREUM_SEPOLIA, ChainId.ETHEREUM_MAINNET])('and the chain is %s', each => {
     beforeEach(() => {
-      chainId = ChainId.ETHEREUM_SEPOLIA
+      chainId = each
+      latest = getLatestOffChainMarketplaceContract(chainId)
     })
 
     it('should return V3, so a listing and its approval both name the newest deployment', () => {
-      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV3, chainId))
-    })
-  })
-
-  describe('and the chain has no V3 deployment', () => {
-    beforeEach(() => {
-      chainId = ChainId.ETHEREUM_MAINNET
-    })
-
-    it('should fall back to V2 rather than throw', () => {
-      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV2, chainId))
+      expect(latest).toEqual(getContract(ContractName.OffChainMarketplaceV3, chainId))
     })
   })
 

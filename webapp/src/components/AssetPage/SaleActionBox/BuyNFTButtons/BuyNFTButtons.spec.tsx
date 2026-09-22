@@ -1,6 +1,7 @@
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
 import { renderWithProviders } from '../../../../utils/test'
 import BuyNFTButtons from './BuyNFTButtons'
@@ -19,13 +20,24 @@ const ITEM = {
   isOnSale: true
 } as unknown as Asset
 
+// What the mocked provider hands the render callback. Mutable so a test can list the same item on a
+// different marketplace version; reset before each one.
+let mockProvidedAsset: Asset = ITEM
+
 // Supplies the loaded asset the real provider would resolve, so the render callback under test runs
 // without the store and network machinery behind it.
 jest.mock('../../../AssetProvider', () => ({
-  AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(ITEM, null)
+  AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(mockProvidedAsset, null)
 }))
 
-jest.mock('../UseCreditsToggle', () => ({ __esModule: true, default: () => null }))
+afterEach(() => {
+  mockProvidedAsset = ITEM
+})
+
+jest.mock('../UseCreditsToggle', () => ({
+  __esModule: true,
+  default: ({ onUseCredits }: { onUseCredits: (value: boolean) => void }) => <button onClick={() => onUseCredits(true)}>use credits</button>
+}))
 jest.mock('./BuyWithCryptoButton', () => ({ BuyWithCryptoButton: () => <button>buy</button> }))
 jest.mock('./BuyWithCardButton', () => ({ BuyWithCardButton: () => <button>card</button> }))
 
@@ -88,5 +100,75 @@ describe('when no deep link asks for it', () => {
 
     await waitFor(() => expect(screen.getByText('buy')).toBeInTheDocument())
     expect(onBuyWithCrypto).not.toHaveBeenCalled()
+  })
+})
+
+describe('when the listing settles on a marketplace version Transak has no registration for', () => {
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+    renderButtons('/')
+    await screen.findByText('buy')
+  })
+
+  it('should not offer the card, since the widget could not execute the purchase', () => {
+    expect(screen.queryByText('card')).not.toBeInTheDocument()
+  })
+})
+
+describe('when the listing settles on a marketplace version Transak knows', () => {
+  let card: HTMLElement
+
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+    renderButtons('/')
+    card = await screen.findByText('card')
+  })
+
+  it('should offer the card', () => {
+    expect(card).toBeInTheDocument()
+  })
+})
+
+describe('when the buyer selects credits on a chain that registers no credits manager', () => {
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
+    } as unknown as Asset
+    renderButtons('/', { isCreditsEnabled: true })
+    fireEvent.click(await screen.findByText('use credits'))
+  })
+
+  it('should withdraw the card, because that click would take a route Transak cannot execute', async () => {
+    await waitFor(() => expect(screen.queryByText('card')).not.toBeInTheDocument())
+  })
+})
+
+describe('when the buyer selects credits on a chain that registers one', () => {
+  let card: HTMLElement
+
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      chainId: ChainId.MATIC_AMOY,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+    } as unknown as Asset
+    renderButtons('/', { isCreditsEnabled: true })
+    fireEvent.click(await screen.findByText('use credits'))
+    card = await screen.findByText('card')
+  })
+
+  it('should keep the card, since that route settles through the credits manager', () => {
+    expect(card).toBeInTheDocument()
   })
 })

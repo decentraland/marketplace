@@ -9,6 +9,7 @@ import { ContractName, getContractName, getContract as getDCLContract } from 'de
 import { EstateSnapshotStatus, isEstateSnapshotBlocking, useEstateSnapshot } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
+import { getTransakPurchase, isTransakSupported } from '../../../../modules/transak/utils'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import * as events from '../../../../utils/events'
@@ -195,7 +196,15 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       // The card flow buys a fixed amount of MANA up front, so it cannot cover a price the contract
       // recomputes from its oracle at accept time. Not offered for a pegged listing until it can.
       onBuyWithCard={
-        nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL || checkoutPrice.isUSDPegged ? undefined : onBuyWithCard
+        nft.category === NFTCategory.ESTATE ||
+        nft.category === NFTCategory.PARCEL ||
+        checkoutPrice.isUSDPegged ||
+        // Transak calls `accept` on the marketplace this listing was signed against, so a version it has
+        // no registration for cannot be executed at all, and neither can a credits purchase — withheld
+        // like the pegged case above.
+        !isTransakSupported({ ...getTransakPurchase(nft, order), useCredits })
+          ? undefined
+          : onBuyWithCard
       }
       onBuyCrossChain={onExecuteOrderCrossChain}
       onGetGasCost={onGetGasCost}
