@@ -184,6 +184,11 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
           calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
         } else {
           contractId = getTransakContractId({ kind: 'mint', network: asset.network, chainId: asset.chainId })
+          if (!contractId) {
+            // Checked like every sibling branch: the id used to be inline and always present, so opening the
+            // widget without one became reachable only once it came from the table.
+            throw new Error(`CollectionStore is not registered with Transak on chainId ${asset.chainId}`)
+          }
           const contract = getContract(ContractName.CollectionStore, asset.chainId)
           const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
           calldata = CollectionStoreInterface.encodeFunctionData('buy', [

@@ -132,13 +132,12 @@ export function getTransakContractId(purchase: TransakPurchase): string | undefi
 /**
  * Whether the card rail can be offered for this purchase.
  *
- * Answers for the route the buyer has actually selected, because that is the one the saga executes. Paying
- * with credits through Transak is not supported, so the card is never offered beside a credits purchase;
- * otherwise it needs a registration for the marketplace the listing settles on.
+ * Answers for the route the buyer has actually selected, because that is the one the saga executes: the
+ * marketplace the listing settles on, or the CreditsManager when they are paying with credits. Either way
+ * the question is the same one the saga asks, so what is offered is what can be opened.
  */
 export function isTransakSupported(purchase: TransakPurchase): boolean {
-  if (purchase.useCredits) return false
-  return Boolean(getTransakContractId({ ...purchase, useCredits: false }))
+  return Boolean(getTransakContractId(purchase))
 }
 
 /**

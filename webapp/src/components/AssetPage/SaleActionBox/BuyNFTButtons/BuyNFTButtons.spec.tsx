@@ -137,7 +137,7 @@ describe('when the listing settles on a marketplace version Transak knows', () =
   })
 })
 
-describe('when the buyer selects credits on a listing Transak would otherwise take', () => {
+describe('when the buyer selects credits on a chain that registers no credits manager', () => {
   beforeEach(async () => {
     mockProvidedAsset = {
       ...ITEM,
@@ -148,7 +148,27 @@ describe('when the buyer selects credits on a listing Transak would otherwise ta
     fireEvent.click(await screen.findByText('use credits'))
   })
 
-  it('should withdraw the card, since credits and the card are not a supported pair', async () => {
+  it('should withdraw the card, because that click would take a route Transak cannot execute', async () => {
     await waitFor(() => expect(screen.queryByText('card')).not.toBeInTheDocument())
+  })
+})
+
+describe('when the buyer selects credits on a chain that registers one', () => {
+  let card: HTMLElement
+
+  beforeEach(async () => {
+    mockProvidedAsset = {
+      ...ITEM,
+      chainId: ChainId.MATIC_AMOY,
+      tradeId: 'a-trade',
+      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
+    } as unknown as Asset
+    renderButtons('/', { isCreditsEnabled: true })
+    fireEvent.click(await screen.findByText('use credits'))
+    card = await screen.findByText('card')
+  })
+
+  it('should keep the card, since that route settles through the credits manager', () => {
+    expect(card).toBeInTheDocument()
   })
 })

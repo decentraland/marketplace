@@ -153,23 +153,7 @@ describe('when deciding whether to offer the card rail', () => {
   })
 
   describe('and the buyer has selected credits', () => {
-    describe('and the listing settles on a version Transak knows', () => {
-      beforeEach(() => {
-        supported = isTransakSupported({
-          kind: 'trade',
-          network: Network.MATIC,
-          chainId: ChainId.MATIC_MAINNET,
-          marketplaceAddress: MARKETPLACE_V2_POLYGON,
-          useCredits: true
-        })
-      })
-
-      it('should not offer it, since credits and the card are not a supported pair', () => {
-        expect(supported).toBe(false)
-      })
-    })
-
-    describe('and the chain registers a credits manager of its own', () => {
+    describe('and the chain registers a credits manager', () => {
       beforeEach(() => {
         supported = isTransakSupported({
           kind: 'trade',
@@ -180,7 +164,23 @@ describe('when deciding whether to offer the card rail', () => {
         })
       })
 
-      it('should still not offer it, so the registration alone cannot bring the pair back', () => {
+      it('should offer it even on a marketplace version Transak does not know, since that route settles through the manager', () => {
+        expect(supported).toBe(true)
+      })
+    })
+
+    describe('and the chain registers no credits manager', () => {
+      beforeEach(() => {
+        supported = isTransakSupported({
+          kind: 'trade',
+          network: Network.MATIC,
+          chainId: ChainId.MATIC_MAINNET,
+          marketplaceAddress: MARKETPLACE_V2_POLYGON,
+          useCredits: true
+        })
+      })
+
+      it('should not offer it, even though the direct route on that listing is registered', () => {
         expect(supported).toBe(false)
       })
     })
