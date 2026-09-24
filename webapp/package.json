@@ -120,7 +120,7 @@
     "prepare": "cd .. && husky webapp/.husky"
   },
   "engines": {
-    "node": "20"
+    "node": "24.x"
   },
   "overrides": {
     "ua-parser-js": "^2.0.0"
