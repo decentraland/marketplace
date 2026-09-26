@@ -7,12 +7,14 @@ import clock from '../../../images/clock.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { AssetType } from '../../../modules/asset/types'
 import { useIsIAP } from '../../../modules/iap/useIAP'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
@@ -22,9 +24,12 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
   const isIAP = useIsIAP()
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
-  const order = useGetCurrentOrder()
+  const currentOrder = useGetCurrentOrder()
   const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
   const isOwner = nft && nft?.owner === address
+  const isStolen = isStolenNFT(nft)
+  // A stolen NFT's open listing must never surface a price or any purchase UI.
+  const order = isStolen ? null : currentOrder
   const renderHasListing = useCallback(() => {
     if (!nft || !order) return null
     const expiresAtLabel = getExpirationDateLabel(
@@ -98,7 +103,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
               </Button>
             )}
           </>
-        ) : !isOrderExpired && !isEstateListingBroken ? (
+        ) : !isOrderExpired && !isEstateListingBroken && !isStolen ? (
           <BuyNFTButtons
             asset={nft}
             assetType={AssetType.NFT}
@@ -107,7 +112,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
             onUseCredits={handleUseCredits}
           />
         ) : null}
-        {!isOwner && !isEstateListingBroken && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
+        {!isOwner && !isEstateListingBroken && !isStolen && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
         {!isOrderExpired ? (
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
@@ -116,7 +121,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
         ) : null}
       </div>
     )
-  }, [nft, order, wallet, isOwner, alreadyBid, useCredits])
+  }, [nft, order, wallet, isOwner, isStolen, alreadyBid, useCredits])
 
   const renderOwnerAndNoListingOptions = useCallback(() => {
     if (!nft) return null
@@ -147,6 +152,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
 
   return (
     <div className={styles.BuyNFTBox}>
+      <StolenNFTWarning asset={nft} />
       {order
         ? renderHasListing()
         : isOwner
@@ -163,7 +169,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
                     <div className={`${styles.containerRow} ${styles.issueNumber}`}>#{nft.issuedId}</div>
                   </div>
                 </div>
-                {!isOwner && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
+                {!isOwner && !isStolen && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
               </div>
             )}
     </div>

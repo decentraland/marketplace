@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isNFT } from '../../../modules/asset/utils'
 import { isInsufficientMANA, checkFingerprint } from '../../../modules/bid/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
@@ -29,7 +30,14 @@ const AcceptButton = (props: Props) => {
   const isItemAvailable = !!asset && (isNFT(asset) || asset.available > 0)
 
   const isDisabled =
-    isCurrentlyLocked || !asset || isLoadingFingerprint || hasInsufficientMANA || !isValidFingerprint || !isValidSeller || !isItemAvailable
+    isCurrentlyLocked ||
+    !asset ||
+    isLoadingFingerprint ||
+    hasInsufficientMANA ||
+    !isValidFingerprint ||
+    !isValidSeller ||
+    !isItemAvailable ||
+    isStolenNFT(asset)
 
   let button = (
     <Button size="small" primary disabled={isDisabled} onClick={onClick}>

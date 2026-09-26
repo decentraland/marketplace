@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
@@ -24,7 +25,8 @@ const Actions = (props: Props) => {
   const isENSName = !!data.ens
 
   const canSell = orderService.canSell()
-  const canBid = !isOwner && isBiddable && (!wallet || !bids.some(bid => bid.bidder === wallet.address))
+  const isStolen = isStolenNFT(nft)
+  const canBid = !isOwner && isBiddable && !isStolen && (!wallet || !bids.some(bid => bid.bidder === wallet.address))
 
   return (
     <div className={styles.container}>
@@ -40,7 +42,7 @@ const Actions = (props: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto(order)} />
+            {!isStolen ? <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto(order)} /> : null}
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}

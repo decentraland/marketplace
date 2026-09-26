@@ -7,6 +7,7 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract, Provider } from 'decentraland-transactions'
+import { isStolenNFT, STOLEN_NFT_RENT_ERROR } from '../../lib/stolenNfts'
 import { getContract as getContractByQuery } from '../contract/selectors'
 import { getIdentity } from '../identity/utils'
 import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
@@ -57,6 +58,10 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }))
 
   try {
+    if (isStolenNFT(nft)) {
+      throw new Error(STOLEN_NFT_RENT_ERROR)
+    }
+
     const address: string | undefined = yield select(getAddress)
     if (!address) {
       throw new Error(`Invalid address`)
@@ -179,6 +184,10 @@ function* handleAcceptRentalListingRequest(action: AcceptRentalListingRequestAct
   const { nft, rental, periodIndexChosen, addressOperator } = action.payload
 
   try {
+    if (isStolenNFT(nft)) {
+      throw new Error(STOLEN_NFT_RENT_ERROR)
+    }
+
     if (!nft.openRentalId) {
       throw new Error('The provided NFT does not have an open rental')
     }

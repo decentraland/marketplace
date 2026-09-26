@@ -9,6 +9,7 @@ import mintingIcon from '../../../images/minting.png'
 import noListings from '../../../images/noListings.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { isStolenToken } from '../../../lib/stolenNfts'
 import { AssetType } from '../../../modules/asset/types'
 import { isNFT } from '../../../modules/asset/utils'
 import { Item } from '../../../modules/item/types'
@@ -186,13 +187,15 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </div>
             </div>
             <div className={styles.buyNFTButtons}>
-              <BuyNFTButtons
-                asset={asset}
-                assetType={AssetType.NFT}
-                tokenId={listing.order.tokenId}
-                buyWithCardClassName={styles.buyWithCardClassName}
-                onUseCredits={handleUseCredits}
-              />
+              {!isStolenToken(listing.order.chainId, listing.order.contractAddress, listing.order.tokenId) ? (
+                <BuyNFTButtons
+                  asset={asset}
+                  assetType={AssetType.NFT}
+                  tokenId={listing.order.tokenId}
+                  buyWithCardClassName={styles.buyWithCardClassName}
+                  onUseCredits={handleUseCredits}
+                />
+              ) : null}
               <Button as={Link} to={locations.nft(asset.contractAddress, listing.order.tokenId)} inverted>
                 {t('best_buying_option.buy_listing.view_listing')}
               </Button>

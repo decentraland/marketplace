@@ -6,6 +6,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { isStolenNFT } from '../../../../lib/stolenNfts'
 import { EstateSnapshotStatus, isEstateSnapshotBlocking, useEstateSnapshot } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
@@ -155,6 +156,18 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     () => (priceInMana === null ? null : manaAfterCredits(priceInMana, useCredits ? credits : null)),
     [priceInMana, useCredits, credits]
   )
+
+  if (isStolenNFT(nft)) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={false}
+        title={t('stolen_nft_warning.label')}
+        description={t('stolen_nft_warning.cannot_be_bought')}
+        onClose={onClose}
+      />
+    )
+  }
 
   // Without a resolved amount there is nothing to confirm. `resolving` is the trade read (a cache hit for
   // anyone who came through the asset page); `unavailable` is an unreadable trade or an unreachable oracle.
