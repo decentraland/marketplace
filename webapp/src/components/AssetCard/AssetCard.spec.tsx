@@ -1,7 +1,7 @@
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
 import { act, fireEvent, screen } from '@testing-library/react'
 import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } from '@dcl/schemas'
-import stolenNftKeys from '../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { PageName, SortBy } from '../../modules/routing/types'
@@ -139,26 +139,15 @@ describe('AssetCard', () => {
 
   describe('when the asset is a stolen nft', () => {
     beforeEach(() => {
-      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
       asset = { ...asset, chainId: Number(chainId), contractAddress, tokenId } as Asset
     })
 
-    it('should render the stolen badge', () => {
+    it('should render the card without a stolen badge', () => {
       renderAssetCard({ asset })
       mockAllIsIntersecting(true)
-      expect(screen.getByTestId('stolen-nft-badge')).toHaveTextContent('STOLEN ITEM. DO NOT BUY THEM')
-    })
-  })
-
-  describe('when the asset is an nft that was not reported as stolen', () => {
-    beforeEach(() => {
-      asset = { ...asset, tokenId: 'tokenId' } as Asset
-    })
-
-    it('should not render the stolen badge', () => {
-      renderAssetCard({ asset })
-      mockAllIsIntersecting(true)
-      expect(screen.queryByTestId('stolen-nft-badge')).not.toBeInTheDocument()
+      expect(screen.getByTestId('asset-card-content')).toBeInTheDocument()
+      expect(screen.queryByTestId('stolen-nft-badge')).toBeNull()
     })
   })
 

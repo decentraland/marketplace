@@ -3,7 +3,7 @@ import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity 
 import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatWeiMANA } from '../../../lib/mana'
-import stolenNftKeys from '../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../lib/stolenNfts'
 import { marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { renderWithProviders } from '../../../utils/tests'
@@ -165,7 +165,7 @@ describe('Best Buying Option', () => {
 
   describe('Listing option for an NFT reported as stolen', () => {
     beforeEach(() => {
-      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
       Date.now = () => 1671033414000
       asset.available = 0
       ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({

@@ -7,8 +7,7 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ContractName as TransactionContractName, getContract as getTransactionContract } from 'decentraland-transactions'
 import { API_SIGNER } from '../../lib/api'
-import { STOLEN_NFT_BID_ERROR, STOLEN_NFT_SELL_ERROR } from '../../lib/stolenNfts'
-import stolenNftKeys from '../../lib/stolenNfts.json'
+import { STOLEN_NFT_BID_ERROR, STOLEN_NFT_KEYS, STOLEN_NFT_SELL_ERROR } from '../../lib/stolenNfts'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
 import { getNft } from '../nft/selectors'
@@ -187,7 +186,7 @@ describe('when handling the creation of a bid', () => {
 
   describe('and the nft was reported as stolen', () => {
     beforeEach(() => {
-      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
       asset = { tokenId, contractAddress, chainId: Number(chainId), vendor: VendorName.DECENTRALAND } as Asset
     })
 
@@ -227,7 +226,7 @@ describe('when handling the accepting a bid action', () => {
 
   describe('and the bid is on an nft reported as stolen', () => {
     it('should dispatch the accept bid failure without accepting it', () => {
-      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
       const bid = { contractAddress, tokenId, chainId: Number(chainId), tradeId: 'a-trade' } as Bid
 
       return expectSaga(bidSaga, bidService, tradeService)

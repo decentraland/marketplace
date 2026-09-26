@@ -1757,7 +1757,7 @@
     "update_listing": "Update listing"
   },
   "stolen_nft_warning": {
-    "label": "STOLEN ITEM. DO NOT BUY THEM",
+    "label": "STOLEN NFTS CAN'T BE BOUGHT",
     "cannot_be_bought": "This item was reported as stolen and cannot be bought."
   },
   "pegged_mana_price": {

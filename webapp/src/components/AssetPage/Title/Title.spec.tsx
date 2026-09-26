@@ -1,6 +1,6 @@
 import { Network } from '@dcl/schemas'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
-import stolenNftKeys from '../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../lib/stolenNfts'
 import { Asset } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
@@ -44,13 +44,13 @@ describe('Title', () => {
 
   describe('when the asset is an nft reported as stolen', () => {
     beforeEach(() => {
-      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
       asset = { ...asset, chainId: Number(chainId), contractAddress, tokenId } as Asset
     })
 
     it('should render the stolen warning', () => {
       const { getByTestId } = renderTitle({ asset })
-      expect(getByTestId('stolen-nft-warning')).toHaveTextContent('STOLEN ITEM. DO NOT BUY THEM')
+      expect(getByTestId('stolen-nft-warning')).toHaveTextContent("STOLEN NFTS CAN'T BE BOUGHT")
     })
   })
 

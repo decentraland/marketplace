@@ -18,8 +18,7 @@ import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/typ
 import { ContractName, ErrorCode, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
-import { STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
-import stolenNftKeys from '../../lib/stolenNfts.json'
+import { STOLEN_NFT_BUY_ERROR, STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -114,7 +113,7 @@ beforeEach(() => {
 describe('when handling the execute order request action', () => {
   describe('and the nft was reported as stolen', () => {
     beforeEach(() => {
-      const [chainId, stolenContractAddress, stolenTokenId] = stolenNftKeys[0].split(':')
+      const [chainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS[0].split(':')
       nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
       order = { ...order, contractAddress: stolenContractAddress, tokenId: stolenTokenId }
     })
@@ -552,7 +551,7 @@ describe('when handling the execute order with card action', () => {
 
   describe('when the nft was reported as stolen', () => {
     beforeEach(() => {
-      const [chainId, stolenContractAddress, stolenTokenId] = stolenNftKeys[0].split(':')
+      const [chainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS[0].split(':')
       nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
     })
 

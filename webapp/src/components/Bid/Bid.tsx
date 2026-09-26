@@ -146,7 +146,7 @@ const Bid = (props: Props) => {
             <>
               {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
               {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} listingCreatedAt={bid.createdAt} /> : null}
-              <StolenNFTWarning asset={asset} />
+              <StolenNFTWarning asset={asset} className="stolen-nft-warning" />
             </>
           )}
         </AssetProvider>

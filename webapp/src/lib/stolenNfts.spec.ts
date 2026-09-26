@@ -1,10 +1,9 @@
 import { ChainId } from '@dcl/schemas'
 import { Item } from '../modules/item/types'
 import { NFT } from '../modules/nft/types'
-import { isStolenNFT, isStolenToken } from './stolenNfts'
-import stolenNftKeys from './stolenNfts.json'
+import { isStolenNFT, isStolenToken, STOLEN_NFT_KEYS } from './stolenNfts'
 
-const [chainId, contractAddress, tokenId] = stolenNftKeys.find(key => key.startsWith('1:'))!.split(':')
+const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS.find(key => key.startsWith('1:'))!.split(':')
 
 function makeNFT(overrides: Partial<NFT> = {}): NFT {
   return { chainId: Number(chainId), contractAddress, tokenId, ...overrides } as NFT
@@ -59,6 +58,17 @@ describe('isStolenToken', () => {
   describe('when the token is not in the stolen list', () => {
     it('should return false', () => {
       expect(isStolenToken(chainId, contractAddress, '0')).toBe(false)
+    })
+  })
+})
+
+describe('STOLEN_NFT_KEYS', () => {
+  it('should contain the 1512 reported tokens as chainId:contract:tokenId keys', () => {
+    expect(STOLEN_NFT_KEYS).toHaveLength(1512)
+    STOLEN_NFT_KEYS.forEach(key => {
+      const parts = key.split(':')
+      expect(parts).toHaveLength(3)
+      expect(parts[1]).toMatch(/^0x[0-9a-f]{40}$/)
     })
   })
 })

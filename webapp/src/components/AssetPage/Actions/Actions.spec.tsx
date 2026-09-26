@@ -1,7 +1,7 @@
 import { Bid, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
-import stolenNftKeys from '../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../lib/stolenNfts'
 import { NFT } from '../../../modules/nft/types'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { VendorName } from '../../../modules/vendor'
@@ -82,7 +82,7 @@ describe('Actions Component', () => {
 
       describe('and the nft was reported as stolen', () => {
         beforeEach(() => {
-          const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+          const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
           props.nft = { ...nft, chainId: Number(chainId), contractAddress, tokenId } as NFT
         })
 
@@ -135,7 +135,7 @@ describe('Actions Component', () => {
 
       describe('and the nft was reported as stolen', () => {
         beforeEach(() => {
-          const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+          const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
           props.nft = { ...nft, chainId: Number(chainId), contractAddress, tokenId } as NFT
         })
 

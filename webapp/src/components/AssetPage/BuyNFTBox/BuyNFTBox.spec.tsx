@@ -1,5 +1,5 @@
 import { Bid, ChainId, NFTCategory, Network, Order } from '@dcl/schemas'
-import stolenNftKeys from '../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../lib/stolenNfts'
 import { NFT } from '../../../modules/nft/types'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { VendorName } from '../../../modules/vendor'
@@ -10,11 +10,11 @@ import { Props } from './BuyNFTBox.types'
 jest.mock('../../../modules/order/hooks')
 jest.mock('../SaleActionBox/BuyNFTButtons', () => ({ BuyNFTButtons: () => <div data-testid="buy-nft-buttons" /> }))
 jest.mock('../../BidButton', () => ({ __esModule: true, default: () => <div data-testid="bid-button" /> }))
-jest.mock('../PriceComponent', () => ({ __esModule: true, default: () => <div /> }))
+jest.mock('../PriceComponent', () => ({ __esModule: true, default: () => <div data-testid="price-component" /> }))
 
 const mockedUseGetCurrentOrder = useGetCurrentOrder as jest.MockedFunction<typeof useGetCurrentOrder>
 
-const [stolenChainId, stolenContractAddress, stolenTokenId] = stolenNftKeys.find(key => key.startsWith('1:'))!.split(':')
+const [stolenChainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS.find(key => key.startsWith('1:'))!.split(':')
 
 describe('BuyNFTBox', () => {
   let props: Props
@@ -48,8 +48,9 @@ describe('BuyNFTBox', () => {
     })
 
     describe('and it was not reported as stolen', () => {
-      it('should render the buy and the bid buttons', () => {
+      it('should render the price and the buy and the bid buttons', () => {
         const { getByTestId } = renderWithProviders(<BuyNFTBox {...props} />)
+        expect(getByTestId('price-component')).toBeInTheDocument()
         expect(getByTestId('buy-nft-buttons')).toBeInTheDocument()
         expect(getByTestId('bid-button')).toBeInTheDocument()
       })
@@ -60,8 +61,10 @@ describe('BuyNFTBox', () => {
         props.nft = { ...nft, chainId: Number(stolenChainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId } as NFT
       })
 
-      it('should not render the buy and the bid buttons', () => {
-        const { queryByTestId } = renderWithProviders(<BuyNFTBox {...props} />)
+      it('should render the warning without the price nor the buy and the bid buttons', () => {
+        const { getByTestId, queryByTestId } = renderWithProviders(<BuyNFTBox {...props} />)
+        expect(getByTestId('stolen-nft-warning')).toBeInTheDocument()
+        expect(queryByTestId('price-component')).not.toBeInTheDocument()
         expect(queryByTestId('buy-nft-buttons')).not.toBeInTheDocument()
         expect(queryByTestId('bid-button')).not.toBeInTheDocument()
       })

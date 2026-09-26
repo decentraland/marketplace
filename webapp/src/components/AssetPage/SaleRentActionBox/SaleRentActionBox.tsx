@@ -31,6 +31,7 @@ import { LinkedProfile } from '../../LinkedProfile'
 import { ListingPrice } from '../../ListingPrice'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
@@ -44,7 +45,7 @@ enum View {
 const SaleRentActionBox = ({
   nft,
   wallet,
-  order,
+  order: currentOrder,
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
@@ -56,11 +57,14 @@ const SaleRentActionBox = ({
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
   const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
-  const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
   const isStolen = isStolenNFT(nft)
+  // A stolen NFT must never show its listing: no price and no purchase UI.
+  const order = isStolen ? null : currentOrder
+  const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
-  const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
+  // A stolen NFT must never start on the rent view: the thief must not monetize it through rentals.
+  const [view, setView] = useState(!!order || !isRentalOpen || isStolen ? View.SALE : View.RENT)
   const maxPriceOfPeriods: string | null = useMemo(() => (rental ? getMaxPriceOfPeriods(rental) : null), [rental])
   const toggleView = useCallback(() => (view === View.RENT ? setView(View.SALE) : setView(View.RENT)), [view])
   const isNFTPartOfAState = useMemo(() => isPartOfEstate(nft), [nft])
@@ -112,7 +116,8 @@ const SaleRentActionBox = ({
   return (
     <div className={styles.main}>
       <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} listingCreatedAt={order?.createdAt} />
-      {isRentalOpen && maxPriceOfPeriods ? (
+      <StolenNFTWarning asset={nft} />
+      {isRentalOpen && maxPriceOfPeriods && !isStolen ? (
         <div className={styles.viewSelector}>
           <button
             onClick={toggleView}
@@ -135,7 +140,7 @@ const SaleRentActionBox = ({
         </div>
       ) : null}
       <div className={styles.actions}>
-        {view === View.RENT && isRentalOpen && maxPriceOfPeriods ? (
+        {view === View.RENT && isRentalOpen && maxPriceOfPeriods && !isStolen ? (
           <>
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>

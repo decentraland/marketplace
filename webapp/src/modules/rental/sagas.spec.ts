@@ -10,6 +10,7 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
+import { STOLEN_NFT_KEYS, STOLEN_NFT_RENT_ERROR } from '../../lib/stolenNfts'
 import { getCurrentIdentity } from '../identity/selectors'
 import { FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getNft } from '../nft/selectors'
@@ -41,7 +42,10 @@ import { PeriodOption, UpsertRentalOptType } from './types'
 import { getNonces, getSignature, waitUntilRentalChangesStatus } from './utils'
 
 let nft: NFT
+let stolenNft: NFT
 let rental: RentalListing
+
+const [stolenChainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS.find(key => key.startsWith('1:'))!.split(':')
 
 beforeEach(() => {
   nft = {
@@ -97,6 +101,8 @@ beforeEach(() => {
     target: ethers.constants.AddressZero,
     rentedDays: null
   }
+
+  stolenNft = { ...nft, chainId: Number(stolenChainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
 })
 
 describe('when handling the request action to upsert a rental listing', () => {
@@ -112,6 +118,22 @@ describe('when handling the request action to upsert a rental listing', () => {
       expiration: new Date(0),
       authChain: []
     }
+  })
+
+  describe('and the NFT was reported as stolen', () => {
+    it('should put an upsert rental failure action with the stolen NFT error', () => {
+      return expectSaga(rentalSaga)
+        .put(upsertRentalFailure(stolenNft, 100, [PeriodOption.ONE_WEEK], 1234567, STOLEN_NFT_RENT_ERROR))
+        .dispatch(upsertRentalRequest(stolenNft, 100, [PeriodOption.ONE_WEEK], 1234567, UpsertRentalOptType.INSERT))
+        .run({ silenceTimeout: true })
+    })
+
+    it('should put an upsert rental failure action with the stolen NFT error when editing', () => {
+      return expectSaga(rentalSaga)
+        .put(upsertRentalFailure(stolenNft, 100, [PeriodOption.ONE_WEEK], 1234567, STOLEN_NFT_RENT_ERROR))
+        .dispatch(upsertRentalRequest(stolenNft, 100, [PeriodOption.ONE_WEEK], 1234567, UpsertRentalOptType.EDIT))
+        .run({ silenceTimeout: true })
+    })
   })
 
   describe('and the wallet is not connected', () => {
@@ -412,6 +434,40 @@ describe('when handling the request action to claim a LAND', () => {
       })
     })
 
+    describe('and the NFT was reported as stolen', () => {
+      beforeEach(() => {
+        stolenNft = { ...stolenNft, owner: rentalContract.address }
+      })
+
+      it('should still put the claim LAND success action', () => {
+        return expectSaga(rentalSaga)
+          .provide([
+            [call(getConnectedProvider), {}],
+            [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+            [getContext('history'), { location: { pathname: locations.nft(stolenNft.contractAddress, stolenNft.tokenId) } }],
+            [call(getContract, ContractName.Rentals, stolenNft.chainId), rentalContract],
+            [
+              call(
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+                rentalContract,
+                'claim(address[],uint256[])',
+                [stolenNft.contractAddress],
+                [stolenNft.tokenId]
+              ),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()],
+            [call(waitUntilRentalChangesStatus, stolenNft, RentalStatus.CLAIMED), Promise.resolve()],
+            [select(getNft, stolenNft.contractAddress, stolenNft.tokenId), { ...stolenNft, owner: rental.lessor }],
+            [take(FETCH_NFT_SUCCESS), {}],
+            [delay(5000), void 0]
+          ])
+          .put(claimAssetSuccess(stolenNft, rental))
+          .dispatch(claimAssetRequest(stolenNft, rental))
+          .silentRun()
+      })
+    })
+
     describe('and the transaction gets reverted', () => {
       it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
         return expectSaga(rentalSaga)
@@ -473,6 +529,19 @@ describe('when handling the request action to accept a rental', () => {
         .provide([[call(getConnectedProvider), null]])
         .put(acceptRentalListingFailure('The provided NFT does not have an open rental'))
         .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
+        .silentRun()
+    })
+  })
+
+  describe('and the NFT was reported as stolen', () => {
+    beforeEach(() => {
+      stolenNft = { ...stolenNft, openRentalId: rental.id }
+    })
+
+    it('should put an accept rental listing failure action with the stolen NFT error', () => {
+      return expectSaga(rentalSaga)
+        .put(acceptRentalListingFailure(STOLEN_NFT_RENT_ERROR))
+        .dispatch(acceptRentalListingRequest(stolenNft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })

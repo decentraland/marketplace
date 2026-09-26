@@ -1719,7 +1719,7 @@
     "update_listing": "Actualizar publicación"
   },
   "stolen_nft_warning": {
-    "label": "ARTÍCULO ROBADO. NO LO COMPRES",
+    "label": "LOS NFTS ROBADOS NO SE PUEDEN COMPRAR",
     "cannot_be_bought": "Este artículo fue reportado como robado y no se puede comprar."
   },
   "pegged_mana_price": {

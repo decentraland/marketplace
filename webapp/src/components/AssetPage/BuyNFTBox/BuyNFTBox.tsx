@@ -14,6 +14,7 @@ import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
@@ -23,10 +24,12 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
   const isIAP = useIsIAP()
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
-  const order = useGetCurrentOrder()
+  const currentOrder = useGetCurrentOrder()
   const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
   const isOwner = nft && nft?.owner === address
   const isStolen = isStolenNFT(nft)
+  // A stolen NFT's open listing must never surface a price or any purchase UI.
+  const order = isStolen ? null : currentOrder
   const renderHasListing = useCallback(() => {
     if (!nft || !order) return null
     const expiresAtLabel = getExpirationDateLabel(
@@ -149,6 +152,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
 
   return (
     <div className={styles.BuyNFTBox}>
+      <StolenNFTWarning asset={nft} />
       {order
         ? renderHasListing()
         : isOwner

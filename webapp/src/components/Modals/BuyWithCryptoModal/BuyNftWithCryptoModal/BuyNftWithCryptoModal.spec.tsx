@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ChainId, NFTCategory, Network, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import stolenNftKeys from '../../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../../lib/stolenNfts'
 import { EstateSnapshotState, EstateSnapshotStatus, useEstateSnapshot } from '../../../../modules/nft/hooks'
 import { CheckoutPrice, useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
 import { BuyNftWithCryptoModal } from './BuyNftWithCryptoModal'
@@ -177,7 +177,7 @@ describe('when the registry could not be read', () => {
 
 describe('when the NFT was reported as stolen', () => {
   it('should block the checkout instead of showing the confirmation', () => {
-    const [, contractAddress, tokenId] = stolenNftKeys.find(key => key.startsWith('1:'))!.split(':')
+    const [, contractAddress, tokenId] = STOLEN_NFT_KEYS.find(key => key.startsWith('1:'))!.split(':')
     const order = { price: '1', chainId: ChainId.ETHEREUM_MAINNET, marketplaceAddress: '0xmarketplace' } as unknown as Order
     const nft = {
       id: 'a-name',

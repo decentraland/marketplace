@@ -2,7 +2,7 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
-import stolenNftKeys from '../../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../../lib/stolenNfts'
 import { EstateSnapshotState, EstateSnapshotStatus, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { renderWithProviders } from '../../../utils/test'
 import BidModal from './BidModal'
@@ -145,7 +145,7 @@ describe.each([
 
 describe('when the NFT was reported as stolen', () => {
   it('should show the stolen warning and keep the bid disabled', async () => {
-    const [chainId, contractAddress, tokenId] = stolenNftKeys.find(key => key.startsWith('1:'))!.split(':')
+    const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS.find(key => key.startsWith('1:'))!.split(':')
     renderBidModal({ status: EstateSnapshotStatus.READY }, {
       asset: {
         id: 'a-name',

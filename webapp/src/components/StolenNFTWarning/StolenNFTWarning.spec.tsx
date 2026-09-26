@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react'
 import { ChainId } from '@dcl/schemas'
-import stolenNftKeys from '../../lib/stolenNfts.json'
+import { STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { Asset } from '../../modules/asset/types'
 import { renderWithProviders } from '../../utils/test'
 import StolenNFTWarning from './StolenNFTWarning'
 
-const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
 
 describe('StolenNFTWarning', () => {
   describe('when the NFT was reported as stolen', () => {
@@ -13,7 +13,7 @@ describe('StolenNFTWarning', () => {
       renderWithProviders(<StolenNFTWarning asset={{ chainId: Number(chainId), contractAddress, tokenId } as Asset} />)
       const warning = screen.getByTestId('stolen-nft-warning')
       expect(warning).toHaveAttribute('role', 'alert')
-      expect(warning).toHaveTextContent('STOLEN ITEM. DO NOT BUY THEM')
+      expect(warning).toHaveTextContent("STOLEN NFTS CAN'T BE BOUGHT")
     })
   })
 
