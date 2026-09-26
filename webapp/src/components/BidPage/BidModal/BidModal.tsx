@@ -9,6 +9,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { getAssetName, isNFT, isOwnedBy } from '../../../modules/asset/utils'
 import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
@@ -25,6 +26,7 @@ import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { EstateCompositionWarning } from '../../EstateCompositionWarning'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import { Props } from './BidModal.types'
 import './BidModal.css'
 
@@ -112,7 +114,8 @@ const BidModal = (props: Props) => {
     hasInsufficientMANA ||
     isPlacingBid ||
     hasLowPriceForMetaTx ||
-    isEstateBlocked
+    isEstateBlocked ||
+    isStolenNFT(asset)
 
   return (
     <AssetAction asset={displayedAsset} strictEstateSelection={!!estateComposition.snapshot}>
@@ -161,6 +164,7 @@ const BidModal = (props: Props) => {
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
             <EstateCompositionWarning state={estateComposition} />
+            <StolenNFTWarning asset={asset} />
           </div>
           {hasLowPriceForMetaTx ? (
             <span className="warning">

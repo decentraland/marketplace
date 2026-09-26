@@ -133,6 +133,22 @@
   font-size: 17px;
 }
 
+.AssetCard .StolenBadge {
+  background-color: #ff2d55;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  left: 11px;
+  line-height: 14px;
+  max-width: calc(100% - 22px);
+  padding: 4px 11px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 11px;
+  z-index: 2;
+}
+
 .AssetCard .LandBubble {
   align-self: flex-end;
   background-color: #ecebed;

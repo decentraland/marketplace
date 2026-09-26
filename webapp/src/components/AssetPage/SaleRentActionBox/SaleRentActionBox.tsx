@@ -10,6 +10,7 @@ import { Button, Popup } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import {
@@ -56,6 +57,7 @@ const SaleRentActionBox = ({
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
   const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
   const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
+  const isStolen = isStolenNFT(nft)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
   const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
@@ -66,7 +68,7 @@ const SaleRentActionBox = ({
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
-  const canBid = !isOwner && isBiddable
+  const canBid = !isOwner && isBiddable && !isStolen
   const isCurrentlyRented = isRentalListingExecuted(rental)
 
   const handleOnRent = useCallback(() => {
@@ -248,7 +250,7 @@ const SaleRentActionBox = ({
                   </Button>
                 ) : null}
                 <div className={styles.saleButtons}>
-                  {order && !isEstateListingBroken ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
+                  {order && !isEstateListingBroken && !isStolen ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
                   {/*
                    * Making a new offer is independent of the seller's listing being
                    * broken by the EstateRegistry upgrade. A fresh bid is signed with the
@@ -271,7 +273,7 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled ? (
+                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled && !isStolen ? (
                   <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
                 ) : null}
               </>

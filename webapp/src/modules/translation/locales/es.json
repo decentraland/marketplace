@@ -1718,6 +1718,10 @@
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
   },
+  "stolen_nft_warning": {
+    "label": "ARTÍCULO ROBADO. NO LO COMPRES",
+    "cannot_be_bought": "Este artículo fue reportado como robado y no se puede comprar."
+  },
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Precio no disponible"

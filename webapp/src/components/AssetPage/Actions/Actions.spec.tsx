@@ -1,6 +1,7 @@
 import { Bid, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
+import stolenNftKeys from '../../../lib/stolenNfts.json'
 import { NFT } from '../../../modules/nft/types'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { VendorName } from '../../../modules/vendor'
@@ -78,6 +79,19 @@ describe('Actions Component', () => {
         expect(updateButton).not.toBeInTheDocument()
         expect(cancelButton).not.toBeInTheDocument()
       })
+
+      describe('and the nft was reported as stolen', () => {
+        beforeEach(() => {
+          const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+          props.nft = { ...nft, chainId: Number(chainId), contractAddress, tokenId } as NFT
+        })
+
+        it('should not render the buy and the bid buttons', () => {
+          const { queryByText } = renderWithProviders(<Actions {...props} />)
+          expect(queryByText(t('asset_page.actions.buy_with_mana'))).not.toBeInTheDocument()
+          expect(queryByText(t('asset_page.actions.bid'))).not.toBeInTheDocument()
+        })
+      })
     })
   })
   describe('and there is no order', () => {
@@ -117,6 +131,18 @@ describe('Actions Component', () => {
         const { queryByText } = renderWithProviders(<Actions {...props} />)
         const bidButton = queryByText(t('asset_page.actions.bid'))
         expect(bidButton).toBeInTheDocument()
+      })
+
+      describe('and the nft was reported as stolen', () => {
+        beforeEach(() => {
+          const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+          props.nft = { ...nft, chainId: Number(chainId), contractAddress, tokenId } as NFT
+        })
+
+        it('should not render the bid button', () => {
+          const { queryByText } = renderWithProviders(<Actions {...props} />)
+          expect(queryByText(t('asset_page.actions.bid'))).not.toBeInTheDocument()
+        })
       })
     })
   })
