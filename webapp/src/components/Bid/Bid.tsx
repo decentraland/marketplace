@@ -21,6 +21,7 @@ import { ConfirmInputValueModal } from '../ConfirmInputValueModal'
 import EstateUpgradeWarning from '../EstateUpgradeWarning'
 import { LinkedProfile } from '../LinkedProfile'
 import { Mana } from '../Mana'
+import StolenNFTWarning from '../StolenNFTWarning'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { Props } from './Bid.types'
@@ -145,6 +146,7 @@ const Bid = (props: Props) => {
             <>
               {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
               {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} listingCreatedAt={bid.createdAt} /> : null}
+              <StolenNFTWarning asset={asset} />
             </>
           )}
         </AssetProvider>

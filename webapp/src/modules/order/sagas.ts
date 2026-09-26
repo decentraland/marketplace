@@ -14,6 +14,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import { isStolenNFT, STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
 import { buyAssetWithCard } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -155,6 +156,9 @@ export function* orderSaga(tradeService: TradeService) {
     const { order, nft, fingerprint, silent, useCredits } = action.payload
 
     try {
+      if (isStolenNFT(nft)) {
+        throw new Error(STOLEN_NFT_BUY_ERROR)
+      }
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
@@ -254,6 +258,9 @@ export function* orderSaga(tradeService: TradeService) {
     const { nft, order, useCredits } = action.payload
 
     try {
+      if (isStolenNFT(nft)) {
+        throw new Error(STOLEN_NFT_BUY_ERROR)
+      }
       // Forwarded, as the item saga does: dropping it sent a buyer who chose credits down the direct
       // marketplace route, which charges the full amount and has no Transak registration for V3.
       yield call(buyAssetWithCard, nft, order, useCredits)

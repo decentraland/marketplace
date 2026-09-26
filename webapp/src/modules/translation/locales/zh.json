@@ -1722,6 +1722,10 @@
     "visitor": "此挂单已不可用。卖家需要重新创建。",
     "update_listing": "更新挂单"
   },
+  "stolen_nft_warning": {
+    "label": "被盗物品。请勿购买",
+    "cannot_be_bought": "此物品已被报告为被盗，无法购买。"
+  },
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "价格不可用"

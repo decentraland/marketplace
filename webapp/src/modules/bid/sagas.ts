@@ -5,6 +5,7 @@ import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeServic
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
+import { isStolenNFT, isStolenToken, STOLEN_NFT_BID_ERROR, STOLEN_NFT_SELL_ERROR } from '../../lib/stolenNfts'
 import { isNFT } from '../asset/utils'
 import { getContract } from '../contract/selectors'
 import { getNft } from '../nft/selectors'
@@ -50,6 +51,9 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
   function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
     const { asset, price, expiresAt, fingerprint } = action.payload
     try {
+      if (isStolenNFT(asset)) {
+        throw new Error(STOLEN_NFT_BID_ERROR)
+      }
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         throw new Error("Can't place a bid without a wallet")
@@ -74,6 +78,9 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
 
     let txHash = ''
     try {
+      if ('tokenId' in bid && isStolenToken(bid.chainId, bid.contractAddress, bid.tokenId)) {
+        throw new Error(STOLEN_NFT_SELL_ERROR)
+      }
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         throw new Error('Can not accept a bid without a wallet')

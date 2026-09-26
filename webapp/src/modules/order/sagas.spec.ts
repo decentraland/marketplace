@@ -18,6 +18,8 @@ import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/typ
 import { ContractName, ErrorCode, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
+import { STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
+import stolenNftKeys from '../../lib/stolenNfts.json'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -110,6 +112,23 @@ beforeEach(() => {
 })
 
 describe('when handling the execute order request action', () => {
+  describe('and the nft was reported as stolen', () => {
+    beforeEach(() => {
+      const [chainId, stolenContractAddress, stolenTokenId] = stolenNftKeys[0].split(':')
+      nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+      order = { ...order, contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+    })
+
+    it('should put the execute order failure without trying to buy it', () => {
+      return expectSaga(orderSaga, tradeService)
+        .put(executeOrderFailure(order, nft, STOLEN_NFT_BUY_ERROR))
+        .not.call.fn(waitForFeatureFlagsToBeLoaded)
+        .not.call.fn(tradeService.accept)
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe("and the nft doesn't have the same contract address as the order", () => {
     beforeEach(() => {
       order.contractAddress = 'anotherContractAddress'
@@ -529,6 +548,22 @@ describe('when handling the execute order with card action', () => {
 
   afterEach(() => {
     jest.restoreAllMocks()
+  })
+
+  describe('when the nft was reported as stolen', () => {
+    beforeEach(() => {
+      const [chainId, stolenContractAddress, stolenTokenId] = stolenNftKeys[0].split(':')
+      nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+    })
+
+    it('should put the execute order with card failure without opening the card checkout', () => {
+      return expectSaga(orderSaga, tradeService)
+        .put(executeOrderWithCardFailure(STOLEN_NFT_BUY_ERROR))
+        .not.call.fn(buyAssetWithCard)
+        .not.put(openTransak(nft))
+        .dispatch(executeOrderWithCardRequest(nft))
+        .run({ silenceTimeout: true })
+    })
   })
 
   describe('when the explanation modal has already been shown', () => {

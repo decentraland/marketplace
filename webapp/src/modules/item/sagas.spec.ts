@@ -1,8 +1,9 @@
 import { call, getContext, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Entity, EntityType, Item, Network, Rarity, Trade, TradeAssetType, TradeType as DCLTradeType } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, Item, Network, Order, Rarity, Trade, TradeAssetType, TradeType as DCLTradeType } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
@@ -13,8 +14,11 @@ import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/act
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
+import stolenNftKeys from '../../lib/stolenNfts.json'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
@@ -29,6 +33,8 @@ import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
   buyItemFailure,
+  buyItemCrossChainRequest,
+  buyItemCrossChainFailure,
   buyItemSuccess,
   fetchItemsRequest,
   fetchItemsSuccess,
@@ -383,6 +389,23 @@ describe('when handling the buy items request action', () => {
           .dispatch(buyItemRequest(itemWithNoTrade))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+})
+
+describe('when handling the buy item cross chain request action', () => {
+  describe('and the nft it carries was reported as stolen', () => {
+    it('should dispatch the cross chain failure without executing the route', () => {
+      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      const nft = { chainId: Number(chainId), contractAddress, tokenId } as unknown as Item
+      const order = { chainId: Number(chainId), contractAddress, tokenId, price: '1' } as Order
+      const route = { route: { params: { fromChain: '1', toChain: '137' } } } as unknown as Route
+
+      return expectSaga(itemSaga, getIdentity)
+        .put(buyItemCrossChainFailure(route, nft, order.price, STOLEN_NFT_BUY_ERROR))
+        .not.call.fn(getConnectedProvider)
+        .dispatch(buyItemCrossChainRequest(nft, route, order))
+        .run({ silenceTimeout: true })
     })
   })
 })

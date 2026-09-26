@@ -1,0 +1,25 @@
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255, 45, 85, 0.12);
+  border: 1px solid rgba(255, 45, 85, 0.5);
+  border-radius: 8px;
+  color: #ff2d55;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 10px 12px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  margin: 1px 0 0 0 !important;
+  color: #ff2d55;
+}
+
+.message {
+  flex: 1;
+}

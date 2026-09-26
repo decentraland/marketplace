@@ -3,6 +3,7 @@ import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity 
 import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatWeiMANA } from '../../../lib/mana'
+import stolenNftKeys from '../../../lib/stolenNfts.json'
 import { marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { renderWithProviders } from '../../../utils/tests'
@@ -11,6 +12,7 @@ import BestBuyingOption from './BestBuyingOption'
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
+jest.mock('../SaleActionBox/BuyNFTButtons', () => ({ BuyNFTButtons: () => <div data-testid="buy-nft-buttons" /> }))
 jest.mock('decentraland-dapps/dist/containers', () => {
   const module = jest.requireActual<typeof containersModule>('decentraland-dapps/dist/containers')
   return {
@@ -151,6 +153,38 @@ describe('Best Buying Option', () => {
 
       expect(getByText(price)).toBeInTheDocument()
       expect(getByText(highestOffer)).toBeInTheDocument()
+    })
+
+    it('should render the buy buttons', async () => {
+      const reference: RefObject<HTMLDivElement> = createRef()
+      const { findByTestId } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
+
+      expect(await findByTestId('buy-nft-buttons')).toBeInTheDocument()
+    })
+  })
+
+  describe('Listing option for an NFT reported as stolen', () => {
+    beforeEach(() => {
+      const [chainId, contractAddress, tokenId] = stolenNftKeys[0].split(':')
+      Date.now = () => 1671033414000
+      asset.available = 0
+      ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
+        data: [{ ...orderResponse, chainId: Number(chainId), contractAddress, tokenId }],
+        total: 1
+      })
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({
+        results: [bid],
+        total: 1
+      })
+    })
+
+    it('should not render the buy buttons', async () => {
+      const reference: RefObject<HTMLDivElement> = createRef()
+      const { findByText, queryByTestId } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
+
+      await findByText(t('best_buying_option.buy_listing.view_listing'))
+
+      expect(queryByTestId('buy-nft-buttons')).not.toBeInTheDocument()
     })
   })
 

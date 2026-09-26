@@ -6,6 +6,7 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
 import CreditsIcon from '../../images/icon-credits.svg'
+import { isStolenNFT } from '../../lib/stolenNfts'
 import { Asset } from '../../modules/asset/types'
 import { getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
 import { useIsIAP } from '../../modules/iap/useIAP'
@@ -286,6 +287,11 @@ const AssetCard = (props: Props) => {
               showOrderListedTag={showListedTag}
             />
             {!isNFT(asset) && !isMobile ? <FavoritesCounter className="FavoritesCounterBubble" item={asset} /> : null}
+            {isStolenNFT(asset) ? (
+              <div className="StolenBadge" data-testid="stolen-nft-badge">
+                {t('stolen_nft_warning.label')}
+              </div>
+            ) : null}
             {showRentalBubble ? (
               <RentalChip asset={asset} isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPending} rental={rental} />
             ) : null}

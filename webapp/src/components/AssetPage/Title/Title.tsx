@@ -4,6 +4,7 @@ import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { getAssetName, isNFT } from '../../../modules/asset/utils'
 import { useIsIAP } from '../../../modules/iap/useIAP'
 import { FavoritesCounter } from '../../FavoritesCounter'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import { Props } from './Title.types'
 import styles from './Title.module.css'
 
@@ -12,15 +13,18 @@ const Title = ({ asset }: Props) => {
   const isIAP = useIsIAP()
 
   return (
-    <div className={styles.title}>
-      <span className={styles.text}>
-        {getAssetName(asset)} {isNFT(asset) && asset.issuedId ? `#${asset.issuedId}` : ''}{' '}
-      </span>
-      {/* TODO (lists): this may be moved after the new detail page for unified markets */}
-      {!isIAP && !isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
-        <FavoritesCounter isCollapsed className={styles.favorites} item={asset} />
-      ) : null}
-    </div>
+    <>
+      <div className={styles.title}>
+        <span className={styles.text}>
+          {getAssetName(asset)} {isNFT(asset) && asset.issuedId ? `#${asset.issuedId}` : ''}{' '}
+        </span>
+        {/* TODO (lists): this may be moved after the new detail page for unified markets */}
+        {!isIAP && !isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
+          <FavoritesCounter isCollapsed className={styles.favorites} item={asset} />
+        ) : null}
+      </div>
+      <StolenNFTWarning asset={asset} />
+    </>
   )
 }
 
