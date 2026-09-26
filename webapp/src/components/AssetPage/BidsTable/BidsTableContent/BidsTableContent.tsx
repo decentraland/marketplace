@@ -8,6 +8,7 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation'
 import { Button, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import emptyBids from '../../../../images/empty-bids.png'
 import { formatWeiMANA } from '../../../../lib/mana'
+import { isStolenNFT } from '../../../../lib/stolenNfts'
 import { AssetType } from '../../../../modules/asset/types'
 import { getAssetName, isNFT } from '../../../../modules/asset/utils'
 import { getAcceptBidStatus, getError } from '../../../../modules/bid/selectors'
@@ -46,6 +47,7 @@ export function BidsTableContent({
   const [totalPages, setTotalPages] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false)
   const assetOwner = isNFT(asset) ? asset.owner : asset.creator
+  const isStolen = isStolenNFT(asset)
   const targetContractLabel = useERC721ContractName(asset.contractAddress, asset.chainId)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState<{
@@ -73,7 +75,9 @@ export function BidsTableContent({
         .then(({ results, total }) => {
           if (cancel) return
           setTotal(total)
-          setBids(formatDataToTable(results, bid => setShowConfirmationModal({ display: true, bid }), address, isMobileOrTablet))
+          setBids(
+            formatDataToTable(results, bid => setShowConfirmationModal({ display: true, bid }), isStolen ? null : address, isMobileOrTablet)
+          )
           setTotalPages(Math.ceil(total / ROWS_PER_PAGE))
         })
         .finally(() => !cancel && setIsLoading(false))
@@ -114,7 +118,7 @@ export function BidsTableContent({
             <img src={emptyBids} alt="empty" className={styles.emptyIcon} />
             <span className={styles.emptyDescription}>
               {t('bids_table.no_bids')}
-              {assetOwner !== address && (
+              {assetOwner !== address && !isStolen && (
                 <Button
                   basic
                   onClick={() =>
