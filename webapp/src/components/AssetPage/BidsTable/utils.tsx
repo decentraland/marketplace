@@ -1,8 +1,9 @@
 import { Bid } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Mana } from 'decentraland-ui'
+import { Button, Mana, Popup } from 'decentraland-ui'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isPaused } from '../../../lib/pausedTrades'
 import { LinkedProfile } from '../../LinkedProfile'
 import { ManaToFiat } from '../../ManaToFiat'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
@@ -37,9 +38,24 @@ export const formatDataToTable = (
             {')'}
           </div>
           {address === bid.seller ? (
-            <Button primary onClick={() => setShowConfirmationModal(bid)} size="small">
-              {t('offers_table.accept')}
-            </Button>
+            isPaused(bid) ? (
+              <Popup
+                content={t('trading_paused_warning.bid_seller')}
+                position="top center"
+                on="hover"
+                trigger={
+                  <span>
+                    <Button primary disabled size="small">
+                      {t('offers_table.accept')}
+                    </Button>
+                  </span>
+                }
+              />
+            ) : (
+              <Button primary onClick={() => setShowConfirmationModal(bid)} size="small">
+                {t('offers_table.accept')}
+              </Button>
+            )
           ) : null}
         </div>
       )
