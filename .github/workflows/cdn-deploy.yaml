@@ -166,9 +166,12 @@ jobs:
       # that sorts above the target has to be at 0% before the target is reached -- after a
       # few pushes that is several commit builds, not one.
       #
-      # The order matters. Restore the target to 100% FIRST, then zero the abandoned
-      # versions from the top down: at no point is there a gap where a record below the
-      # target serves. Zeroing first opens exactly that gap.
+      # The order matters, and only one order is safe. Restore the target to 100% FIRST:
+      # that is invisible to users, because a newer record still sorts ahead and keeps
+      # serving. Then zero the abandoned versions. Zeroing first leaves users whom no
+      # record covers, and `calculateRollout` skips records at 0% and falls back to the
+      # LAST one -- the oldest version still stored -- so a rollback done in that order can
+      # briefly serve something older than either version involved.
       #
       # One dispatch at a time, waiting for each run to finish. These share a concurrency
       # group per environment, and a third dispatch queued behind a running one cancels the
