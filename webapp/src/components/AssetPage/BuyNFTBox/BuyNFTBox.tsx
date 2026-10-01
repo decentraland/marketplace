@@ -15,6 +15,7 @@ import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import StolenNFTWarning from '../../StolenNFTWarning'
+import TradingPausedWarning from '../../TradingPausedWarning'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
@@ -49,6 +50,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
         <EstateUpgradeWarning nft={nft} isOwnListing={!!isOwner} listingCreatedAt={order?.createdAt} />
+        {isOwner ? <TradingPausedWarning listing={order} isOwnListing /> : null}
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>

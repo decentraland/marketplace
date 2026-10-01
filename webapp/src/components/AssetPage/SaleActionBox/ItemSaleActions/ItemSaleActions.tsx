@@ -5,6 +5,7 @@ import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
 import BidButton from '../../../BidButton'
+import TradingPausedWarning from '../../../TradingPausedWarning'
 import { BuyNFTButtons } from '../BuyNFTButtons'
 import { Props } from './ItemSaleActions.types'
 import styles from './ItemSaleActions.module.css'
@@ -21,6 +22,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }:
     <>
       {isOwner ? (
         <div className={styles.ownerButtons}>
+          <TradingPausedWarning listing={item} isOwnListing />
           <Button as="a" href={builderCollectionUrl} fluid className={customClassnames?.primaryButton}>
             {t('asset_page.actions.edit_price')}
           </Button>

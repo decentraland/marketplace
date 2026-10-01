@@ -8,6 +8,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Loader } from 'decentraland-ui'
 import { config } from '../../../../config'
+import { isPaused } from '../../../../lib/pausedTrades'
 import { Asset } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
@@ -17,6 +18,7 @@ import { getTransakPurchase, isTransakSupported } from '../../../../modules/tran
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
 import { getMinSaleValueInWei } from '../../../BuyPage/utils'
+import TradingPausedWarning from '../../../TradingPausedWarning'
 import UseCreditsToggle from '../UseCreditsToggle'
 import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
@@ -115,6 +117,23 @@ const BuyNFTButtons = ({
       <AssetProvider type={assetType} contractAddress={asset.contractAddress} tokenId={tokenId}>
         {(asset, order) => {
           if (!asset) return <Loader active size="medium" className={styles.loading_asset} />
+
+          // A paused contract reverts the purchase: keep the listing visible, block every rail and skip the deep link.
+          const listing = isNFT(asset) ? order : asset
+          if (isPaused(listing)) {
+            return (
+              <>
+                <TradingPausedWarning listing={listing} />
+                {isIAP ? (
+                  <Button primary fluid className={styles.buyWithCryptoButton} disabled>
+                    <span>{t('asset_page.actions.checkout')}</span>
+                  </Button>
+                ) : (
+                  <BuyWithCryptoButton className={styles.buyWithCryptoButton} asset={asset} disabled />
+                )}
+              </>
+            )
+          }
           // Every branch below carries the same auto-open, so a deep link behaves the same
           // whichever call to action the asset resolves to.
           const withAutoOpen = (children: ReactNode) => (

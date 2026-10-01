@@ -197,3 +197,36 @@ describe('when the NFT was reported as stolen', () => {
     expect(onAuthorizedAction).not.toHaveBeenCalled()
   })
 })
+
+describe('when the order is on a paused marketplace contract', () => {
+  let order: Order
+  let nft: Record<string, unknown>
+
+  beforeEach(() => {
+    order = {
+      price: '1',
+      chainId: ChainId.ETHEREUM_MAINNET,
+      marketplaceAddress: '0xmarketplace',
+      tradeId: 'a-trade',
+      paused: true
+    } as Order
+    nft = {
+      id: 'a-parcel',
+      tokenId: '1',
+      contractAddress: '0xland',
+      category: NFTCategory.PARCEL,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET,
+      data: {}
+    }
+    renderModal({ status: EstateSnapshotStatus.READY }, { metadata: { nft, order, useCredits: false } } as Partial<Props>)
+  })
+
+  it('should block the checkout instead of showing the confirmation', () => {
+    expect(screen.queryByTestId('confirmation')).not.toBeInTheDocument()
+  })
+
+  it('should explain that purchases of the listing are unavailable', () => {
+    expect(screen.getByText(t('trading_paused_warning.visitor'))).toBeInTheDocument()
+  })
+})
