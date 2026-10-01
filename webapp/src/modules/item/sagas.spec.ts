@@ -35,6 +35,7 @@ import {
   buyItemFailure,
   buyItemCrossChainRequest,
   buyItemCrossChainFailure,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   buyItemSuccess,
   fetchItemsRequest,
   fetchItemsSuccess,
@@ -959,16 +960,67 @@ describe('when handling the buy item cross chain request action of a listing on 
 
   beforeEach(() => {
     nft = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1' } as unknown as Item
-    order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', isPaused: true } as Order
     route = { route: { params: { fromChain: '1', toChain: '137' } } } as unknown as Route
   })
 
-  it('should dispatch the cross chain failure with the paused copy without executing the route', () => {
-    return expectSaga(itemSaga, getIdentity)
-      .put(buyItemCrossChainFailure(route, nft, order.price, getPausedTradeErrorMessage()))
-      .not.call.fn(getConnectedProvider)
-      .dispatch(buyItemCrossChainRequest(nft, route, order))
-      .run({ silenceTimeout: true })
+  describe('and the order is flagged as paused', () => {
+    beforeEach(() => {
+      order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', isPaused: true } as Order
+    })
+
+    it('should dispatch the cross chain failure with the paused copy without executing the route', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .put(buyItemCrossChainFailure(route, nft, order.price, getPausedTradeErrorMessage()))
+        .not.call.fn(getConnectedProvider)
+        .dispatch(buyItemCrossChainRequest(nft, route, order))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the order is not flagged but its trade was paused after the route was quoted', () => {
+    let trade: Trade
+
+    beforeEach(() => {
+      order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', tradeId: 'aTradeId' } as Order
+      trade = { id: 'aTradeId', isPaused: true } as unknown as Trade
+    })
+
+    it('should fetch the trade and dispatch the cross chain failure with the paused copy without executing the route', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [matchers.call.fn(getConnectedProvider), {}],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade]
+        ])
+        .call.like({ fn: TradeService.prototype.fetchTrade, args: ['aTradeId'] })
+        .put(buyItemCrossChainFailure(route, nft, order.price, getPausedTradeErrorMessage()))
+        .not.put.like({ action: { type: BUY_ITEM_CROSS_CHAIN_SUCCESS } })
+        .dispatch(buyItemCrossChainRequest(nft, route, order))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the item has no order and its trade was paused after the route was quoted', () => {
+    let pausedItem: Item
+    let trade: Trade
+
+    beforeEach(() => {
+      pausedItem = { ...item, tradeId: 'anItemTradeId' }
+      trade = { id: 'anItemTradeId', isPaused: true } as unknown as Trade
+    })
+
+    it('should fetch the item trade and dispatch the cross chain failure with the paused copy', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [matchers.call.fn(getConnectedProvider), {}],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade]
+        ])
+        .call.like({ fn: TradeService.prototype.fetchTrade, args: ['anItemTradeId'] })
+        .put(buyItemCrossChainFailure(route, pausedItem, pausedItem.price, getPausedTradeErrorMessage()))
+        .dispatch(buyItemCrossChainRequest(pausedItem, route))
+        .run({ silenceTimeout: true })
+    })
   })
 })
 

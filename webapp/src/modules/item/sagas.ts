@@ -266,6 +266,12 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
+        // The route may have been quoted long ago: re-check the trade before bridging any funds.
+        const tradeId = order ? order.tradeId : item.tradeId
+        if (tradeId) {
+          const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
+          assertNotPaused(trade)
+        }
         const crossChainModule = import('decentraland-transactions/crossChain')
         const { AxelarProvider }: Awaited<typeof crossChainModule> = yield crossChainModule
         const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
