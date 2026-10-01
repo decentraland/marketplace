@@ -91,7 +91,9 @@
 }
 
 .pausedBadge :global(i.icon.icon) {
+  height: auto;
   margin: 0;
+  line-height: 1;
   color: #ff9800;
 }
 

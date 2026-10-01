@@ -59,7 +59,7 @@ export const formatDataToTable = (
           ) : address && address === bid.bidder && isPaused(bid) ? (
             <Popup
               content={t('trading_paused_warning.bid_bidder')}
-              position="top center"
+              position="top right"
               on="hover"
               trigger={
                 <span className={styles.pausedBadge} data-testid="paused-bid-badge">

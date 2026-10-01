@@ -10,10 +10,12 @@ import iconListings from '../../../images/iconListings.png'
 import infoIcon from '../../../images/infoIcon.png'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isPaused } from '../../../lib/pausedTrades'
 import { isBidTrade } from '../../../modules/bid/utils'
 import { locations } from '../../../modules/routing/locations'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
+import TradingPausedWarning, { TradingPausedWarningVariant } from '../../TradingPausedWarning'
 import { Props } from './YourOffer.types'
 import styles from './YourOffer.module.css'
 
@@ -86,7 +88,11 @@ const YourOffer = (props: Props) => {
 
   const isMobile = useMobileMediaQuery()
 
-  const bid = useMemo(() => bids.find(({ bidder }) => bidder === address), [bids, address])
+  // An offer that replaced one stuck on a paused contract takes precedence over it.
+  const bid = useMemo(() => {
+    const own = bids.filter(({ bidder }) => bidder === address)
+    return own.find(ownBid => !isPaused(ownBid)) ?? own[0]
+  }, [bids, address])
 
   useEffect(() => {
     if (!hasFetched && asset) {
@@ -132,6 +138,7 @@ const YourOffer = (props: Props) => {
           )}
         </div>
       </div>
+      <TradingPausedWarning listing={bid} isOwnListing variant={TradingPausedWarningVariant.BID} className={styles.pausedWarning} />
     </div>
   ) : null
 }
