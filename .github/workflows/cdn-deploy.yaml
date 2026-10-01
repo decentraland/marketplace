@@ -161,11 +161,14 @@ jobs:
       # cannot be read from package.json, and there is no base version to compute a commit
       # version from -- the action only demands one when it has to compute it.
       #
-      # This is NOT a complete rollback. Records are stored sorted descending by semver and
-      # the worker serves the first one whose percentage covers the user, so naming an older
-      # version here leaves the newer one still serving while this job reports success.
-      # Rolling back also needs the abandoned version set to 0%, which this single-version
-      # dispatch cannot express -- use set-rollout-manual.yaml for that.
+      # This is NOT a complete rollback on its own. Records are stored sorted descending by
+      # semver and the worker serves the first one whose percentage covers the user, so
+      # naming an older version here leaves the newer one still serving while this job
+      # reports success.
+      #
+      # A rollback is this job dispatched twice: the abandoned version at 0%, then the one
+      # to restore at 100%. `percentage` accepts 0, so both halves are expressible here --
+      # what one dispatch cannot do is name two versions at once.
       - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
         with:
           package-name: "@dcl/marketplace-site"
