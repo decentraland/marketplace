@@ -2,7 +2,8 @@ import { all, takeEvery, put, select } from 'redux-saga/effects'
 import { showToast, hideAllToasts } from 'decentraland-dapps/dist/modules/toast/actions'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { TRANSACTION_ACTION_FLAG, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
-import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
+import { isPausedTradeErrorMessage } from '../../lib/pausedTrades'
+import { ACCEPT_BID_FAILURE, AcceptBidFailureAction, PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
 import { CLAIM_NAME_SUCCESS } from '../ens/actions'
 import {
   DeleteListSuccessAction,
@@ -19,6 +20,8 @@ import {
 import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BUY_ITEM_FAILURE,
+  BuyItemFailureAction,
   BUY_ITEM_WITH_CARD_FAILURE,
   BuyItemCrossChainSuccessAction,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
@@ -51,7 +54,8 @@ import {
   getUpsertRentalSuccessToast,
   getCrossChainTransactionSuccessToast,
   getBidPlacedSuccessToast,
-  getCreateOrderSuccessToast
+  getCreateOrderSuccessToast,
+  getTradingPausedToast
 } from './toasts'
 import { DispatchableFromToastActions } from './types'
 import { toastDispatchableActionsChannel } from './utils'
@@ -76,6 +80,8 @@ function* successToastSagas() {
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
+  yield takeEvery(BUY_ITEM_FAILURE, handlePausedTradeFailure)
+  yield takeEvery(ACCEPT_BID_FAILURE, handlePausedTradeFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(toastDispatchableActionsChannel, handleToastTryAgainActionChannel)
@@ -130,7 +136,15 @@ function* handleBuyNFTWithCardFailure() {
 function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   const { silent } = action.payload
   if (!silent) {
-    yield put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
+    yield put(
+      showToast(isPausedTradeErrorMessage(action.payload.error) ? getTradingPausedToast() : getExecuteOrderFailureToast(), 'bottom center')
+    )
+  }
+}
+
+function* handlePausedTradeFailure(action: BuyItemFailureAction | AcceptBidFailureAction) {
+  if (isPausedTradeErrorMessage(action.payload.error)) {
+    yield put(showToast(getTradingPausedToast(), 'bottom center'))
   }
 }
 

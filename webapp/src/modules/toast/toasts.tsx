@@ -176,6 +176,17 @@ export function getOpenTransakFailureToast(): Omit<Toast, 'id'> {
   }
 }
 
+export function getTradingPausedToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.WARN,
+    title: t('trading_paused_warning.title'),
+    body: <p>{t('trading_paused_warning.error')}</p>,
+    icon: <Icon size="big" name="pause circle" />,
+    closable: true,
+    timeout: 15000
+  }
+}
+
 export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,

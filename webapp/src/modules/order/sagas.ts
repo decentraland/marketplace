@@ -14,6 +14,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import { assertNotPaused, getTradeFailureMessage } from '../../lib/pausedTrades'
 import { isStolenNFT, STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
 import { buyAssetWithCard } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
@@ -162,6 +163,7 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
+      assertNotPaused(order)
       yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
@@ -189,6 +191,7 @@ export function* orderSaga(tradeService: TradeService) {
         }
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
+        assertNotPaused(trade)
 
         // An Estate's transfer is bound to a fingerprint the seller signed into the trade, and the
         // registry verifies it at settlement. Accepting that trade means receiving whatever composition
@@ -244,7 +247,7 @@ export function* orderSaga(tradeService: TradeService) {
 
       yield put(executeOrderSuccess(txHash, nft))
     } catch (error) {
-      const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      const errorMessage = getTradeFailureMessage(error, t('global.unknown_error'))
       const errorCode =
         error !== undefined && error !== null && typeof error === 'object' && 'code' in error
           ? (error as { code: ErrorCode }).code
@@ -261,11 +264,12 @@ export function* orderSaga(tradeService: TradeService) {
       if (isStolenNFT(nft)) {
         throw new Error(STOLEN_NFT_BUY_ERROR)
       }
+      assertNotPaused(order)
       // Forwarded, as the item saga does: dropping it sent a buyer who chose credits down the direct
       // marketplace route, which charges the full amount and has no Transak registration for V3.
       yield call(buyAssetWithCard, nft, order, useCredits)
     } catch (error) {
-      yield put(executeOrderWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(executeOrderWithCardFailure(getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 
@@ -301,7 +305,7 @@ export function* orderSaga(tradeService: TradeService) {
         yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
       }
     } catch (error) {
-      yield put(executeOrderWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(executeOrderWithCardFailure(getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 

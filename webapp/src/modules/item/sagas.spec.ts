@@ -17,6 +17,7 @@ import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { getPausedTradeErrorMessage } from '../../lib/pausedTrades'
 import { STOLEN_NFT_BUY_ERROR, STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
@@ -889,5 +890,100 @@ describe('when handling the fetch trending items request action', () => {
         .dispatch(fetchTrendingItemsRequest())
         .run({ silenceTimeout: true })
     })
+  })
+})
+
+describe('when handling the buy items request action of a listing on a paused contract', () => {
+  let pausedItem: Item
+  let trade: Trade
+
+  describe('and the item is flagged as paused', () => {
+    beforeEach(() => {
+      pausedItem = { ...item, tradeId: 'aTradeId', paused: true }
+    })
+
+    it('should dispatch the failure with the paused copy without accepting the trade', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .put(buyItemFailure(getPausedTradeErrorMessage()))
+        .not.call.fn(TradeService.prototype.accept)
+        .dispatch(buyItemRequest(pausedItem))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the item is not flagged but its trade is', () => {
+    beforeEach(() => {
+      pausedItem = { ...item, tradeId: 'aTradeId' }
+      trade = { id: 'aTradeId', paused: true } as unknown as Trade
+    })
+
+    it('should dispatch the failure with the paused copy without accepting the trade', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [select(getIsCreditsEnabled), false],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade]
+        ])
+        .put(buyItemFailure(getPausedTradeErrorMessage()))
+        .not.call.fn(TradeService.prototype.accept)
+        .dispatch(buyItemRequest(pausedItem))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and accepting the trade reverts because the contract is paused', () => {
+    beforeEach(() => {
+      pausedItem = { ...item, tradeId: 'aTradeId' }
+      trade = { id: 'aTradeId' } as unknown as Trade
+    })
+
+    it('should dispatch the failure with the paused copy', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [select(getIsCreditsEnabled), false],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.reject(new Error('execution reverted: Pausable: paused'))]
+        ])
+        .put(buyItemFailure(getPausedTradeErrorMessage()))
+        .dispatch(buyItemRequest(pausedItem))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the buy item cross chain request action of a listing on a paused contract', () => {
+  let nft: Item
+  let order: Order
+  let route: Route
+
+  beforeEach(() => {
+    nft = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1' } as unknown as Item
+    order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', paused: true } as Order
+    route = { route: { params: { fromChain: '1', toChain: '137' } } } as unknown as Route
+  })
+
+  it('should dispatch the cross chain failure with the paused copy without executing the route', () => {
+    return expectSaga(itemSaga, getIdentity)
+      .put(buyItemCrossChainFailure(route, nft, order.price, getPausedTradeErrorMessage()))
+      .not.call.fn(getConnectedProvider)
+      .dispatch(buyItemCrossChainRequest(nft, route, order))
+      .run({ silenceTimeout: true })
+  })
+})
+
+describe('when handling the buy item with card request action of a listing on a paused contract', () => {
+  let pausedItem: Item
+
+  beforeEach(() => {
+    pausedItem = { ...item, tradeId: 'aTradeId', paused: true }
+  })
+
+  it('should dispatch the card failure with the paused copy without opening the card checkout', () => {
+    return expectSaga(itemSaga, getIdentity)
+      .put(buyItemWithCardFailure(getPausedTradeErrorMessage()))
+      .not.call.fn(buyAssetWithCard)
+      .dispatch(buyItemWithCardRequest(pausedItem))
+      .run({ silenceTimeout: true })
   })
 })

@@ -22,6 +22,7 @@ import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
 import { isErrorWithMessage } from '../../lib/error'
+import { assertNotPaused, getTradeFailureMessage } from '../../lib/pausedTrades'
 import { isStolenNFT, isStolenToken, STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
@@ -197,6 +198,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleBuyItem(action: BuyItemRequestAction) {
     try {
       const { item, useCredits } = action.payload
+      assertNotPaused(item)
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
@@ -219,6 +221,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         if (item.tradeId) {
           // Use credits for marketplace trade
           const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
+          assertNotPaused(trade)
           txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
         } else {
           // Use credits for collection store
@@ -229,6 +232,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       } else if (item.tradeId) {
         // Regular trade acceptance without credits
         const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
+        assertNotPaused(trade)
         txHash = yield call([tradeService, 'accept'], trade, wallet.address)
       } else {
         // Regular collection store purchase without credits
@@ -241,7 +245,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(buyItemSuccess(wallet.chainId, txHash, item))
     } catch (error) {
-      yield put(buyItemFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(buyItemFailure(getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 
@@ -252,6 +256,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       if (isStolenNFT(item) || (order && isStolenToken(order.chainId, order.contractAddress, order.tokenId))) {
         throw new Error(STOLEN_NFT_BUY_ERROR)
       }
+      assertNotPaused(item, order)
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
       const provider: Provider | null = yield call(getConnectedProvider)
@@ -269,23 +274,17 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         yield put(buyItemCrossChainSuccess(route, Number(route.route.params.fromChain), txResponse.transactionHash, item, order))
       }
     } catch (error) {
-      yield put(
-        buyItemCrossChainFailure(
-          route,
-          item,
-          order?.price || item.price,
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(buyItemCrossChainFailure(route, item, order?.price || item.price, getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 
   function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
     try {
       const { item, useCredits } = action.payload
+      assertNotPaused(item)
       yield call(buyAssetWithCard, item, undefined, useCredits)
     } catch (error) {
-      yield put(buyItemWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(buyItemWithCardFailure(getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 

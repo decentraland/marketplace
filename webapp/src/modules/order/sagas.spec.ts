@@ -18,6 +18,7 @@ import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/typ
 import { ContractName, ErrorCode, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
+import { getPausedTradeErrorMessage } from '../../lib/pausedTrades'
 import { STOLEN_NFT_BUY_ERROR, STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
@@ -902,6 +903,83 @@ describe('when buying an estate with credits on a legacy order', () => {
       .not.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace)
       .put(executeOrderFailure(legacyOrder, estateNft, 'Credits cannot be used to buy an Estate on this listing', undefined, false))
       .dispatch(executeOrderRequest(legacyOrder, estateNft, fingerprint, false, true))
+      .run({ silenceTimeout: true })
+  })
+})
+
+describe('when handling the execute order request action of a listing on a paused contract', () => {
+  describe('and the order is flagged as paused', () => {
+    beforeEach(() => {
+      order = { ...order, paused: true }
+    })
+
+    it('should put the execute order failure with the paused copy without trying to buy it', () => {
+      return expectSaga(orderSaga, tradeService)
+        .put(executeOrderFailure(order, nft, getPausedTradeErrorMessage()))
+        .not.call.fn(waitForFeatureFlagsToBeLoaded)
+        .not.call.fn(tradeService.accept)
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the order is not flagged but its trade is', () => {
+    let trade: Trade
+
+    beforeEach(() => {
+      order = { ...order, tradeId: 'aTradeId' }
+      trade = { id: 'aTradeId', paused: true, sent: [], received: [] } as unknown as Trade
+    })
+
+    it('should put the execute order failure with the paused copy without accepting the trade', () => {
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [call([tradeService, 'fetchTrade'], 'aTradeId'), trade]
+        ])
+        .put(executeOrderFailure(order, nft, getPausedTradeErrorMessage()))
+        .not.call.fn(tradeService.accept)
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and accepting the trade reverts because the contract is paused', () => {
+    let trade: Trade
+
+    beforeEach(() => {
+      order = { ...order, tradeId: 'aTradeId' }
+      trade = { id: 'aTradeId', sent: [], received: [] } as unknown as Trade
+    })
+
+    it('should put the execute order failure with the paused copy', () => {
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [call([tradeService, 'fetchTrade'], 'aTradeId'), trade],
+          [call([tradeService, 'accept'], trade, wallet.address), throwError(new Error('execution reverted: EnforcedPause()'))]
+        ])
+        .put(executeOrderFailure(order, nft, getPausedTradeErrorMessage()))
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the execute order with card action of a listing on a paused contract', () => {
+  beforeEach(() => {
+    order = { ...order, paused: true }
+  })
+
+  it('should put the execute order with card failure with the paused copy without opening the card checkout', () => {
+    return expectSaga(orderSaga, tradeService)
+      .put(executeOrderWithCardFailure(getPausedTradeErrorMessage()))
+      .not.call.fn(buyAssetWithCard)
+      .dispatch(executeOrderWithCardRequest(nft, order))
       .run({ silenceTimeout: true })
   })
 })
