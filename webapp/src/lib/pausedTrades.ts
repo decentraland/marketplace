@@ -6,8 +6,9 @@ export type Pausable = { isPaused?: boolean } | null | undefined
 
 export const PAUSED_TRADE_ERROR = 'The marketplace contract of this listing is paused'
 
-// 0xd93c0665 is the selector of OpenZeppelin's EnforcedPause() custom error.
-const PAUSED_REVERT_PATTERNS = [/pausable: paused/i, /enforcedpause/i, /0xd93c0665/i]
+// 0xd93c0665 is the selector of OpenZeppelin's EnforcedPause() custom error, which carries no arguments,
+// so it must be the whole revert data and not a fragment of calldata.
+const PAUSED_REVERT_PATTERNS = [/pausable: paused/i, /enforcedpause/i, /(^|[^0-9a-fx])0xd93c0665(?![0-9a-f])/i]
 
 export class PausedTradeError extends Error {
   constructor() {

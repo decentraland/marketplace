@@ -121,6 +121,36 @@ describe('when checking if an error comes from a paused contract', () => {
     })
   })
 
+  describe('and its revert data is the EnforcedPause selector', () => {
+    beforeEach(() => {
+      error = { message: 'execution reverted', error: { data: '0xd93c0665' } }
+    })
+
+    it('should return true', () => {
+      expect(isPausedTradeError(error)).toBe(true)
+    })
+  })
+
+  describe('and only its calldata contains the EnforcedPause selector', () => {
+    beforeEach(() => {
+      error = { message: 'transaction failed (data="0x961a547e00000000d93c066500000000", reason="insufficient allowance")' }
+    })
+
+    it('should return false', () => {
+      expect(isPausedTradeError(error)).toBe(false)
+    })
+  })
+
+  describe('and its revert data starts with the EnforcedPause selector but carries arguments', () => {
+    beforeEach(() => {
+      error = { message: 'execution reverted', data: '0xd93c06650000000000000000000000000000000000000000000000000000000000000001' }
+    })
+
+    it('should return false', () => {
+      expect(isPausedTradeError(error)).toBe(false)
+    })
+  })
+
   describe('and it is an unrelated error', () => {
     beforeEach(() => {
       error = new Error('insufficient funds')
