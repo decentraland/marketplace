@@ -161,11 +161,25 @@ jobs:
       # cannot be read from package.json, and there is no base version to compute a commit
       # version from -- the action only demands one when it has to compute it.
       #
-      # This is NOT a complete rollback. Records are stored sorted descending by semver and
-      # the worker serves the first one whose percentage covers the user, so naming an older
-      # version here leaves the newer one still serving while this job reports success.
-      # Rolling back also needs the abandoned version set to 0%, which this single-version
-      # dispatch cannot express -- use set-rollout-manual.yaml for that.
+      # One dispatch is NOT a rollback. Records are stored sorted descending by semver and
+      # the worker serves the first one whose percentage covers the user, so EVERY version
+      # that sorts above the target has to be at 0% before the target is reached -- after a
+      # few pushes that is several commit builds, not one.
+      #
+      # The order matters, and only one order is safe. Restore the target to 100% FIRST:
+      # that is invisible to users, because a newer record still sorts ahead and keeps
+      # serving. Then zero the abandoned versions. Zeroing first leaves users whom no
+      # record covers, and `calculateRollout` skips records at 0% and falls back to the
+      # LAST one -- the oldest version still stored -- so a rollback done in that order can
+      # briefly serve something older than either version involved.
+      #
+      # One dispatch at a time, waiting for each run to finish. These share a concurrency
+      # group per environment, and a third dispatch queued behind a running one cancels the
+      # second while it is still pending -- which deploys nothing and reports no failure.
+      #
+      # A version published before this workflow existed has no `.deploy-complete.json`, and
+      # the broker refuses to point at a prefix whose upload it cannot confirm finished. Use
+      # `set-rollout-manual.yaml` for those; it writes KV through the older path, which does not check.
       - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
         with:
           package-name: "@dcl/marketplace-site"
