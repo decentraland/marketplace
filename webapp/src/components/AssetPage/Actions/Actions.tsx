@@ -32,7 +32,7 @@ const Actions = (props: Props) => {
 
   return (
     <div className={styles.container}>
-      {order && (!isOwner || canSell) ? <TradingPausedWarning listing={order} isOwnListing={isOwner} /> : null}
+      {order && !isStolen && (!isOwner || canSell) ? <TradingPausedWarning listing={order} isOwnListing={isOwner} /> : null}
       {order ? (
         isOwner && canSell ? (
           <>
