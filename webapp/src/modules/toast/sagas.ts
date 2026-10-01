@@ -19,10 +19,11 @@ import {
 } from '../favorites/actions'
 import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
+  BUY_ITEM_CROSS_CHAIN_FAILURE,
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
-  BUY_ITEM_FAILURE,
-  BuyItemFailureAction,
+  BuyItemCrossChainFailureAction,
   BUY_ITEM_WITH_CARD_FAILURE,
+  BuyItemWithCardFailureAction,
   BuyItemCrossChainSuccessAction,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   FETCH_ITEMS_FAILURE,
@@ -31,6 +32,7 @@ import {
 import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import {
   EXECUTE_ORDER_WITH_CARD_FAILURE,
+  ExecuteOrderWithCardFailureAction,
   EXECUTE_ORDER_FAILURE,
   ExecuteOrderFailureAction,
   CREATE_ORDER_SUCCESS,
@@ -80,7 +82,8 @@ function* successToastSagas() {
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
-  yield takeEvery(BUY_ITEM_FAILURE, handlePausedTradeFailure)
+  // BUY_ITEM_FAILURE is left to the mint modal, which shows the failure itself.
+  yield takeEvery(BUY_ITEM_CROSS_CHAIN_FAILURE, handlePausedTradeFailure)
   yield takeEvery(ACCEPT_BID_FAILURE, handlePausedTradeFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
@@ -129,8 +132,10 @@ function* handleDeleteListFailure(action: DeleteListFailureAction) {
   yield put(showToast(getDeleteListFailureToast(action.payload.list), 'bottom center'))
 }
 
-function* handleBuyNFTWithCardFailure() {
-  yield put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
+function* handleBuyNFTWithCardFailure(action: BuyItemWithCardFailureAction | ExecuteOrderWithCardFailureAction) {
+  yield put(
+    showToast(isPausedTradeErrorMessage(action.payload.error) ? getTradingPausedToast() : getBuyNFTWithCardErrorToast(), 'bottom center')
+  )
 }
 
 function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
@@ -142,7 +147,7 @@ function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   }
 }
 
-function* handlePausedTradeFailure(action: BuyItemFailureAction | AcceptBidFailureAction) {
+function* handlePausedTradeFailure(action: BuyItemCrossChainFailureAction | AcceptBidFailureAction) {
   if (isPausedTradeErrorMessage(action.payload.error)) {
     yield put(showToast(getTradingPausedToast(), 'bottom center'))
   }
