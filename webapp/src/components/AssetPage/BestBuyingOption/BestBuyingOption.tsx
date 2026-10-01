@@ -9,6 +9,7 @@ import mintingIcon from '../../../images/minting.png'
 import noListings from '../../../images/noListings.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { isPaused } from '../../../lib/pausedTrades'
 import { isStolenToken } from '../../../lib/stolenNfts'
 import { AssetType } from '../../../modules/asset/types'
 import { isNFT } from '../../../modules/asset/utils'
@@ -21,6 +22,9 @@ import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
+
+// Paused bids can't be accepted, so the highest offer is the first active one among the top few.
+const HIGHEST_OFFER_CANDIDATES = 10
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
@@ -75,11 +79,11 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   tokenId: response.data[0].tokenId,
                   status: ListingStatus.OPEN,
                   sortBy: BidSortBy.MOST_EXPENSIVE,
-                  limit: 1
+                  limit: HIGHEST_OFFER_CANDIDATES
                 })
                 .then(({ results }) => {
                   setIsLoading(false)
-                  setMostExpensiveBid(results[0])
+                  setMostExpensiveBid(results.find(bid => !isPaused(bid)) ?? null)
                 })
                 .catch(error => {
                   console.error(error)

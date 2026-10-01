@@ -1,4 +1,5 @@
 import { createRef, RefObject } from 'react'
+import { screen } from '@testing-library/react'
 import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
 import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -160,6 +161,50 @@ describe('Best Buying Option', () => {
       const { findByTestId } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       expect(await findByTestId('buy-nft-buttons')).toBeInTheDocument()
+    })
+  })
+
+  describe('when the most expensive bids include one on a paused marketplace contract', () => {
+    let pausedBid: Bid
+    let activeBid: Bid
+    let reference: RefObject<HTMLDivElement>
+
+    beforeEach(async () => {
+      Date.now = () => 1671033414000
+      asset.available = 0
+      pausedBid = { ...bid, id: 'paused', price: '9000000000000000000', paused: true }
+      activeBid = { ...bid, id: 'active', price: '3000000000000000000' }
+      ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({ data: [orderResponse], total: 1 })
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({ results: [pausedBid, activeBid], total: 2 })
+      reference = createRef()
+      renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
+      await screen.findByText(t('best_buying_option.buy_listing.view_listing'))
+    })
+
+    it('should show the most expensive active bid as the highest offer', () => {
+      expect(screen.getByText(formatWeiMANA(activeBid.price))).toBeInTheDocument()
+    })
+
+    it('should not show the paused bid', () => {
+      expect(screen.queryByText(formatWeiMANA(pausedBid.price))).not.toBeInTheDocument()
+    })
+  })
+
+  describe('when every most expensive bid is on a paused marketplace contract', () => {
+    let reference: RefObject<HTMLDivElement>
+
+    beforeEach(async () => {
+      Date.now = () => 1671033414000
+      asset.available = 0
+      ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({ data: [orderResponse], total: 1 })
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({ results: [{ ...bid, paused: true }], total: 1 })
+      reference = createRef()
+      renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
+      await screen.findByText(t('best_buying_option.buy_listing.view_listing'))
+    })
+
+    it('should show that there is no offer', () => {
+      expect(screen.getByText(t('best_buying_option.buy_listing.no_offer'))).toBeInTheDocument()
     })
   })
 
