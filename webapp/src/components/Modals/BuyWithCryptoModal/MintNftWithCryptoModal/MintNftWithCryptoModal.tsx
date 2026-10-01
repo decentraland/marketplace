@@ -144,7 +144,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
         name={name}
         isLoading={false}
         title={t('trading_paused_warning.title')}
-        description={t('trading_paused_warning.visitor')}
+        description={t('trading_paused_warning.item_visitor')}
         onClose={onClose}
       />
     )

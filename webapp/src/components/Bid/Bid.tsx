@@ -149,7 +149,12 @@ const Bid = (props: Props) => {
               {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} listingCreatedAt={bid.createdAt} /> : null}
               <StolenNFTWarning asset={asset} className="stolen-nft-warning" />
               {isBidder || isSeller ? (
-                <TradingPausedWarning listing={bid} isOwnListing={isBidder} variant={TradingPausedWarningVariant.BID} />
+                <TradingPausedWarning
+                  listing={bid}
+                  isOwnListing={isBidder}
+                  variant={TradingPausedWarningVariant.BID}
+                  className="trading-paused-warning"
+                />
               ) : null}
             </>
           )}

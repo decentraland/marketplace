@@ -52,6 +52,17 @@ describe('when rendering the trading paused warning', () => {
       })
     })
 
+    describe('and it is a primary sale shown to a buyer', () => {
+      beforeEach(() => {
+        props = { listing: { paused: true }, variant: TradingPausedWarningVariant.ITEM }
+        renderWithProviders(<TradingPausedWarning {...props} />)
+      })
+
+      it('should render an alert explaining that purchases of the item are unavailable', () => {
+        expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.item_visitor'))
+      })
+    })
+
     describe('and it is a bid shown to the seller', () => {
       beforeEach(() => {
         props = { listing: { paused: true }, variant: TradingPausedWarningVariant.BID }

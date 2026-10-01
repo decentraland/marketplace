@@ -188,8 +188,8 @@ describe('when the item is listed on a paused marketplace contract', () => {
     await screen.findByText('buy')
   })
 
-  it('should explain that purchases of the listing are unavailable', () => {
-    expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.visitor'))
+  it('should explain that purchases of the item are unavailable', () => {
+    expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.item_visitor'))
   })
 
   it('should keep the buy button visible but disabled', () => {
@@ -211,6 +211,10 @@ describe('when the NFT order is on a paused marketplace contract', () => {
     mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', paused: true } as unknown as Order
     renderButtons('/', { assetType: AssetType.NFT })
     await screen.findByText('buy')
+  })
+
+  it('should explain that purchases of the listing are unavailable', () => {
+    expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.visitor'))
   })
 
   it('should keep the buy button visible but disabled', () => {

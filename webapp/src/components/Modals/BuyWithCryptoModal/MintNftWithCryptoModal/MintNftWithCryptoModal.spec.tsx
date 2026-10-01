@@ -188,3 +188,32 @@ describe('when a mobile-IAP checkout is opened without the credits selection', (
     expect(screen.getByTestId('confirmation')).toBeInTheDocument()
   })
 })
+
+describe('when the item is sold through a paused marketplace contract', () => {
+  let item: Item
+
+  beforeEach(() => {
+    mockedUseCheckoutPriceInMana.mockReturnValue({ status: 'ready', manaWei: '1', isUSDPegged: false } as CheckoutPrice)
+    item = {
+      price: '1',
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET,
+      tradeId: 'a-trade',
+      tradeContractAddress: '0xmarketplace',
+      paused: true
+    } as Item
+    renderModal({ metadata: { item, useCredits: false } } as Partial<Props>)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('should block the checkout instead of showing the confirmation', () => {
+    expect(screen.queryByTestId('confirmation')).not.toBeInTheDocument()
+  })
+
+  it('should explain that purchases of the item are unavailable', () => {
+    expect(screen.getByText(t('trading_paused_warning.item_visitor'))).toBeInTheDocument()
+  })
+})

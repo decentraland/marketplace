@@ -18,7 +18,7 @@ import { getTransakPurchase, isTransakSupported } from '../../../../modules/tran
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
 import { getMinSaleValueInWei } from '../../../BuyPage/utils'
-import TradingPausedWarning from '../../../TradingPausedWarning'
+import TradingPausedWarning, { TradingPausedWarningVariant } from '../../../TradingPausedWarning'
 import UseCreditsToggle from '../UseCreditsToggle'
 import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
@@ -123,7 +123,10 @@ const BuyNFTButtons = ({
           if (isPaused(listing)) {
             return (
               <>
-                <TradingPausedWarning listing={listing} />
+                <TradingPausedWarning
+                  listing={listing}
+                  variant={isNFT(asset) ? TradingPausedWarningVariant.LISTING : TradingPausedWarningVariant.ITEM}
+                />
                 {isIAP ? (
                   <Button primary fluid className={styles.buyWithCryptoButton} disabled>
                     <span>{t('asset_page.actions.checkout')}</span>

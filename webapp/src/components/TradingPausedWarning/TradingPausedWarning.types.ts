@@ -2,6 +2,8 @@ import { Pausable } from '../../lib/pausedTrades'
 
 export enum TradingPausedWarningVariant {
   LISTING = 'listing',
+  // A primary sale, sold straight from the collection rather than through a seller's listing.
+  ITEM = 'item',
   BID = 'bid'
 }
 

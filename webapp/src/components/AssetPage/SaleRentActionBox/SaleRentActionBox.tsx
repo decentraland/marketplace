@@ -120,7 +120,6 @@ const SaleRentActionBox = ({
     <div className={styles.main}>
       <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} listingCreatedAt={order?.createdAt} />
       <StolenNFTWarning asset={nft} />
-      <TradingPausedWarning listing={order} isOwnListing={isOwner} />
       {isRentalOpen && maxPriceOfPeriods && !isStolen ? (
         <div className={styles.viewSelector}>
           <button
@@ -207,6 +206,7 @@ const SaleRentActionBox = ({
                     showTooltip
                   />
                 </div>
+                <TradingPausedWarning listing={order} isOwnListing={isOwner} className={styles.pausedWarning} />
               </div>
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (
               <div className={styles.upperMessage}>

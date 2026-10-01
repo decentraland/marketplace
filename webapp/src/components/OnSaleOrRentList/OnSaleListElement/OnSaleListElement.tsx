@@ -78,7 +78,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   position="top center"
                   trigger={
                     <div className="warningExpiration">
-                      <Icon name="pause circle" className={'warningExpiration'} /> {t('trading_paused_warning.title')}
+                      <Icon name="pause circle" className={'warningExpiration'} /> {t('trading_paused_warning.label')}
                     </div>
                   }
                   on="hover"

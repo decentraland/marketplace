@@ -1720,7 +1720,9 @@
   },
   "trading_paused_warning": {
     "title": "Compras temporalmente no disponibles",
+    "label": "Pausada",
     "visitor": "Las compras de esta publicación no están disponibles temporalmente porque el contrato del marketplace en el que se creó ha sido pausado.",
+    "item_visitor": "Las compras de este artículo no están disponibles temporalmente porque el contrato del marketplace a través del cual se vende ha sido pausado.",
     "owner": "Tu publicación se creó en un contrato del marketplace que ha sido pausado, por lo que no se puede comprar. Cancélala y vuelve a publicarla.",
     "bid_seller": "Esta oferta se hizo en un contrato del marketplace que ha sido pausado, por lo que no se puede aceptar por ahora.",
     "bid_bidder": "Tu oferta se hizo en un contrato del marketplace que ha sido pausado, por lo que no se puede aceptar. Cancélala y haz una nueva oferta.",

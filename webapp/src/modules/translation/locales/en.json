@@ -1758,7 +1758,9 @@
   },
   "trading_paused_warning": {
     "title": "Purchases temporarily unavailable",
+    "label": "Paused",
     "visitor": "Purchases of this listing are temporarily unavailable because the marketplace contract it was created on has been paused.",
+    "item_visitor": "Purchases of this item are temporarily unavailable because the marketplace contract it's sold through has been paused.",
     "owner": "Your listing was created on a marketplace contract that has been paused, so it can't be bought. Cancel it and list it again.",
     "bid_seller": "This offer was made on a marketplace contract that has been paused, so it can't be accepted right now.",
     "bid_bidder": "Your offer was made on a marketplace contract that has been paused, so it can't be accepted. Cancel it and make a new offer.",

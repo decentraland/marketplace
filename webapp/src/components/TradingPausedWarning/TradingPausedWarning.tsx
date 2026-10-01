@@ -8,6 +8,7 @@ import styles from './TradingPausedWarning.module.css'
 
 const MESSAGE_KEYS: Record<TradingPausedWarningVariant, { own: string; other: string }> = {
   [TradingPausedWarningVariant.LISTING]: { own: 'trading_paused_warning.owner', other: 'trading_paused_warning.visitor' },
+  [TradingPausedWarningVariant.ITEM]: { own: 'trading_paused_warning.owner', other: 'trading_paused_warning.item_visitor' },
   [TradingPausedWarningVariant.BID]: { own: 'trading_paused_warning.bid_bidder', other: 'trading_paused_warning.bid_seller' }
 }
 
