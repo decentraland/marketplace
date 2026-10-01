@@ -1756,6 +1756,14 @@
     "visitor": "This listing is no longer available. The seller needs to recreate it.",
     "update_listing": "Update listing"
   },
+  "trading_paused_warning": {
+    "title": "Purchases temporarily unavailable",
+    "visitor": "Purchases of this listing are temporarily unavailable because the marketplace contract it was created on has been paused.",
+    "owner": "Your listing was created on a marketplace contract that has been paused, so it can't be bought. Cancel it and list it again.",
+    "bid_seller": "This offer was made on a marketplace contract that has been paused, so it can't be accepted right now.",
+    "bid_bidder": "Your offer was made on a marketplace contract that has been paused, so it can't be accepted. Cancel it and make a new offer.",
+    "error": "This listing was created on a marketplace contract that has been paused, so it can't be completed right now."
+  },
   "stolen_nft_warning": {
     "label": "STOLEN NFTS CAN'T BE BOUGHT",
     "cannot_be_bought": "This item was reported as stolen and cannot be bought."
