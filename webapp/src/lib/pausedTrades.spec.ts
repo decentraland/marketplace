@@ -35,7 +35,7 @@ describe('when checking if a listing is paused', () => {
 
   describe('and the listing is flagged as not paused', () => {
     beforeEach(() => {
-      listing = { paused: false }
+      listing = { isPaused: false }
     })
 
     it('should return false', () => {
@@ -45,7 +45,7 @@ describe('when checking if a listing is paused', () => {
 
   describe('and the listing is flagged as paused', () => {
     beforeEach(() => {
-      listing = { paused: true }
+      listing = { isPaused: true }
     })
 
     it('should return true', () => {
@@ -59,7 +59,7 @@ describe('when asserting that listings are not paused', () => {
 
   describe('and none of them is paused', () => {
     beforeEach(() => {
-      listings = [{ paused: false }, undefined, {}]
+      listings = [{ isPaused: false }, undefined, {}]
     })
 
     it('should not throw', () => {
@@ -69,7 +69,7 @@ describe('when asserting that listings are not paused', () => {
 
   describe('and one of them is paused', () => {
     beforeEach(() => {
-      listings = [{ paused: false }, { paused: true }]
+      listings = [{ isPaused: false }, { isPaused: true }]
     })
 
     it('should throw a paused trade error', () => {
@@ -196,7 +196,7 @@ describe('when checking if a failure message is the paused trade copy', () => {
 })
 
 describe('when checking if an address has an active bid', () => {
-  let bids: { bidder: string; paused?: boolean }[]
+  let bids: { bidder: string; isPaused?: boolean }[]
   let address: string | null | undefined
 
   beforeEach(() => {
@@ -215,7 +215,7 @@ describe('when checking if an address has an active bid', () => {
 
   describe('and the address only has a bid on a paused contract', () => {
     beforeEach(() => {
-      bids = [{ bidder: '0xbidder', paused: true }]
+      bids = [{ bidder: '0xbidder', isPaused: true }]
     })
 
     it('should return false', () => {
@@ -225,7 +225,7 @@ describe('when checking if an address has an active bid', () => {
 
   describe('and the address has a bid on an active contract', () => {
     beforeEach(() => {
-      bids = [{ bidder: '0xbidder', paused: true }, { bidder: '0xbidder' }]
+      bids = [{ bidder: '0xbidder', isPaused: true }, { bidder: '0xbidder' }]
     })
 
     it('should return true', () => {

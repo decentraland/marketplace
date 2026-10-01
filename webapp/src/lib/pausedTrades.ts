@@ -2,7 +2,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from './error'
 
 // Orders, bids, items and trades flag listings settled by a paused marketplace contract.
-export type Pausable = { paused?: boolean } | null | undefined
+export type Pausable = { isPaused?: boolean } | null | undefined
 
 export const PAUSED_TRADE_ERROR = 'The marketplace contract of this listing is paused'
 
@@ -17,7 +17,7 @@ export class PausedTradeError extends Error {
 }
 
 export function isPaused(entity: Pausable): boolean {
-  return !!entity && entity.paused === true
+  return !!entity && entity.isPaused === true
 }
 
 export function assertNotPaused(...entities: Pausable[]): void {

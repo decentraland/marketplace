@@ -61,7 +61,7 @@ describe('BuyNFTBox', () => {
 
     describe('and the buyer only has a bid on a paused marketplace contract', () => {
       beforeEach(() => {
-        props.bids = [{ bidder: '0xbuyer', paused: true } as Bid]
+        props.bids = [{ bidder: '0xbuyer', isPaused: true } as Bid]
       })
 
       it('should let the buyer make a new offer', () => {

@@ -22,9 +22,9 @@ describe('when rendering the offer of the connected address', () => {
       network: Network.MATIC,
       createdAt: 0,
       expiresAt: 0,
-      paused: true
+      isPaused: true
     } as Bid
-    activeBid = { ...pausedBid, id: 'active-bid', tradeId: 'active-trade', price: '3000000000000000000', paused: false }
+    activeBid = { ...pausedBid, id: 'active-bid', tradeId: 'active-trade', price: '3000000000000000000', isPaused: false }
     props = {
       asset: { contractAddress: '0xcontract', tokenId: '1' } as Asset,
       address: '0xbidder',

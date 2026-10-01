@@ -527,7 +527,7 @@ describe('when opening Transak for a listing on a paused contract', () => {
 
   describe('and the order is flagged as paused', () => {
     beforeEach(() => {
-      order = { ...mockOrder, tradeId: 'a-trade', paused: true }
+      order = { ...mockOrder, tradeId: 'a-trade', isPaused: true }
     })
 
     it('should dispatch the failure without fetching the trade', () => {
@@ -549,7 +549,7 @@ describe('when opening Transak for a listing on a paused contract', () => {
   describe('and the order is not flagged but its trade is', () => {
     beforeEach(() => {
       order = { ...mockOrder, tradeId: 'a-trade' }
-      trade = { ...mockTrade, paused: true }
+      trade = { ...mockTrade, isPaused: true }
     })
 
     it('should dispatch the failure without opening the widget', () => {

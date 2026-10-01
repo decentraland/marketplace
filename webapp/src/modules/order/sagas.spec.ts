@@ -910,7 +910,7 @@ describe('when buying an estate with credits on a legacy order', () => {
 describe('when handling the execute order request action of a listing on a paused contract', () => {
   describe('and the order is flagged as paused', () => {
     beforeEach(() => {
-      order = { ...order, paused: true }
+      order = { ...order, isPaused: true }
     })
 
     it('should put the execute order failure with the paused copy without trying to buy it', () => {
@@ -928,7 +928,7 @@ describe('when handling the execute order request action of a listing on a pause
 
     beforeEach(() => {
       order = { ...order, tradeId: 'aTradeId' }
-      trade = { id: 'aTradeId', paused: true, sent: [], received: [] } as unknown as Trade
+      trade = { id: 'aTradeId', isPaused: true, sent: [], received: [] } as unknown as Trade
     })
 
     it('should put the execute order failure with the paused copy without accepting the trade', () => {
@@ -972,7 +972,7 @@ describe('when handling the execute order request action of a listing on a pause
 
 describe('when handling the execute order with card action of a listing on a paused contract', () => {
   beforeEach(() => {
-    order = { ...order, paused: true }
+    order = { ...order, isPaused: true }
   })
 
   it('should put the execute order with card failure with the paused copy without opening the card checkout', () => {

@@ -59,7 +59,7 @@ describe('SaleRentActionBox', () => {
 
   describe('when the order is on a paused marketplace contract', () => {
     beforeEach(() => {
-      props.order = { ...props.order, paused: true } as Order
+      props.order = { ...props.order, isPaused: true } as Order
     })
 
     describe('and it is shown to a buyer', () => {

@@ -22,7 +22,7 @@ describe('when formatting the bids of an asset for its table', () => {
 
   describe('and the seller sees a bid on a paused marketplace contract', () => {
     beforeEach(() => {
-      bid = { ...bid, paused: true }
+      bid = { ...bid, isPaused: true }
       const [row] = formatDataToTable([bid], onAccept, '0xseller')
       renderWithProviders(<>{row[t('listings_table.offer')]}</>)
     })
@@ -34,7 +34,7 @@ describe('when formatting the bids of an asset for its table', () => {
 
   describe('and the bidder sees their own bid on a paused marketplace contract', () => {
     beforeEach(() => {
-      bid = { ...bid, paused: true }
+      bid = { ...bid, isPaused: true }
       const [row] = formatDataToTable([bid], onAccept, '0xbidder')
       renderWithProviders(<>{row[t('listings_table.offer')]}</>)
     })
@@ -57,7 +57,7 @@ describe('when formatting the bids of an asset for its table', () => {
 
   describe('and a visitor sees a bid on a paused marketplace contract', () => {
     beforeEach(() => {
-      bid = { ...bid, paused: true }
+      bid = { ...bid, isPaused: true }
       const [row] = formatDataToTable([bid], onAccept, '0xvisitor')
       renderWithProviders(<>{row[t('listings_table.offer')]}</>)
     })

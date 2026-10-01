@@ -899,7 +899,7 @@ describe('when handling the buy items request action of a listing on a paused co
 
   describe('and the item is flagged as paused', () => {
     beforeEach(() => {
-      pausedItem = { ...item, tradeId: 'aTradeId', paused: true }
+      pausedItem = { ...item, tradeId: 'aTradeId', isPaused: true }
     })
 
     it('should dispatch the failure with the paused copy without accepting the trade', () => {
@@ -914,7 +914,7 @@ describe('when handling the buy items request action of a listing on a paused co
   describe('and the item is not flagged but its trade is', () => {
     beforeEach(() => {
       pausedItem = { ...item, tradeId: 'aTradeId' }
-      trade = { id: 'aTradeId', paused: true } as unknown as Trade
+      trade = { id: 'aTradeId', isPaused: true } as unknown as Trade
     })
 
     it('should dispatch the failure with the paused copy without accepting the trade', () => {
@@ -959,7 +959,7 @@ describe('when handling the buy item cross chain request action of a listing on 
 
   beforeEach(() => {
     nft = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1' } as unknown as Item
-    order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', paused: true } as Order
+    order = { chainId: ChainId.MATIC_MAINNET, contractAddress: '0xcontract', tokenId: '1', price: '1', isPaused: true } as Order
     route = { route: { params: { fromChain: '1', toChain: '137' } } } as unknown as Route
   })
 
@@ -976,7 +976,7 @@ describe('when handling the buy item with card request action of a listing on a 
   let pausedItem: Item
 
   beforeEach(() => {
-    pausedItem = { ...item, tradeId: 'aTradeId', paused: true }
+    pausedItem = { ...item, tradeId: 'aTradeId', isPaused: true }
   })
 
   it('should dispatch the card failure with the paused copy without opening the card checkout', () => {

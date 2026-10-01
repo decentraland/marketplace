@@ -172,7 +172,7 @@ describe('Best Buying Option', () => {
     beforeEach(async () => {
       Date.now = () => 1671033414000
       asset.available = 0
-      pausedBid = { ...bid, id: 'paused', price: '9000000000000000000', paused: true }
+      pausedBid = { ...bid, id: 'paused', price: '9000000000000000000', isPaused: true }
       activeBid = { ...bid, id: 'active', price: '3000000000000000000' }
       ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({ data: [orderResponse], total: 1 })
       ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({ results: [pausedBid, activeBid], total: 2 })
@@ -197,7 +197,7 @@ describe('Best Buying Option', () => {
       Date.now = () => 1671033414000
       asset.available = 0
       ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({ data: [orderResponse], total: 1 })
-      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({ results: [{ ...bid, paused: true }], total: 1 })
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({ results: [{ ...bid, isPaused: true }], total: 1 })
       reference = createRef()
       renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
       await screen.findByText(t('best_buying_option.buy_listing.view_listing'))

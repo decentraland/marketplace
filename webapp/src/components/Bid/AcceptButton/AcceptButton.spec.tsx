@@ -45,7 +45,7 @@ describe('when rendering the accept bid button', () => {
 
   describe('and the bid is on a paused marketplace contract', () => {
     beforeEach(async () => {
-      props.bid = { ...props.bid, paused: true }
+      props.bid = { ...props.bid, isPaused: true }
       renderWithProviders(<AcceptButton {...props} />)
       await waitFor(() => expect(mockedIsInsufficientMANA).toHaveBeenCalled())
     })

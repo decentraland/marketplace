@@ -208,7 +208,7 @@ describe('when the order is on a paused marketplace contract', () => {
       chainId: ChainId.ETHEREUM_MAINNET,
       marketplaceAddress: '0xmarketplace',
       tradeId: 'a-trade',
-      paused: true
+      isPaused: true
     } as Order
     nft = {
       id: 'a-parcel',

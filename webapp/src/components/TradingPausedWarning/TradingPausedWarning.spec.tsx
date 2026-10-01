@@ -9,7 +9,7 @@ describe('when rendering the trading paused warning', () => {
 
   describe('and the listing is not paused', () => {
     beforeEach(() => {
-      props = { listing: { paused: false } }
+      props = { listing: { isPaused: false } }
       renderWithProviders(<TradingPausedWarning {...props} />)
     })
 
@@ -32,7 +32,7 @@ describe('when rendering the trading paused warning', () => {
   describe('and the listing is paused', () => {
     describe('and it is shown to a buyer', () => {
       beforeEach(() => {
-        props = { listing: { paused: true } }
+        props = { listing: { isPaused: true } }
         renderWithProviders(<TradingPausedWarning {...props} />)
       })
 
@@ -43,7 +43,7 @@ describe('when rendering the trading paused warning', () => {
 
     describe('and it is shown to the lister', () => {
       beforeEach(() => {
-        props = { listing: { paused: true }, isOwnListing: true }
+        props = { listing: { isPaused: true }, isOwnListing: true }
         renderWithProviders(<TradingPausedWarning {...props} />)
       })
 
@@ -54,7 +54,7 @@ describe('when rendering the trading paused warning', () => {
 
     describe('and it is a primary sale shown to a buyer', () => {
       beforeEach(() => {
-        props = { listing: { paused: true }, variant: TradingPausedWarningVariant.ITEM }
+        props = { listing: { isPaused: true }, variant: TradingPausedWarningVariant.ITEM }
         renderWithProviders(<TradingPausedWarning {...props} />)
       })
 
@@ -65,7 +65,7 @@ describe('when rendering the trading paused warning', () => {
 
     describe('and it is a bid shown to the seller', () => {
       beforeEach(() => {
-        props = { listing: { paused: true }, variant: TradingPausedWarningVariant.BID }
+        props = { listing: { isPaused: true }, variant: TradingPausedWarningVariant.BID }
         renderWithProviders(<TradingPausedWarning {...props} />)
       })
 
@@ -76,7 +76,7 @@ describe('when rendering the trading paused warning', () => {
 
     describe('and it is a bid shown to the bidder', () => {
       beforeEach(() => {
-        props = { listing: { paused: true }, variant: TradingPausedWarningVariant.BID, isOwnListing: true }
+        props = { listing: { isPaused: true }, variant: TradingPausedWarningVariant.BID, isOwnListing: true }
         renderWithProviders(<TradingPausedWarning {...props} />)
       })
 

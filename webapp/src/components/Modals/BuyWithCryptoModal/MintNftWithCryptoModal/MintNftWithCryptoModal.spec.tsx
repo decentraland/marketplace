@@ -200,7 +200,7 @@ describe('when the item is sold through a paused marketplace contract', () => {
       chainId: ChainId.MATIC_MAINNET,
       tradeId: 'a-trade',
       tradeContractAddress: '0xmarketplace',
-      paused: true
+      isPaused: true
     } as Item
     renderModal({ metadata: { item, useCredits: false } } as Partial<Props>)
   })

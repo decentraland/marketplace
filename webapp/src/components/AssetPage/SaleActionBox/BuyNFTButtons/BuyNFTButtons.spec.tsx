@@ -183,7 +183,7 @@ describe('when the item is listed on a paused marketplace contract', () => {
   let onBuyWithCrypto: jest.Mock
 
   beforeEach(async () => {
-    mockProvidedAsset = { ...ITEM, tradeId: 'a-trade', paused: true } as unknown as Asset
+    mockProvidedAsset = { ...ITEM, tradeId: 'a-trade', isPaused: true } as unknown as Asset
     ;({ onBuyWithCrypto } = renderButtons('/?buyWithCrypto=true'))
     await screen.findByText('buy')
   })
@@ -208,7 +208,7 @@ describe('when the item is listed on a paused marketplace contract', () => {
 describe('when the NFT order is on a paused marketplace contract', () => {
   beforeEach(async () => {
     mockProvidedAsset = { ...ITEM, tokenId: '1', itemId: undefined } as unknown as Asset
-    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', paused: true } as unknown as Order
+    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', isPaused: true } as unknown as Order
     renderButtons('/', { assetType: AssetType.NFT })
     await screen.findByText('buy')
   })
@@ -225,7 +225,7 @@ describe('when the NFT order is on a paused marketplace contract', () => {
 describe('when the NFT order is on an active marketplace contract', () => {
   beforeEach(async () => {
     mockProvidedAsset = { ...ITEM, tokenId: '1', itemId: undefined } as unknown as Asset
-    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', paused: false } as unknown as Order
+    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', isPaused: false } as unknown as Order
     renderButtons('/', { assetType: AssetType.NFT })
     await screen.findByText('buy')
   })

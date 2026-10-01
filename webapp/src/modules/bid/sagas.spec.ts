@@ -784,7 +784,7 @@ describe('when handling the accepting a bid action of a bid on a paused contract
 
   describe('and the bid is flagged as paused', () => {
     beforeEach(() => {
-      bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade', paused: true } as Bid
+      bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade', isPaused: true } as Bid
     })
 
     it('should dispatch the accept bid failure with the paused copy without fetching the trade', () => {
@@ -804,7 +804,7 @@ describe('when handling the accepting a bid action of a bid on a paused contract
   describe('and the bid is not flagged but its trade is', () => {
     beforeEach(() => {
       bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade' } as Bid
-      trade = { id: 'a-trade', paused: true } as unknown as Trade
+      trade = { id: 'a-trade', isPaused: true } as unknown as Trade
     })
 
     it('should dispatch the accept bid failure with the paused copy without accepting the trade', () => {

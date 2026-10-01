@@ -40,7 +40,7 @@ describe('when off chain bids are enabled', () => {
 
     describe('and the user only has a bid on a paused marketplace contract', () => {
       beforeEach(() => {
-        props = { ...props, item: { ...props.item, available: 2 } as Item, bids: [{ bidder: '0xuser', paused: true } as Bid] }
+        props = { ...props, item: { ...props.item, available: 2 } as Item, bids: [{ bidder: '0xuser', isPaused: true } as Bid] }
       })
 
       afterEach(() => {
