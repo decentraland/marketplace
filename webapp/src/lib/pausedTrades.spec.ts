@@ -2,6 +2,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   assertNotPaused,
   getTradeFailureMessage,
+  hasActiveBidFrom,
   isPaused,
   isPausedTradeError,
   isPausedTradeErrorMessage,
@@ -190,6 +191,56 @@ describe('when checking if a failure message is the paused trade copy', () => {
 
     it('should return false', () => {
       expect(isPausedTradeErrorMessage(message)).toBe(false)
+    })
+  })
+})
+
+describe('when checking if an address has an active bid', () => {
+  let bids: { bidder: string; paused?: boolean }[]
+  let address: string | null | undefined
+
+  beforeEach(() => {
+    address = '0xbidder'
+  })
+
+  describe('and the address has no bids', () => {
+    beforeEach(() => {
+      bids = [{ bidder: '0xsomeone-else' }]
+    })
+
+    it('should return false', () => {
+      expect(hasActiveBidFrom(bids, address)).toBe(false)
+    })
+  })
+
+  describe('and the address only has a bid on a paused contract', () => {
+    beforeEach(() => {
+      bids = [{ bidder: '0xbidder', paused: true }]
+    })
+
+    it('should return false', () => {
+      expect(hasActiveBidFrom(bids, address)).toBe(false)
+    })
+  })
+
+  describe('and the address has a bid on an active contract', () => {
+    beforeEach(() => {
+      bids = [{ bidder: '0xbidder', paused: true }, { bidder: '0xbidder' }]
+    })
+
+    it('should return true', () => {
+      expect(hasActiveBidFrom(bids, address)).toBe(true)
+    })
+  })
+
+  describe('and there is no address', () => {
+    beforeEach(() => {
+      bids = [{ bidder: '0xbidder' }]
+      address = undefined
+    })
+
+    it('should return false', () => {
+      expect(hasActiveBidFrom(bids, address)).toBe(false)
     })
   })
 })

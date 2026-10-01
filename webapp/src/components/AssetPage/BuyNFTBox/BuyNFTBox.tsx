@@ -7,6 +7,7 @@ import clock from '../../../images/clock.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { hasActiveBidFrom } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { AssetType } from '../../../modules/asset/types'
 import { useIsIAP } from '../../../modules/iap/useIAP'
@@ -26,7 +27,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
   const currentOrder = useGetCurrentOrder()
-  const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
+  const alreadyBid = useMemo(() => hasActiveBidFrom(bids, address), [bids, address])
   const isOwner = nft && nft?.owner === address
   const isStolen = isStolenNFT(nft)
   // A stolen NFT's open listing must never surface a price or any purchase UI.

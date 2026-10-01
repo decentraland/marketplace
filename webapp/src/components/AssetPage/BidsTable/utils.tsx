@@ -1,6 +1,6 @@
 import { Bid } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Mana, Popup } from 'decentraland-ui'
+import { Button, Icon, Mana, Popup } from 'decentraland-ui'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { isPaused } from '../../../lib/pausedTrades'
@@ -56,6 +56,18 @@ export const formatDataToTable = (
                 {t('offers_table.accept')}
               </Button>
             )
+          ) : address && address === bid.bidder && isPaused(bid) ? (
+            <Popup
+              content={t('trading_paused_warning.bid_bidder')}
+              position="top center"
+              on="hover"
+              trigger={
+                <span className={styles.pausedBadge} data-testid="paused-bid-badge">
+                  <Icon name="pause circle" />
+                  {t('trading_paused_warning.label')}
+                </span>
+              }
+            />
           ) : null}
         </div>
       )

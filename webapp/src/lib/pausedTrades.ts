@@ -26,6 +26,11 @@ export function assertNotPaused(...entities: Pausable[]): void {
   }
 }
 
+// A bid on a paused contract can't be accepted, so it doesn't stop its bidder from making a new one.
+export function hasActiveBidFrom(bids: ({ bidder: string } & NonNullable<Pausable>)[], address: string | null | undefined): boolean {
+  return !!address && bids.some(bid => bid.bidder === address && !isPaused(bid))
+}
+
 function collectErrorTexts(error: unknown, depth = 0): string[] {
   if (depth > 3 || error === null || error === undefined) return []
   if (typeof error === 'string') return [error]

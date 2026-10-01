@@ -9,7 +9,10 @@ import { Props } from './BuyNFTBox.types'
 
 jest.mock('../../../modules/order/hooks')
 jest.mock('../SaleActionBox/BuyNFTButtons', () => ({ BuyNFTButtons: () => <div data-testid="buy-nft-buttons" /> }))
-jest.mock('../../BidButton', () => ({ __esModule: true, default: () => <div data-testid="bid-button" /> }))
+jest.mock('../../BidButton', () => ({
+  __esModule: true,
+  default: ({ alreadyBid }: { alreadyBid: boolean }) => <div data-testid="bid-button" data-already-bid={String(alreadyBid)} />
+}))
 jest.mock('../PriceComponent', () => ({ __esModule: true, default: () => <div data-testid="price-component" /> }))
 
 const mockedUseGetCurrentOrder = useGetCurrentOrder as jest.MockedFunction<typeof useGetCurrentOrder>
@@ -53,6 +56,28 @@ describe('BuyNFTBox', () => {
         expect(getByTestId('price-component')).toBeInTheDocument()
         expect(getByTestId('buy-nft-buttons')).toBeInTheDocument()
         expect(getByTestId('bid-button')).toBeInTheDocument()
+      })
+    })
+
+    describe('and the buyer only has a bid on a paused marketplace contract', () => {
+      beforeEach(() => {
+        props.bids = [{ bidder: '0xbuyer', paused: true } as Bid]
+      })
+
+      it('should let the buyer make a new offer', () => {
+        const { getByTestId } = renderWithProviders(<BuyNFTBox {...props} />)
+        expect(getByTestId('bid-button')).toHaveAttribute('data-already-bid', 'false')
+      })
+    })
+
+    describe('and the buyer has a bid on an active marketplace contract', () => {
+      beforeEach(() => {
+        props.bids = [{ bidder: '0xbuyer' } as Bid]
+      })
+
+      it('should lock the offer button', () => {
+        const { getByTestId } = renderWithProviders(<BuyNFTBox {...props} />)
+        expect(getByTestId('bid-button')).toHaveAttribute('data-already-bid', 'true')
       })
     })
 

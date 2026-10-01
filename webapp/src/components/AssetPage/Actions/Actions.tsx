@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
-import { isPaused } from '../../../lib/pausedTrades'
+import { hasActiveBidFrom, isPaused } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
@@ -28,7 +28,7 @@ const Actions = (props: Props) => {
 
   const canSell = orderService.canSell()
   const isStolen = isStolenNFT(nft)
-  const canBid = !isOwner && isBiddable && !isStolen && (!wallet || !bids.some(bid => bid.bidder === wallet.address))
+  const canBid = !isOwner && isBiddable && !isStolen && !hasActiveBidFrom(bids, wallet?.address)
 
   return (
     <div className={styles.container}>

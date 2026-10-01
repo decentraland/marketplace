@@ -32,6 +32,41 @@ describe('when formatting the bids of an asset for its table', () => {
     })
   })
 
+  describe('and the bidder sees their own bid on a paused marketplace contract', () => {
+    beforeEach(() => {
+      bid = { ...bid, paused: true }
+      const [row] = formatDataToTable([bid], onAccept, '0xbidder')
+      renderWithProviders(<>{row[t('listings_table.offer')]}</>)
+    })
+
+    it('should mark the bid as paused', () => {
+      expect(screen.getByTestId('paused-bid-badge')).toHaveTextContent(t('trading_paused_warning.label'))
+    })
+  })
+
+  describe('and the bidder sees their own bid on an active marketplace contract', () => {
+    beforeEach(() => {
+      const [row] = formatDataToTable([bid], onAccept, '0xbidder')
+      renderWithProviders(<>{row[t('listings_table.offer')]}</>)
+    })
+
+    it('should not mark the bid as paused', () => {
+      expect(screen.queryByTestId('paused-bid-badge')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('and a visitor sees a bid on a paused marketplace contract', () => {
+    beforeEach(() => {
+      bid = { ...bid, paused: true }
+      const [row] = formatDataToTable([bid], onAccept, '0xvisitor')
+      renderWithProviders(<>{row[t('listings_table.offer')]}</>)
+    })
+
+    it('should not mark the bid as paused', () => {
+      expect(screen.queryByTestId('paused-bid-badge')).not.toBeInTheDocument()
+    })
+  })
+
   describe('and the seller sees a bid on an active marketplace contract', () => {
     beforeEach(() => {
       const [row] = formatDataToTable([bid], onAccept, '0xseller')

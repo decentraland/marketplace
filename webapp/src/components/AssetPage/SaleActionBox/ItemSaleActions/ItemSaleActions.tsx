@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
+import { hasActiveBidFrom } from '../../../../lib/pausedTrades'
 import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
@@ -14,7 +15,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }:
   const isIAP = useIsIAP()
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
-  const alreadyBid = !!bids.find(bid => bid.bidder === wallet?.address)
+  const alreadyBid = hasActiveBidFrom(bids, wallet?.address)
   const canBid = !isOwner && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
