@@ -340,13 +340,25 @@ describe('when handling the failure of execute order on a paused contract', () =
   })
 })
 
-describe('when handling the failure of buying an item because the contract is paused', () => {
-  it('should leave the failure to the mint modal instead of showing the paused toast', () => {
-    return expectSaga(toastSaga)
-      .provide([[select(getState), []]])
-      .not.put(showToast(getTradingPausedToast(), 'bottom center'))
-      .dispatch(buyItemFailure(getPausedTradeErrorMessage()))
-      .silentRun()
+describe('when handling the failure of buying an item', () => {
+  describe('and it failed because the contract is paused', () => {
+    it('should show the paused toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .put(showToast(getTradingPausedToast(), 'bottom center'))
+        .dispatch(buyItemFailure(getPausedTradeErrorMessage()))
+        .silentRun()
+    })
+  })
+
+  describe('and it failed for another reason', () => {
+    it('should not show any toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .not.put.like({ action: { type: showToast(getTradingPausedToast()).type } })
+        .dispatch(buyItemFailure('anError'))
+        .silentRun()
+    })
   })
 })
 

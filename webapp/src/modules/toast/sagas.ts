@@ -22,6 +22,8 @@ import {
   BUY_ITEM_CROSS_CHAIN_FAILURE,
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BuyItemCrossChainFailureAction,
+  BUY_ITEM_FAILURE,
+  BuyItemFailureAction,
   BUY_ITEM_WITH_CARD_FAILURE,
   BuyItemWithCardFailureAction,
   BuyItemCrossChainSuccessAction,
@@ -82,7 +84,7 @@ function* successToastSagas() {
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
-  // BUY_ITEM_FAILURE is left to the mint modal, which shows the failure itself.
+  yield takeEvery(BUY_ITEM_FAILURE, handlePausedTradeFailure)
   yield takeEvery(BUY_ITEM_CROSS_CHAIN_FAILURE, handlePausedTradeFailure)
   yield takeEvery(ACCEPT_BID_FAILURE, handlePausedTradeFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
@@ -147,7 +149,7 @@ function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   }
 }
 
-function* handlePausedTradeFailure(action: BuyItemCrossChainFailureAction | AcceptBidFailureAction) {
+function* handlePausedTradeFailure(action: BuyItemFailureAction | BuyItemCrossChainFailureAction | AcceptBidFailureAction) {
   if (isPausedTradeErrorMessage(action.payload.error)) {
     yield put(showToast(getTradingPausedToast(), 'bottom center'))
   }
