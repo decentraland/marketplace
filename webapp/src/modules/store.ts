@@ -140,7 +140,8 @@ export function initStore(history: History) {
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
   // analytics.js is served from a first party proxy where configured, ad blockers drop the requests to Segment's CDN
   const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'), {
-    analyticsUrl: config.get('SEGMENT_ANALYTICS_URL', '') || undefined
+    analyticsUrl: config.get('SEGMENT_ANALYTICS_URL', '') || undefined,
+    apiHost: config.get('SEGMENT_API_HOST', '') || undefined
   })
 
   const middleware = applyMiddleware(sagasMiddleware, loggerMiddleware, transactionMiddleware, storageMiddleware, analyticsMiddleware)
