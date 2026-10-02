@@ -22,6 +22,7 @@ import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
 import { isErrorWithMessage } from '../../lib/error'
+import { isStolenNFT, isStolenToken, STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
@@ -247,6 +248,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleBuyItemCrossChain(action: BuyItemCrossChainRequestAction) {
     const { item, route, order } = action.payload
     try {
+      // The NFT checkout sends the NFT here as the item, along with its order.
+      if (isStolenNFT(item) || (order && isStolenToken(order.chainId, order.contractAddress, order.tokenId))) {
+        throw new Error(STOLEN_NFT_BUY_ERROR)
+      }
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
       const provider: Provider | null = yield call(getConnectedProvider)

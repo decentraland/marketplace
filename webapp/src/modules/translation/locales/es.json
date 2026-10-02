@@ -1243,6 +1243,10 @@
       "title": "Temporalmente no disponible",
       "body": "El registro de NAME con créditos está temporalmente pausado por los altos costos de la red. Por favor, inténtalo de nuevo más tarde."
     },
+    "open_transak_failure": {
+      "title": "Pago con tarjeta no disponible",
+      "body": "No se pudo iniciar el pago con tarjeta para esta publicación."
+    },
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"
@@ -1603,6 +1607,14 @@
     "info": "<strong>Los datos del mapa pueden estar desactualizados</strong>Encuentre los detalles de la LAND más recientes en la sección debajo de este mapa. Refrescar esta página puede actualizar la información. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
     "fingerprint_missmatch": "La información de esta LAND puede no estar actualizada. Actualice la página para obtener la información más reciente. Si el problema persiste, comuníquese con nuestro equipo de soporte."
   },
+  "estate_composition": {
+    "loading": "Verificando qué LANDs contiene este Estate…",
+    "retry": "Reintentar",
+    "modal_title": "Contenido del Estate no disponible",
+    "unavailable": "No pudimos leer qué LANDs contiene este Estate. Actualice la página e inténtelo de nuevo. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
+    "out_of_sync": "Este Estate contiene {count} {count, plural, one {LAND} other {LANDs}}, que no es lo que muestra esta página. Actualice la página para ver su contenido actual antes de continuar.",
+    "changed": "Las LANDs que contiene este Estate cambiaron mientras lo revisaba. Actualice la página para ver su contenido actual antes de continuar."
+  },
   "names_page": {
     "title": "Reclama tu NOMBRE, desbloquea tu Mundo!",
     "subtitle": "Obtené tu nombre único",
@@ -1706,9 +1718,21 @@
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
   },
+  "stolen_nft_warning": {
+    "label": "LOS NFTS ROBADOS NO SE PUEDEN COMPRAR",
+    "cannot_be_bought": "Este artículo fue reportado como robado y no se puede comprar."
+  },
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Precio no disponible"
+  },
+  "iap_payment_unavailable": {
+    "title": "Checkout no disponible",
+    "description": "Este checkout se presenta como una compra con Credits, pero el pago con Credits no llegó, así que no le pedimos aprobar nada. Abra el ítem otra vez desde la tienda e inténtelo de nuevo."
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "Precio no disponible",
+    "description": "No pudimos confirmar cuánto MANA cuesta esta publicación en este momento, así que no te mostramos un monto para aprobar. Volvé a intentar en un rato."
   },
   "announcement_bar": {
     "highlight": "Conoce la Decentraland Shop",

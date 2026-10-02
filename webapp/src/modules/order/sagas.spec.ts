@@ -3,7 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { v4 as uuidv4 } from 'uuid'
-import { ChainId, Network, Order, RentalListing, RentalStatus, Trade } from '@dcl/schemas'
+import { ChainId, NFTCategory, Network, Order, RentalListing, RentalStatus, Trade, TradeAssetType } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
@@ -18,6 +18,7 @@ import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/typ
 import { ContractName, ErrorCode, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
+import { STOLEN_NFT_BUY_ERROR, STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -27,6 +28,7 @@ import { NFT } from '../nft/types'
 import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { openTransak } from '../transak/actions'
 import { VendorName } from '../vendor'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
@@ -109,6 +111,23 @@ beforeEach(() => {
 })
 
 describe('when handling the execute order request action', () => {
+  describe('and the nft was reported as stolen', () => {
+    beforeEach(() => {
+      const [chainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS[0].split(':')
+      nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+      order = { ...order, contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+    })
+
+    it('should put the execute order failure without trying to buy it', () => {
+      return expectSaga(orderSaga, tradeService)
+        .put(executeOrderFailure(order, nft, STOLEN_NFT_BUY_ERROR))
+        .not.call.fn(waitForFeatureFlagsToBeLoaded)
+        .not.call.fn(tradeService.accept)
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe("and the nft doesn't have the same contract address as the order", () => {
     beforeEach(() => {
       order.contractAddress = 'anotherContractAddress'
@@ -191,6 +210,95 @@ describe('when handling the execute order request action', () => {
     })
 
     describe('and credits are enabled and available', () => {
+      describe('and the listing is priced in USD', () => {
+        let manaWei: string
+
+        beforeEach(() => {
+          // What the marketplace converts the listing to at accept time, which is what leaves the balance.
+          // Above the listed price and still inside the credits balance, so the assertion is about the
+          // amount and not about the clamp below.
+          manaWei = ((BigInt(order.price) * 3n) / 2n).toString()
+        })
+
+        it('should poll for the balance the converted amount leaves, not the listed one', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei, isUSDPegged: true }],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(manaWei)))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and resolving the price fails after the transaction was submitted', () => {
+        it('should still report the purchase as submitted, since the poll is best effort', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), Promise.reject(new Error('oracle unreachable'))],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(executeOrderTransactionSubmitted(order, nft, txHash))
+            .put(executeOrderSuccess(txHash, nft))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the credits do not cover the price', () => {
+        it('should poll for an empty balance rather than a negative one', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [
+                matchers.call.fn(resolveCheckoutPriceInMana),
+                { manaWei: (BigInt(mockCredits.totalCredits) * 2n).toString(), isUSDPegged: true }
+              ],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .put(pollCreditsBalanceRequest(wallet.address, 0n))
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the price cannot be resolved', () => {
+        it('should not poll a balance it cannot know', () => {
+          return expectSaga(orderSaga, tradeService)
+            .provide([
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+              [select(getIsOffchainPublicNFTOrdersEnabled), true],
+              [select(getWallet), wallet],
+              [select(getIsCreditsEnabled), true],
+              [select(getCredits, wallet.address), mockCredits],
+              [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+              [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: null, isUSDPegged: true }],
+              [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+            ])
+            .not.put.actionType(pollCreditsBalanceRequest(wallet.address, 0n).type)
+            .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+            .run({ silenceTimeout: true })
+        })
+      })
+
       it('should execute the order with credits and poll the credits balance', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
@@ -200,6 +308,7 @@ describe('when handling the execute order request action', () => {
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), mockCredits],
             [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: order.price, isUSDPegged: false }],
             [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
@@ -279,6 +388,7 @@ describe('when handling the execute order request action', () => {
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), mockCredits],
             [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+            [matchers.call.fn(resolveCheckoutPriceInMana), { manaWei: order.price, isUSDPegged: false }],
             [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
@@ -439,6 +549,22 @@ describe('when handling the execute order with card action', () => {
     jest.restoreAllMocks()
   })
 
+  describe('when the nft was reported as stolen', () => {
+    beforeEach(() => {
+      const [chainId, stolenContractAddress, stolenTokenId] = STOLEN_NFT_KEYS[0].split(':')
+      nft = { ...nft, chainId: Number(chainId), contractAddress: stolenContractAddress, tokenId: stolenTokenId }
+    })
+
+    it('should put the execute order with card failure without opening the card checkout', () => {
+      return expectSaga(orderSaga, tradeService)
+        .put(executeOrderWithCardFailure(STOLEN_NFT_BUY_ERROR))
+        .not.call.fn(buyAssetWithCard)
+        .not.put(openTransak(nft))
+        .dispatch(executeOrderWithCardRequest(nft))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
       return expectSaga(orderSaga, tradeService)
@@ -459,13 +585,39 @@ describe('when handling the execute order with card action', () => {
     it('should not set nft in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
-        .put(openModal('BuyWithCardExplanationModal', { asset: nft, order: undefined }))
+        .put(openModal('BuyWithCardExplanationModal', { asset: nft, order: undefined, useCredits: false }))
         .dispatch(executeOrderWithCardRequest(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {
           expect(localStorage.setItem).not.toHaveBeenCalled()
         })
+    })
+  })
+
+  describe('when the buyer chose to pay with credits', () => {
+    let args: unknown[] | undefined
+
+    beforeEach(async () => {
+      args = undefined
+      await expectSaga(orderSaga, tradeService)
+        .provide([
+          {
+            call: (effect, next) => {
+              if (effect.fn === buyAssetWithCard) {
+                args = effect.args
+                return undefined
+              }
+              return next()
+            }
+          }
+        ])
+        .dispatch(executeOrderWithCardRequest(nft, order, true))
+        .run({ silenceTimeout: true })
+    })
+
+    it('should carry that choice into the card purchase, which decides both the route and the amount', () => {
+      expect(args).toEqual([nft, order, true])
     })
   })
 
@@ -478,7 +630,7 @@ describe('when handling the execute order with card action', () => {
 
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(orderSaga, tradeService)
-        .provide([[call(buyAssetWithCard, nft, undefined), Promise.reject(new Error(errorMessage))]])
+        .provide([[call(buyAssetWithCard, nft, undefined, false), Promise.reject(new Error(errorMessage))]])
         .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
@@ -628,5 +780,128 @@ describe('when handling the set purchase action', () => {
         })
       })
     })
+  })
+})
+
+describe('when accepting an off-chain order for an estate', () => {
+  let estateNft: NFT
+  let estateOrder: Order
+  let baseTrade: Trade
+  const reviewedFingerprint = '0xaaaa'
+
+  beforeEach(() => {
+    estateNft = { ...nft, category: NFTCategory.ESTATE, contractAddress: '0xestate', tokenId: '6503' } as NFT
+    estateOrder = { ...order, contractAddress: '0xestate', tokenId: '6503', tradeId: uuidv4() } as Order
+    baseTrade = {
+      id: estateOrder.tradeId!,
+      signer: wallet.address,
+      signature: '0x1',
+      type: 'public_nft_order',
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA,
+      contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+      createdAt: Date.now(),
+      checks: {
+        expiration: Date.now() + 100000000000,
+        effective: Date.now(),
+        uses: 1,
+        salt: '0x',
+        allowedRoot: '0x',
+        contractSignatureIndex: 0,
+        externalChecks: [],
+        signerSignatureIndex: 0
+      },
+      received: []
+    } as unknown as Trade
+  })
+
+  // The seller signs the composition into the trade; accepting it settles that composition. The buyer
+  // must not be able to accept a trade bound to a different LAND set than the one they reviewed.
+  describe('and the trade binds a different composition than the one reviewed', () => {
+    it('should fail without accepting the trade', () => {
+      const trade = {
+        ...baseTrade,
+        sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xestate', tokenId: '6503', extra: '0xbbbb' }]
+      } as unknown as Trade
+
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .not.call.fn(TradeService.prototype.accept)
+        .put(executeOrderFailure(estateOrder, estateNft, 'The Estate composition changed since it was reviewed'))
+        .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the trade binds the reviewed composition', () => {
+    it('should accept the trade', () => {
+      const trade = {
+        ...baseTrade,
+        sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xestate', tokenId: '6503', extra: reviewedFingerprint }]
+      } as unknown as Trade
+
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true],
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .call.fn(TradeService.prototype.accept)
+        .put(executeOrderTransactionSubmitted(estateOrder, estateNft, txHash))
+        .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when buying an estate with credits on a legacy order', () => {
+  let estateNft: NFT
+  let legacyOrder: Order
+  let mockCredits: CreditsResponse
+
+  beforeEach(() => {
+    estateNft = { ...nft, category: NFTCategory.ESTATE, contractAddress: '0xestate', tokenId: '6503' } as NFT
+    // No tradeId -> the legacy branch, whose credits path settles through executeOrder (no fingerprint).
+    legacyOrder = { ...order, contractAddress: '0xestate', tokenId: '6503' } as Order
+    mockCredits = {
+      totalCredits: 200000000000,
+      credits: [
+        {
+          id: '1',
+          amount: '200000000000',
+          availableAmount: '200000000000',
+          contract: '0x123',
+          expiresAt: '1000',
+          season: 1,
+          signature: '123',
+          timestamp: '1000',
+          userAddress: wallet.address
+        }
+      ]
+    }
+  })
+
+  it('should refuse it rather than settle without binding the composition', () => {
+    return expectSaga(orderSaga, tradeService)
+      .provide([
+        [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+        [select(getIsOffchainPublicNFTOrdersEnabled), true],
+        [select(getWallet), wallet],
+        [select(getIsCreditsEnabled), true],
+        [select(getCredits, wallet.address), mockCredits],
+        [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
+      ])
+      .not.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace)
+      .put(executeOrderFailure(legacyOrder, estateNft, 'Credits cannot be used to buy an Estate on this listing', undefined, false))
+      .dispatch(executeOrderRequest(legacyOrder, estateNft, fingerprint, false, true))
+      .run({ silenceTimeout: true })
   })
 })

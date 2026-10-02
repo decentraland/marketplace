@@ -83,6 +83,10 @@
   margin-left: 0px;
 }
 
+.Bid .stolen-nft-warning {
+  margin: 10px;
+}
+
 @media (max-width: 1300px) {
   .Bid .wrapper {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;

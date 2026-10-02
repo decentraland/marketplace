@@ -1,28 +1,32 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { ChainId, Contract, NFTCategory } from '@dcl/schemas'
+import { ChainId, Contract } from '@dcl/schemas'
 import { withAuthorizedAction, ChainButton } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
+import { ContractName } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { getAssetName, isNFT, isOwnedBy } from '../../../modules/asset/utils'
 import { getBidStatus, getError } from '../../../modules/bid/selectors'
-import { useFingerprint } from '../../../modules/nft/hooks'
+import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
+import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { isLand } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { getRentalEndDate, hasRentalEnded, isRentalListingExecuted } from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getContractNames } from '../../../modules/vendor'
+import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import { AssetAction } from '../../AssetAction'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
-import ErrorBanner from '../../ErrorBanner'
+import { EstateCompositionWarning } from '../../EstateCompositionWarning'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import { Props } from './BidModal.types'
 import './BidModal.css'
 
@@ -32,16 +36,27 @@ const BidModal = (props: Props) => {
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
-  // The server validates `extra` against on-chain getFingerprintV2, so we must
-  // send the value the contract returns, not the locally derived one.
-  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(isNFT(asset) ? asset : null)
+  // The bid records which LANDs the Estate contains, so it is placed against the
+  // composition read when this form opened — the one shown alongside it — and not
+  // against whatever the registry holds by the time the bid is signed.
+  const estateComposition = useEstateSnapshot(isNFT(asset) ? asset : null)
+  // Draw the Estate from the registry rather than from the indexed copy, so what is on screen is the
+  // composition the signature will be bound to even while the indexer is behind.
+  const displayedAsset = estateComposition.snapshot && isNFT(asset) ? applyEstateSnapshot(asset, estateComposition.snapshot) : asset
+  const isEstateBlocked = isEstateSnapshotBlocking(estateComposition)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [estateCompositionError, setEstateCompositionError] = useState<string>()
 
-  const handlePlaceBid = useCallback(
-    () => onPlaceBid(asset, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), contractFingerprint),
-    [asset, price, expiresAt, contractFingerprint, onPlaceBid]
-  )
+  const handlePlaceBid = useCallback(() => {
+    void (async () => {
+      if (!(await estateComposition.confirm())) {
+        setEstateCompositionError(t('estate_composition.changed'))
+        return
+      }
+      onPlaceBid(asset, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), estateComposition.fingerprint)
+    })()
+  }, [asset, price, expiresAt, estateComposition, onPlaceBid])
 
   const contractNames = getContractNames()
 
@@ -55,7 +70,7 @@ const BidModal = (props: Props) => {
     network: asset.network
   })
 
-  const offchainBidsContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, asset.chainId)
+  const offchainBidsContract = getLatestOffChainMarketplaceContract(asset.chainId)
 
   if (!wallet || !mana || !bids) {
     return null
@@ -69,6 +84,7 @@ const BidModal = (props: Props) => {
     const { onAuthorizedAction, onClearBidError } = props
 
     onClearBidError()
+    setEstateCompositionError(undefined)
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
       authorizedAddress: offchainBidsContract?.address ?? bids.address,
@@ -96,13 +112,13 @@ const BidModal = (props: Props) => {
     isInvalidPrice ||
     isInvalidDate ||
     hasInsufficientMANA ||
-    isLoadingFingerprint ||
     isPlacingBid ||
     hasLowPriceForMetaTx ||
-    (asset.category === NFTCategory.ESTATE && !contractFingerprint)
+    isEstateBlocked ||
+    isStolenNFT(asset)
 
   return (
-    <AssetAction asset={asset}>
+    <AssetAction asset={displayedAsset} strictEstateSelection={!!estateComposition.snapshot}>
       <div className="bid-action">
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">
@@ -147,9 +163,8 @@ const BidModal = (props: Props) => {
               error={isInvalidDate}
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
-            {!isLoadingFingerprint && asset.category === NFTCategory.ESTATE && !contractFingerprint ? (
-              <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
-            ) : null}
+            <EstateCompositionWarning state={estateComposition} />
+            <StolenNFTWarning asset={asset} />
           </div>
           {hasLowPriceForMetaTx ? (
             <span className="warning">
@@ -177,7 +192,7 @@ const BidModal = (props: Props) => {
           <div className="buttons">
             <Button
               as="div"
-              disabled={isLoadingFingerprint || isPlacingBid}
+              disabled={isPlacingBid}
               onClick={() =>
                 onNavigate(
                   isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
@@ -215,7 +230,7 @@ const BidModal = (props: Props) => {
             onConfirm={handleConfirmBid}
             valueToConfirm={price}
             network={asset.network}
-            error={authorizationError}
+            error={estateCompositionError || authorizationError}
             onCancel={() => setShowConfirmationModal(false)}
             loading={isPlacingBid || isLoadingAuthorization}
             disabled={isPlacingBid || isLoadingAuthorization}

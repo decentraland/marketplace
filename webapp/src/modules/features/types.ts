@@ -17,7 +17,5 @@ export enum FeatureName {
   USER_WALLETS = 'alfa-marketplace-credits',
   UNITY_WEARABLE_PREVIEW = 'unity-wearable-preview',
   SOCIAL_EMOTES = 'social-emotes',
-  NAMES_WITH_CREDITS = 'names-with-credits',
-  /** Kill switch for the analytics first party proxy. ON sends analytics straight to Segment. */
-  SEGMENT_ALTERNATIVE = 'seg-alt'
+  NAMES_WITH_CREDITS = 'names-with-credits'
 }

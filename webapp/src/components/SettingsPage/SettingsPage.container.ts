@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { FETCH_AUTHORIZATIONS_REQUEST, fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations, getLoading, getError } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
@@ -33,7 +33,8 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchContracts: () => dispatch(fetchContractsRequest())
+  onFetchContracts: () => dispatch(fetchContractsRequest()),
+  onFetchAuthorizations: authorizations => dispatch(fetchAuthorizationsRequest(authorizations))
 })
 
 export default connect(mapState, mapDispatch)(SettingsPage)

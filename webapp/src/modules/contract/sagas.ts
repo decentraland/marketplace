@@ -10,6 +10,7 @@ import { CHANGE_ACCOUNT, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getContract as getContractFromDecentralandTransactions, ContractName, ContractData } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import { getDeployedOffChainMarketplaceContracts } from '../../utils/trades'
 import { getContractNames, VendorFactory, VendorName } from '../vendor'
 import { Contract } from '../vendor/services'
 import { getWallet } from '../wallet/selectors'
@@ -71,16 +72,6 @@ export function* handleFetchContractsSuccess() {
     network: Network.MATIC
   })) as ReturnType<typeof getContract>
 
-  const offChainMarketplaceEthereum: Contract | null = (yield select(getContract, {
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.ETHEREUM
-  })) as ReturnType<typeof getContract>
-
-  const offChainMarketplaceMatic: Contract | null = (yield select(getContract, {
-    name: contractNames.OFF_CHAIN_MARKETPLACE,
-    network: Network.MATIC
-  })) as ReturnType<typeof getContract>
-
   const legacyMarketplaceMatic: Contract | null = (yield select(getContract, {
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
@@ -137,15 +128,19 @@ export function* handleFetchContractsSuccess() {
 
   let authorizations: Authorization[] = []
 
-  if (offChainMarketplaceEthereum && manaEthereum) {
-    authorizations.push({
-      address,
-      authorizedAddress: offChainMarketplaceEthereum.address,
-      contractAddress: manaEthereum.address,
-      contractName: ContractName.MANAToken,
-      chainId: manaEthereum.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
+  // Every deployed version, not just the one the vendor registry pins: an allowance granted against an older
+  // marketplace stays live on chain, and it can only be shown or revoked if it is fetched here first.
+  if (manaEthereum) {
+    for (const { contract } of getDeployedOffChainMarketplaceContracts(manaEthereum.chainId)) {
+      authorizations.push({
+        address,
+        authorizedAddress: contract.address,
+        contractAddress: manaEthereum.address,
+        contractName: ContractName.MANAToken,
+        chainId: manaEthereum.chainId,
+        type: AuthorizationType.ALLOWANCE
+      })
+    }
   }
 
   if (creditsManager && manaMatic) {
@@ -159,15 +154,17 @@ export function* handleFetchContractsSuccess() {
     })
   }
 
-  if (offChainMarketplaceMatic && manaMatic) {
-    authorizations.push({
-      address,
-      authorizedAddress: offChainMarketplaceMatic.address,
-      contractAddress: manaMatic.address,
-      contractName: ContractName.MANAToken,
-      chainId: manaMatic.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
+  if (manaMatic) {
+    for (const { contract } of getDeployedOffChainMarketplaceContracts(manaMatic.chainId)) {
+      authorizations.push({
+        address,
+        authorizedAddress: contract.address,
+        contractAddress: manaMatic.address,
+        contractName: ContractName.MANAToken,
+        chainId: manaMatic.chainId,
+        type: AuthorizationType.ALLOWANCE
+      })
+    }
   }
 
   if (marketplaceEthereum && manaEthereum) {

@@ -12,6 +12,9 @@ export type Props = {
   isDraggable?: boolean
   withNavigation?: boolean
   showUpdatedDateWarning?: boolean
+  // Draw an Estate strictly from its selection (the registry composition), not expanded from a stale
+  // tile layer. Set by the review flows so the map matches the composition the action binds to.
+  strictEstateSelection?: boolean
   hasPopup?: boolean
   zoom?: number
   isSmall?: boolean

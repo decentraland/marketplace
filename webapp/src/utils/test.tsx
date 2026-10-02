@@ -17,7 +17,13 @@ const allTranslations = mergeTranslations(flatten(en), flatten(locales.en) as an
 
 export function renderWithProviders(
   component: JSX.Element,
-  { preloadedState, store }: { preloadedState?: Partial<RootState>; store?: Store } = {}
+  {
+    preloadedState,
+    store,
+    // Route the component renders at. Components that read the URL — the mobile-IAP marker,
+    // for one — need it set; everything else keeps the router's default entry.
+    initialEntries
+  }: { preloadedState?: Partial<RootState>; store?: Store; initialEntries?: string[] } = {}
 ) {
   const initializedStore =
     store ||
@@ -35,7 +41,7 @@ export function renderWithProviders(
   function AppProviders({ children }: { children: React.ReactNode }) {
     return (
       <Provider store={initializedStore}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={initialEntries}>
           <DclThemeProvider theme={darkTheme}>
             <TranslationProvider locales={['en']}>{children}</TranslationProvider>
           </DclThemeProvider>

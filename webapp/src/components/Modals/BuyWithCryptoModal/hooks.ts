@@ -185,6 +185,11 @@ export const useNameMintingGasCost = (name: string, selectedToken: Token, chainN
 
 export const useCrossChainMintNftRoute = (
   item: Item,
+  /**
+   * MANA wei to land on the destination chain. Separate from `item.price`, which on a USD-pegged listing is
+   * USD wei and would route the wrong amount. See `useCheckoutPriceInMana`.
+   */
+  priceInMana: string,
   assetChainId: ChainId,
   selectedToken: Token,
   selectedChain: ChainId,
@@ -199,12 +204,12 @@ export const useCrossChainMintNftRoute = (
         fromAmount,
         fromToken,
         fromChain,
-        toAmount: item.price,
+        toAmount: priceInMana,
         toChain: item.chainId,
         item: {
           collectionAddress: item.contractAddress,
           itemId: item.itemId,
-          price: item.price,
+          price: priceInMana,
           tradeId: item.tradeId
         },
         fetchTradeData: async () => {
@@ -219,7 +224,7 @@ export const useCrossChainMintNftRoute = (
   )
 
   return useCrossChainRoute(
-    item.price,
+    priceInMana,
     assetChainId,
     selectedToken,
     selectedChain,
@@ -232,6 +237,8 @@ export const useCrossChainMintNftRoute = (
 
 export const useCrossChainBuyNftRoute = (
   order: Order,
+  /** MANA wei to land on the destination chain — see the note on {@link useCrossChainMintNftRoute}. */
+  priceInMana: string,
   assetChainId: ChainId,
   selectedToken: Token,
   selectedChain: ChainId,
@@ -247,7 +254,7 @@ export const useCrossChainBuyNftRoute = (
         fromAmount,
         fromChain,
         fromToken,
-        toAmount: order.price,
+        toAmount: priceInMana,
         toChain: order.chainId,
         order,
         fetchTradeData:
@@ -268,7 +275,7 @@ export const useCrossChainBuyNftRoute = (
   )
 
   return useCrossChainRoute(
-    order.price,
+    priceInMana,
     assetChainId,
     selectedToken,
     selectedChain,

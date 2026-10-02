@@ -348,7 +348,7 @@ const ClaimNamePage = (props: Props) => {
                         content={t('names_page.dao_tooltip', {
                           link: (
                             <a
-                              href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
+                              href="https://decentraland.org/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
                               target="_blank"
                               rel="noopener noreferrer"
                             >

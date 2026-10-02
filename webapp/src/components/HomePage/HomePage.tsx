@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Banner } from 'decentraland-dapps/dist/containers/Banner'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BackToTopButton, Page } from 'decentraland-ui'
@@ -12,6 +11,7 @@ import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
+import CampaignBanner from '../CampaignBanner'
 import { HoverPreviewProvider } from '../HoverPreview'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
@@ -227,11 +227,7 @@ const HomePage = (props: Props) => {
           out of the way of the landing page's first paint. */}
       <HoverPreviewProvider>
         <ListsLaunchModal />
-        {isCampaignHomepageBannerEnabled ? (
-          <div className="HomePageBanner">
-            <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} />
-          </div>
-        ) : null}
+        {isCampaignHomepageBannerEnabled ? <CampaignBanner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
         <Page className="HomePage">
           {firstViewsSection.map(renderSlideshow)}
           <RankingsTable />

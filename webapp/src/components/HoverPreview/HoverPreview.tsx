@@ -11,16 +11,27 @@ import {
   PreviewType,
   PreviewUnityMode,
   Rarity,
-  sendMessage
+  sendMessage,
+  Item
 } from '@dcl/schemas'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
+import { getRarityWash } from '../../utils/rarity'
+import { FavoritesCounter } from '../FavoritesCounter'
 import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
+
+// Matches `.AssetCard .FavoritesCounterBubble`, so the repeated control lands exactly on the card's own.
+const FAVORITES_INSET = 8
+
+// The preview renders INSIDE a cross-origin iframe, and its scene background can only be a flat
+// colour, never a gradient. So the scene is made transparent and the rarity wash is painted on the
+// overlay BEHIND it: that way hovering swaps the picture without swapping the surface under it, and
+// a card looks the same at rest and under the pointer.
 
 // How long to wait for a genuinely idle moment before booting the preview, and the fallback delay
 // for browsers without requestIdleCallback (Safari).
@@ -37,6 +48,12 @@ export type HoverPreviewSource = {
   rarity?: Rarity
   // Wearables only: the body shapes the item declares a representation for.
   bodyShapes?: BodyShape[]
+  /**
+   * The catalog item behind the card, when there is one. Only used to keep the favourite control
+   * reachable while the preview covers the card: the card's own heart is trapped in the card's
+   * stacking context (z-index 5) and this overlay is portaled to the body above it.
+   */
+  item?: Item | null
 }
 
 type HoverPreviewContextValue = {
@@ -79,7 +96,28 @@ const toBodyShape = (urn?: string | null): BodyShape | null =>
  * avatar only when it can actually wear the item, and otherwise fall back to the default mannequin
  * pinned to a shape the item does support.
  */
-const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+/**
+ * Poses a hovered wearable can strike, ported from the shop (decentraland/shop#409).
+ *
+ * It used to be FASHION and only FASHION, so every card in a grid played the identical animation and
+ * the row read as one avatar copy-pasted. Restricted to poses that keep the avatar planted and framed
+ * inside a card-sized viewport: walk, run and jump translate it out of frame, and idle is what the
+ * shopper is hovering to get away from.
+ */
+export const HOVER_POSES = [
+  PreviewEmote.FASHION,
+  PreviewEmote.FASHION_2,
+  PreviewEmote.FASHION_3,
+  PreviewEmote.FASHION_4,
+  PreviewEmote.DANCE,
+  PreviewEmote.LOVE,
+  PreviewEmote.MONEY,
+  PreviewEmote.WAVE,
+  PreviewEmote.CLAP,
+  PreviewEmote.FIST_PUMP
+] as const
+
+const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): PreviewOptions => {
   if (src.category !== NFTCategory.WEARABLE) {
     return { profile: env.profile }
   }
@@ -89,19 +127,19 @@ const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previ
 
   return {
     type: PreviewType.AVATAR,
-    // Land straight into a fashion pose so the avatar never flashes a T-pose.
-    emote: PreviewEmote.FASHION,
+    // Always a pose, never nothing, so the avatar never flashes a T-pose.
+    emote,
     profile: canBeWornByAvatar ? env.profile : 'default',
     bodyShape: canBeWornByAvatar ? null : shapes[0] ?? null
   }
 }
 
-const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): PreviewOptions => {
   const base: PreviewOptions = {
-    ...getAvatarOptions(src, env),
+    ...getAvatarOptions(src, env, emote),
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
-    background: Rarity.getColor(src.rarity ?? Rarity.COMMON)
+    disableBackground: true
   }
   if (src.network === Network.ETHEREUM && src.urn) {
     return { ...base, urns: [src.urn] }
@@ -114,13 +152,24 @@ const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previe
   }
 }
 
-const dispatchUpdate = (src: HoverPreviewSource, env: PreviewEnvConfig): boolean => {
+const dispatchUpdate = (src: HoverPreviewSource, env: PreviewEnvConfig, emote: PreviewEmote): boolean => {
   const iframe = document.getElementById(PREVIEW_IFRAME_ID) as HTMLIFrameElement | null
   if (!iframe?.contentWindow) return false
   sendMessage(iframe.contentWindow, PreviewMessageType.UPDATE, {
-    options: sourceToOptions(src, env)
+    options: sourceToOptions(src, env, emote)
   })
   return true
+}
+
+/**
+ * A fresh pose per hovered asset, never the same one twice running, since a repeat reads as the
+ * feature not working. Held per asset rather than rolled at dispatch time, because the pending-source
+ * flush dispatches the same hover a second time once the iframe becomes controllable, and re-rolling
+ * there would snap the avatar into a different animation mid-hover.
+ */
+const nextPose = (last: PreviewEmote): PreviewEmote => {
+  const options = HOVER_POSES.filter(pose => pose !== last)
+  return options[Math.floor(Math.random() * options.length)]
 }
 
 // Stable identity of an asset, matching the discriminator used in
@@ -141,6 +190,11 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   const [isControllable, setIsControllable] = useState(false)
   const [isAssetLoading, setIsAssetLoading] = useState(false)
   const [isBootScheduled, setIsBootScheduled] = useState(false)
+  const [item, setItem] = useState<Item | null>(null)
+  const [isFavoritesHovered, setIsFavoritesHovered] = useState(false)
+  // Identity of the card being previewed. `rect` cannot stand in for it: it is recomputed every frame,
+  // so it changes identity throughout the hover lift and any scroll.
+  const [anchorKey, setAnchorKey] = useState<string | null>(null)
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
@@ -151,6 +205,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   // the iframe doesn't rebuild its scene and never emits a LOAD — a LOAD
   // counter would then drift and leave the spinner stuck forever.
   const currentKeyRef = useRef<string | null>(null)
+  const poseRef = useRef<{ key: string | null; emote: PreviewEmote }>({ key: null, emote: HOVER_POSES[0] })
   const loadedKeyRef = useRef<string | null>(null)
 
   const wallet = useSelector(getWallet)
@@ -231,17 +286,22 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     (target: HTMLElement, source: HoverPreviewSource) => {
       targetRef.current = target
       setRarity(source.rarity ?? Rarity.COMMON)
+      setItem(source.item ?? null)
       const r = target.getBoundingClientRect()
       setRect({ top: r.top, left: r.left, width: r.width, height: r.height })
       setIsVisible(true)
       const key = keyOf(source)
       currentKeyRef.current = key
+      setAnchorKey(key)
+      if (poseRef.current.key !== key) {
+        poseRef.current = { key, emote: nextPose(poseRef.current.emote) }
+      }
       // If this asset is already rendered in the iframe the UPDATE won't
       // trigger a rebuild (no LOAD will follow), so don't show a spinner that
       // would never clear. Otherwise wait for its LOAD.
       setIsAssetLoading(key !== loadedKeyRef.current)
       if (isControllable) {
-        dispatchUpdate(source, envConfig)
+        dispatchUpdate(source, envConfig, poseRef.current.emote)
         pendingSourceRef.current = null
       } else {
         pendingSourceRef.current = source
@@ -262,7 +322,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   // Flush any pending hover request once the iframe is controllable.
   useEffect(() => {
     if (isControllable && pendingSourceRef.current) {
-      dispatchUpdate(pendingSourceRef.current, envConfig)
+      dispatchUpdate(pendingSourceRef.current, envConfig, poseRef.current.emote)
       pendingSourceRef.current = null
     }
   }, [isControllable, envConfig])
@@ -324,17 +384,59 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     [hide]
   )
 
+  /**
+   * Mirrors the hover of the card's own favourite control onto the copy drawn over the preview.
+   *
+   * The copy is transparent to the pointer so the card keeps its own hover, which means it never gets
+   * `:hover` itself. The control underneath does get it, so its state is read from there and handed to
+   * the copy as a class.
+   */
+  useEffect(() => {
+    const anchor = targetRef.current
+    if (!isVisible || !anchor) return
+    const real = anchor.closest('.AssetCard')?.querySelector<HTMLElement>('[class*="FavoritesCounter"]')
+    if (!real) return
+
+    const onEnter = () => setIsFavoritesHovered(true)
+    const onLeave = () => setIsFavoritesHovered(false)
+    real.addEventListener('mouseenter', onEnter)
+    real.addEventListener('mouseleave', onLeave)
+    return () => {
+      real.removeEventListener('mouseenter', onEnter)
+      real.removeEventListener('mouseleave', onLeave)
+      setIsFavoritesHovered(false)
+    }
+  }, [isVisible, anchorKey])
+
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
-    const [light, dark] = Rarity.getGradient(rarity)
     return {
       top: rect.top,
       left: rect.left,
       width: rect.width,
       height: rect.height,
-      backgroundImage: `radial-gradient(${light}, ${dark})`
+      backgroundImage: getRarityWash(rarity)
     }
   }, [isVisible, rect, rarity])
+
+  /**
+   * The favourite control, repeated over the preview.
+   *
+   * The card's own heart sits inside the card, whose hover state opens a stacking context at z-index 5,
+   * so it can never rise above this overlay however high its own z-index goes. Rather than restack the
+   * grid, the control is drawn again here as a sibling of the preview, one level above it. This copy is
+   * for the eyes only: it does not take the pointer, so the click reaches the card's own control
+   * directly underneath and the card never loses the hover that opened the preview.
+   */
+  const favourites =
+    isVisible && item && rect ? (
+      <div
+        className={`HoverPreview__favorites${isFavoritesHovered ? ' is-hovered' : ''}`}
+        style={{ top: rect.top + FAVORITES_INSET, left: rect.left + FAVORITES_INSET }}
+      >
+        <FavoritesCounter item={item} />
+      </div>
+    ) : null
 
   const overlay =
     enabled && isBootScheduled ? (
@@ -344,7 +446,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
           profile="default"
           peerUrl={envConfig.peerUrl}
           marketplaceServerUrl={envConfig.marketplaceServerUrl}
-          background={Rarity.getColor(Rarity.COMMON)}
+          disableBackground
           wheelZoom={1.5}
           wheelStart={100}
           disableAutoRotate
@@ -366,7 +468,15 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   return (
     <HoverPreviewContext.Provider value={contextValue}>
       {children}
-      {overlay && typeof document !== 'undefined' ? createPortal(overlay, document.body) : null}
+      {overlay && typeof document !== 'undefined'
+        ? createPortal(
+            <>
+              {overlay}
+              {favourites}
+            </>,
+            document.body
+          )
+        : null}
     </HoverPreviewContext.Provider>
   )
 }

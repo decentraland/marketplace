@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
-import { ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { ListingStatus, NFTCategory, Order, RentalStatus, Trade, TradeAssetType, TradeCreation } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
@@ -14,6 +14,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import { isStolenNFT, STOLEN_NFT_BUY_ERROR } from '../../lib/stolenNfts'
 import { buyAssetWithCard } from '../asset/utils'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -23,6 +24,7 @@ import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { locations } from '../routing/locations'
+import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import SubgraphService from '../vendor/decentraland/SubgraphService'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
@@ -122,10 +124,41 @@ export function* orderSaga(tradeService: TradeService) {
     }
   }
 
+  /**
+   * Poll the credits balance down to what it should be after a purchase.
+   *
+   * The amount spent is in MANA; `order.price` only is on most listings, since on a USD-pegged one it is USD
+   * wei, so it is resolved first. That resolution reads the trade and the oracle, and this runs AFTER the
+   * transaction has been submitted — so it swallows its own failures. Letting one escape would reach the
+   * caller's catch and report a purchase that is already on its way to the chain as failed. Without a figure
+   * there is simply no poll, and the balance refreshes on its next ordinary fetch.
+   */
+  function* pollCreditsAfterPurchase(address: string, order: Order, totalCredits: CreditsResponse['totalCredits']) {
+    try {
+      const { manaWei } = (yield call(resolveCheckoutPriceInMana, order.price, order.chainId, order.tradeId)) as Awaited<
+        ReturnType<typeof resolveCheckoutPriceInMana>
+      >
+
+      if (manaWei === null) {
+        return
+      }
+
+      // Clamped like the Transak saga does: credits smaller than the price would otherwise make the poll
+      // wait on a negative balance.
+      const expected = BigInt(totalCredits) - BigInt(manaWei)
+      yield put(pollCreditsBalanceRequest(address, expected > 0n ? expected : 0n))
+    } catch (error) {
+      // Best effort by design: see above.
+    }
+  }
+
   function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     const { order, nft, fingerprint, silent, useCredits } = action.payload
 
     try {
+      if (isStolenNFT(nft)) {
+        throw new Error(STOLEN_NFT_BUY_ERROR)
+      }
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
@@ -156,10 +189,28 @@ export function* orderSaga(tradeService: TradeService) {
         }
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
+
+        // An Estate's transfer is bound to a fingerprint the seller signed into the trade, and the
+        // registry verifies it at settlement. Accepting that trade means receiving whatever composition
+        // the seller signed for — which can differ from the one the buyer reviewed. `fingerprint` is the
+        // buyer's frozen review snapshot; reject if the trade does not bind that exact composition so a
+        // buyer cannot be settled onto a different LAND set than the one they saw.
+        if (nft.category === NFTCategory.ESTATE) {
+          const estateAsset = trade.sent.find(
+            asset =>
+              asset.assetType === TradeAssetType.ERC721 &&
+              asset.contractAddress.toLowerCase() === nft.contractAddress.toLowerCase() &&
+              asset.tokenId === nft.tokenId
+          )
+          const tradeFingerprint = estateAsset?.extra
+          if (!fingerprint || !tradeFingerprint || tradeFingerprint.toLowerCase() !== fingerprint.toLowerCase()) {
+            throw new Error('The Estate composition changed since it was reviewed')
+          }
+        }
+
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
-          const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
-          yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+          yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {
           txHash = yield call([tradeService, 'accept'], trade, wallet.address)
         }
@@ -167,9 +218,14 @@ export function* orderSaga(tradeService: TradeService) {
         const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
         if (useCredits && credits) {
+          // The legacy credits path settles through `executeOrder`, which carries no fingerprint, so it
+          // cannot bind the composition an Estate buyer reviewed. Refuse it rather than settle unbound —
+          // the fingerprint-carrying `safeExecuteOrder` path below is the only Estate-safe legacy route.
+          if (nft.category === NFTCategory.ESTATE) {
+            throw new Error('Credits cannot be used to buy an Estate on this listing')
+          }
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
-          const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
-          yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+          yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
         } else {
           txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
             ReturnType<typeof orderService.execute>
@@ -199,10 +255,15 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleExecuteOrderWithCardRequest(action: ExecuteOrderWithCardRequestAction) {
-    const { nft, order } = action.payload
+    const { nft, order, useCredits } = action.payload
 
     try {
-      yield call(buyAssetWithCard, nft, order)
+      if (isStolenNFT(nft)) {
+        throw new Error(STOLEN_NFT_BUY_ERROR)
+      }
+      // Forwarded, as the item saga does: dropping it sent a buyer who chose credits down the direct
+      // marketplace route, which charges the full amount and has no Transak registration for V3.
+      yield call(buyAssetWithCard, nft, order, useCredits)
     } catch (error) {
       yield put(executeOrderWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }

@@ -57,3 +57,14 @@
 .HoverPreview .ui.loader.HoverPreview__spinner:after {
   border-top-color: #fff;
 }
+
+/* The favourite control drawn over the preview (see HoverPreview.tsx). One step above the preview so it
+   stays visible, and deliberately transparent to the pointer: the card's own control sits at exactly
+   these coordinates underneath, so the click falls through to it and the card keeps its hover. Taking
+   the pointer here instead would fire the card's `mouseleave`, and the preview would flicker. */
+.HoverPreview__favorites {
+  position: fixed;
+  z-index: 101;
+  pointer-events: none;
+  display: flex;
+}

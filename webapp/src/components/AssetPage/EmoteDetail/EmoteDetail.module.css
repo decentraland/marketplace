@@ -9,6 +9,16 @@
 
 .EmoteDetail .assetImageContainer {
   height: 602px;
+  /* This preview runs the full width of the page, so the glow is sized off the frame's height (see the
+     override below) and kept inside it, same reasoning as the shared default. */
+  --glow-box: 1;
+}
+
+/* A wide band rather than the squarish panel the shared glow assumes: scaling both directions would
+   smear a flat ellipse across the page, so the width comes from the height at the shop's frame ratio. */
+.EmoteDetail .assetImageContainer:global(.rarity-glow)::before {
+  width: auto;
+  aspect-ratio: 1045 / 752;
 }
 
 .EmoteDetail .assetImageContainer :global(.AssetImage) {

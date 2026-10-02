@@ -107,14 +107,14 @@
     "names": "姓名",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的清单",
     "my_bids": "我的出价",
     "activity": "活动",
     "buy_mana_with_fiat": "买法力"
   },
   "user_menu": {
-    "my_assets": "我的资产",
+    "my_assets": "我的物品",
     "my_lists": "我的列表"
   },
   "menu": {
@@ -1246,6 +1246,10 @@
       "title": "暂时不可用",
       "body": "由于网络费用较高，使用积分注册 NAME 暂时暂停。请稍后再试。"
     },
+    "open_transak_failure": {
+      "title": "暂不支持银行卡支付",
+      "body": "无法为此商品发起银行卡支付。"
+    },
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
       "view_transaction": "查看交易"
@@ -1568,8 +1572,8 @@
   },
   "expired_listings_modal": {
     "title": "您的一些资产需要您的关注",
-    "description": "请转到“我的资产”并查看您的列表<br></br>, 因为其中一些列表需要更新",
-    "go_to_my_assets": "前往我的资产",
+    "description": "请转到“我的物品”并查看您的列表<br></br>, 因为其中一些列表需要更新",
+    "go_to_my_assets": "前往我的物品",
     "do_not_show_again": "不要再给我看这个"
   },
   "list_card": {
@@ -1606,6 +1610,14 @@
   "atlas_updated_warning": {
     "info": "<strong>地图数据可能过时</strong>Find the moST在此地图下方的部分中的最新土地详细信息。刷新此页面可能会更新信息。如果问题仍然存在，请联系我们的支持团队。",
     "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
+  },
+  "estate_composition": {
+    "loading": "正在检查此地产包含哪些土地…",
+    "retry": "重试",
+    "modal_title": "无法确认地产内容",
+    "unavailable": "我们无法读取此地产包含哪些土地。请刷新页面后重试。如果问题仍然存在，请联系我们的支持团队。",
+    "out_of_sync": "此地产包含 {count} 块土地，与本页面所示不符。请先刷新页面以查看其当前内容，然后再继续。",
+    "changed": "在您查看期间，此地产包含的土地发生了变化。请先刷新页面以查看其当前内容，然后再继续。"
   },
   "names_page": {
     "title": "索取您的 NAME，解锁您的世界！",
@@ -1710,9 +1722,21 @@
     "visitor": "此挂单已不可用。卖家需要重新创建。",
     "update_listing": "更新挂单"
   },
+  "stolen_nft_warning": {
+    "label": "被盗的NFT无法购买",
+    "cannot_be_bought": "此物品已被报告为被盗，无法购买。"
+  },
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "价格不可用"
+  },
+  "iap_payment_unavailable": {
+    "title": "无法结账",
+    "description": "此结账页面呈现为使用 Credits 付款，但 Credits 付款未能完成，因此我们不会请您授权任何交易。请从商店重新打开该商品后重试。"
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "价格不可用",
+    "description": "我们目前无法确认此挂单需要多少 MANA，因此不会向你显示待批准的金额。请稍后重试。"
   },
   "announcement_bar": {
     "highlight": "认识 Decentraland Shop",

@@ -1,7 +1,8 @@
 .main {
   border-radius: 12px;
   margin-bottom: 12px;
-  background: rgba(42, 38, 47);
+  /* Same near-black family as the panels above, and it sits right beside the details box. */
+  background: var(--card);
 }
 
 .actions {
@@ -88,7 +89,8 @@
 }
 
 .selectedViewOption {
-  background: rgba(42, 38, 47);
+  /* Same near-black family as the panels above, and it sits right beside the details box. */
+  background: var(--card);
   cursor: auto;
 }
 

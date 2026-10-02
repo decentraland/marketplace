@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { BigNumber, ethers } from 'ethers'
 import { ChainId, Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ChainData, Token } from 'decentraland-transactions/crossChain'
+import { CHAIN_SELECTOR_DATA_TEST_ID, TOKEN_SELECTOR_DATA_TEST_ID } from './constants'
 import PaymentSelector from './PaymentSelector'
 
 jest.mock('decentraland-ui', () => ({
@@ -67,6 +69,48 @@ describe('when rendering PaymentSelector', () => {
     }
     onShowChainSelector = jest.fn()
     onShowTokenSelector = jest.fn()
+  })
+
+  // Set for an asset whose transfer the registry gates on a fingerprint — an Estate. The cross-chain
+  // route settles through a call that carries no fingerprint, so another chain or token would be
+  // offering a purchase that cannot complete.
+  describe('and the payment is pinned to the asset chain', () => {
+    beforeEach(() => {
+      render(
+        <PaymentSelector
+          price={price}
+          shouldUseCrossChainProvider={false}
+          isBuyingAsset={false}
+          amountInSelectedToken="100"
+          route={undefined}
+          routeFeeCost={undefined}
+          gasCost={undefined}
+          isFetchingGasCost={false}
+          providerTokens={providerTokens}
+          selectedToken={selectedToken}
+          selectedChain={selectedChain}
+          wallet={wallet}
+          selectedProviderChain={selectedProviderChain as ChainData}
+          isFetchingBalance={false}
+          selectedTokenBalance={BigNumber.from('1000000000000000000000')}
+          onShowChainSelector={onShowChainSelector}
+          onShowTokenSelector={onShowTokenSelector}
+          isPinnedToAssetChain
+        />
+      )
+    })
+
+    it('should not open the chain selector', async () => {
+      await userEvent.click(screen.getByTestId(CHAIN_SELECTOR_DATA_TEST_ID))
+
+      expect(onShowChainSelector).not.toHaveBeenCalled()
+    })
+
+    it('should not open the token selector', async () => {
+      await userEvent.click(screen.getByTestId(TOKEN_SELECTOR_DATA_TEST_ID))
+
+      expect(onShowTokenSelector).not.toHaveBeenCalled()
+    })
   })
 
   describe('and credits are not being used', () => {

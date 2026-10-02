@@ -23,6 +23,10 @@ export type Props = Partial<AtlasProps> & {
   tilesByEstateId: Record<string, Tile[]>
   selection?: { x: number | string; y: number | string }[]
   isEstate?: boolean
+  // Highlight exactly the `selection`, without the estate_id expansion below. Set when the selection is
+  // the authoritative composition (read from the registry), so a stale tile layer cannot re-add parcels
+  // the Estate no longer contains to what the user is reviewing.
+  strictSelection?: boolean
   withPopup?: boolean
   withNavigation?: boolean
   showOnSale?: boolean

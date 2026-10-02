@@ -109,14 +109,14 @@
     "names": "NAMEs",
     "collectibles": "Collectibles",
     "partners": "Partners",
-    "my_assets": "My Assets",
+    "my_assets": "My Items",
     "my_lists": "My Lists",
     "my_bids": "My Bids",
     "activity": "Activity",
     "buy_mana_with_fiat": "Buy MANA"
   },
   "user_menu": {
-    "my_assets": "My Assets",
+    "my_assets": "My Items",
     "my_lists": "My Lists"
   },
   "menu": {
@@ -1275,6 +1275,10 @@
       "title": "Temporarily unavailable",
       "body": "NAME registration with credits is temporarily paused due to high network costs. Please try again later."
     },
+    "open_transak_failure": {
+      "title": "Card payment unavailable",
+      "body": "Card payment could not be started for this listing."
+    },
     "cross_chain_tx": {
       "body": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in the links below:",
       "view_transaction": "View transaction"
@@ -1602,8 +1606,8 @@
   },
   "expired_listings_modal": {
     "title": "Some of your assets need attention",
-    "description": "Please go to My Assets and review your listings <br></br> as some of them have to be updated",
-    "go_to_my_assets": "Go to My Assets",
+    "description": "Please go to My Items and review your listings <br></br> as some of them have to be updated",
+    "go_to_my_assets": "Go to My Items",
     "do_not_show_again": "Don't show me this again"
   },
   "list_card": {
@@ -1640,6 +1644,14 @@
   "atlas_updated_warning": {
     "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
+  },
+  "estate_composition": {
+    "loading": "Checking which LANDs this Estate contains…",
+    "retry": "Try again",
+    "modal_title": "Estate contents unavailable",
+    "unavailable": "We could not read which LANDs this Estate contains. Please refresh the page and try again. If the problem persists, please contact our support team.",
+    "out_of_sync": "This Estate contains {count} {count, plural, one {LAND} other {LANDs}}, which is not what this page is showing. Please refresh the page to see its current contents before continuing.",
+    "changed": "The LANDs this Estate contains changed while you were reviewing it. Please refresh the page to see its current contents before continuing."
   },
   "names_page": {
     "title": "Claim your NAME, Unlock Your World!",
@@ -1744,9 +1756,21 @@
     "visitor": "This listing is no longer available. The seller needs to recreate it.",
     "update_listing": "Update listing"
   },
+  "stolen_nft_warning": {
+    "label": "STOLEN NFTS CAN'T BE BOUGHT",
+    "cannot_be_bought": "This item was reported as stolen and cannot be bought."
+  },
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Price unavailable"
+  },
+  "iap_payment_unavailable": {
+    "title": "Checkout unavailable",
+    "description": "This checkout is presented as a Credits purchase, but the Credits payment did not come through, so we are not asking you to approve anything. Please open the item again from the store and retry."
+  },
+  "checkout_price_unavailable_modal": {
+    "title": "Price unavailable",
+    "description": "We couldn't confirm how much MANA this listing costs right now, so we're not showing you an amount to approve. Please try again in a moment."
   },
   "announcement_bar": {
     "highlight": "Meet the Decentraland Shop",

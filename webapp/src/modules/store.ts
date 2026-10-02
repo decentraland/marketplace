@@ -7,21 +7,19 @@ import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analy
 import { fetchCampaignRequest } from 'decentraland-dapps/dist/modules/campaign/actions'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
-import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 import { fetchTranslationsRequest } from 'decentraland-dapps/dist/modules/translation/actions'
 import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Locale } from 'decentraland-ui'
 import { config } from '../config'
-import { getAnalyticsProxyOptions } from './analytics/proxy'
-import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
+import { getShopUrl } from './iap/shopRedirect'
 import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
 import { getBasename } from './routing/basename'
 import { rootSaga } from './sagas'
+import { PERSISTED_ACTIONS, PERSISTED_PATHS } from './storage'
 import { fetchTilesRequest } from './tile/actions'
 import { ExtendedHistory } from './types'
-import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
 export const createHistory = () => {
   const history = createBrowserHistory({ basename: getBasename() || undefined }) as ExtendedHistory
@@ -53,6 +51,14 @@ export const createHistory = () => {
   const isIAP = viewParam === 'mobile-iap'
 
   if (isIAP) {
+    // Hand the request to the shop when it serves this destination. Runs before the
+    // router exists, so there is no flash of this app's shell.
+    const shopUrl = getShopUrl(window.location.pathname, initialParams)
+    if (shopUrl) {
+      window.location.replace(shopUrl)
+      return history
+    }
+
     const injectParams = (path: string | Location): string | Location => {
       if (typeof path === 'string') {
         const [pathname, search = ''] = path.split('?')
@@ -91,8 +97,10 @@ export const createHistory = () => {
       originalReplace(injectParams(location as string | Location) as Path & Location, state)
     }
 
-    // In IAP mode, redirect root to /browse on initial load
-    if (isIAP && window.location.pathname === (getBasename() || '/')) {
+    // In IAP mode, redirect root to /browse on initial load. Compared case-insensitively for the
+    // same reason `stripBasename` is: the router resolves a case variant of the basename to the
+    // same route, so recognising it differently here leaves that route unredirected.
+    if (isIAP && window.location.pathname.toLowerCase() === (getBasename() || '/').toLowerCase()) {
       history.replace(`/browse?${initialParams.toString()}`)
     }
   }
@@ -126,19 +134,14 @@ export function initStore(history: History) {
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-    paths: [
-      ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn']
-    ], // array of paths from state to be persisted (optional)
-    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
+    paths: PERSISTED_PATHS, // array of paths from state to be persisted (optional)
+    actions: PERSISTED_ACTIONS, // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
-  // analytics.js and the events it sends go through a first party proxy where configured, ad blockers drop
-  // Segment's own hosts. The `dapps-seg-alt` flag is the kill switch back to them, see modules/analytics/proxy
-  const analyticsMiddleware = createAnalyticsMiddleware(
-    config.get('SEGMENT_API_KEY'),
-    getAnalyticsProxyOptions(config.get('SEGMENT_ANALYTICS_URL', ''), config.get('SEGMENT_API_HOST', ''))
-  )
+  // analytics.js is served from a first party proxy where configured, ad blockers drop the requests to Segment's CDN
+  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'), {
+    analyticsUrl: config.get('SEGMENT_ANALYTICS_URL', '') || undefined
+  })
 
   const middleware = applyMiddleware(sagasMiddleware, loggerMiddleware, transactionMiddleware, storageMiddleware, analyticsMiddleware)
   const enhancer = composeEnhancers(middleware)
@@ -172,11 +175,8 @@ export function initTestStore(preloadedState = {}) {
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-    paths: [
-      ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn']
-    ], // array of paths from state to be persisted (optional)
-    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
+    paths: PERSISTED_PATHS, // array of paths from state to be persisted (optional)
+    actions: PERSISTED_ACTIONS, // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 

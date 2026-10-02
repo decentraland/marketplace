@@ -2,6 +2,8 @@ import React from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge } from 'decentraland-ui'
+import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
+import { useEstateSnapshot } from '../../../modules/nft/hooks'
 import { AssetImage } from '../../AssetImage'
 import BaseDetail from '../BaseDetail'
 import { BidList } from '../BidList'
@@ -17,7 +19,12 @@ import { Props } from './EstateDetail.types'
 import './EstateDetail.css'
 
 const EstateDetail = ({ nft, order, rental }: Props) => {
-  const estate = nft.data.estate!
+  // The composition shown here comes from the indexer, which can be behind. Read it from the registry so
+  // the map a buyer or seller reviews is the one their action will bind to, and draw it strictly (the
+  // registry set is complete, so the large-estate tile expansion would only add stale parcels).
+  const estateSnapshot = useEstateSnapshot(nft)
+  const reviewedNft = estateSnapshot.snapshot ? applyEstateSnapshot(nft, estateSnapshot.snapshot) : nft
+  const estate = reviewedNft.data.estate!
   let x = 0
   let y = 0
 
@@ -36,11 +43,12 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
         <>
           <AssetImage
             className={classNames(estate.size === 0 && 'dissolved')}
-            asset={nft}
+            asset={reviewedNft}
             isDraggable
             withNavigation
             hasPopup
             showUpdatedDateWarning
+            strictEstateSelection={!!estateSnapshot.snapshot}
           />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">
@@ -61,14 +69,14 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
         <>
           <Description text={estate.description} />
           <Owner asset={nft} />
-          <ProximityHighlights nft={nft} />
+          <ProximityHighlights nft={reviewedNft} />
         </>
       }
       box={<></>}
       below={
         <>
           <BidList nft={nft} />
-          {estate.size > 0 && <ParcelCoordinates parcelCoordinates={nft.data.estate?.parcels || []} total={nft.data.estate?.size || 0} />}
+          {estate.size > 0 && <ParcelCoordinates parcelCoordinates={estate.parcels} total={estate.size} />}
           <TransactionHistory asset={nft} />
           <RentalHistory asset={nft} />
         </>

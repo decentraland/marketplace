@@ -11,3 +11,6 @@ import './components/Field.css'
 import './components/Menu.css'
 import './components/Navigation.css'
 import './components/Popup.css'
+// Shop visual parity — loads last so it wins specificity ties. Remove this line to revert.
+// eslint-disable-next-line import/order
+import './shop-parity.css'

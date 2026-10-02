@@ -1,0 +1,188 @@
+name: CDN deploy
+
+on:
+  push:
+    branches: [master]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: "Environment to promote to"
+        required: true
+        default: "today"
+        options: [zone, today, org]
+      version:
+        description: "Version to put live. org requires a release (e.g. 8.37.0); zone and today also take a commit build (e.g. 8.36.2-36712345678.commit-1509d74 — copy it from the deploy run you want)."
+        required: true
+      percentage:
+        description: "Rollout percentage"
+        required: true
+        default: "100"
+
+jobs:
+  dev:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    # Scoped to pushes. The broker serialises the KV write itself -- it holds a lease per
+    # environment and record, and answers `rollout_in_progress` with a Retry-After that this
+    # action retries -- so a release or a promotion may run alongside this one. Sharing a
+    # single group across all three instead lets a queued release be cancelled outright by
+    # the next push, which deploys nothing and reports no failure.
+    #
+    # Within this group a newer commit does supersede a pending older one, which is the
+    # commit that should end up live.
+    concurrency:
+      group: cdn-deploy-${{ github.repository }}-push
+      cancel-in-progress: false
+    # zone and today, which is what the `set-rollout` workflow this replaces did on every
+    # master push. `today` needs an environment claim, and GitHub issues one only to a job
+    # that declares an environment; `zone` needs none, so this one declaration covers both.
+    #
+    # GitHub evaluates this before the job starts. `today` carries no protection rules
+    # today, so nothing waits -- but adding required reviewers to it would make every push
+    # to master queue for approval.
+    environment: today
+    env:
+      # Job level, not step level: the build runs inside a composite action, and composite
+      # steps do not inherit `env:` from the step that calls them.
+      NODE_OPTIONS: "--max_old_space_size=4096"
+    permissions:
+      id-token: write
+      contents: read
+      deployments: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: webapp/package-lock.json
+      - run: npm install
+        working-directory: webapp
+      # The build runs INSIDE the action, which is what keeps the version the bytes were
+      # built for and the prefix they are uploaded to the same value. webapp/scripts/prebuild.cjs
+      # derives VITE_BASE_URL -- the CDN path every asset is requested from -- from the version
+      # in webapp/package.json. A build that runs before the version is settled emits HTML
+      # pointing at a prefix nothing was ever uploaded to.
+      #
+      # The action writes the version into the REPO-ROOT package.json, which this app does not
+      # build from, so the first line carries it across. `npm run build` then runs `prebuild`
+      # through npm's lifecycle, and that is what reads the value.
+      #
+      # `package-name` is explicit because the root package.json is called `marketplace`, not
+      # the package definitions binds to this repository.
+      - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
+        with:
+          package-name: "@dcl/marketplace-site"
+          build-command: |
+            cd webapp
+            npm version "$CDN_DEPLOY_VERSION" --no-git-tag-version --allow-same-version
+            npm run build
+          dist-path: ./webapp/dist
+          deployment-environments: '["zone","today"]'
+
+  release:
+    # `release: published` fires for prereleases too. Without the guard an RC would publish
+    # like any other release.
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    # Keyed by tag: two releases published close together both deploy, rather than the
+    # pending one being cancelled when the second arrives.
+    concurrency:
+      group: cdn-deploy-${{ github.repository }}-release-${{ github.event.release.tag_name }}
+      cancel-in-progress: false
+    environment: today
+    env:
+      NODE_OPTIONS: "--max_old_space_size=4096"
+    permissions:
+      id-token: write
+      contents: read
+      deployments: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: webapp/package-lock.json
+      - run: npm install
+        working-directory: webapp
+      # Rebuilt rather than copied from the commit build: prebuild bakes VITE_BASE_URL from
+      # the version, so a copy of the commit build would serve /8.37.0/index.html asking for
+      # its assets from /8.37.0-<runId>.commit-<sha7>/. A release serves everything from its
+      # own path, which means building with the tag as the version -- which is what passing
+      # `version` alongside `build-command` does.
+      #
+      # `org` is absent deliberately: production is promoted by hand, naming the version,
+      # from `promote` below.
+      - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
+        with:
+          package-name: "@dcl/marketplace-site"
+          build-command: |
+            cd webapp
+            npm version "$CDN_DEPLOY_VERSION" --no-git-tag-version --allow-same-version
+            npm run build
+          dist-path: ./webapp/dist
+          version: ${{ github.event.release.tag_name }}
+          deployment-environments: '["zone","today"]'
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          sourcemaps: ${{ github.workspace }}/webapp/dist
+          version: "${{ vars.SENTRY_RELEASE_PREFIX }}@${{ github.event.release.tag_name }}"
+          url_prefix: "~"
+
+  promote:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # Keyed by environment: a promotion to zone must not queue behind one to org.
+    concurrency:
+      group: cdn-deploy-${{ github.repository }}-promote-${{ inputs.environment }}
+      cancel-in-progress: false
+    # Required: GitHub evaluates this before the job starts and only then issues the
+    # environment claim the broker checks for today and org.
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+      deployments: write
+      statuses: write
+    steps:
+      # No checkout: nothing is built and the bytes are already in S3, so the package name
+      # cannot be read from package.json, and there is no base version to compute a commit
+      # version from -- the action only demands one when it has to compute it.
+      #
+      # One dispatch is NOT a rollback. Records are stored sorted descending by semver and
+      # the worker serves the first one whose percentage covers the user, so EVERY version
+      # that sorts above the target has to be at 0% before the target is reached -- after a
+      # few pushes that is several commit builds, not one.
+      #
+      # The order matters, and only one order is safe. Restore the target to 100% FIRST:
+      # that is invisible to users, because a newer record still sorts ahead and keeps
+      # serving. Then zero the abandoned versions. Zeroing first leaves users whom no
+      # record covers, and `calculateRollout` skips records at 0% and falls back to the
+      # LAST one -- the oldest version still stored -- so a rollback done in that order can
+      # briefly serve something older than either version involved.
+      #
+      # One dispatch at a time, waiting for each run to finish. These share a concurrency
+      # group per environment, and a third dispatch queued behind a running one cancels the
+      # second while it is still pending -- which deploys nothing and reports no failure.
+      #
+      # A version published before this workflow existed has no `.deploy-complete.json`, and
+      # the broker refuses to point at a prefix whose upload it cannot confirm finished. Use
+      # `set-rollout-manual.yaml` for those; it writes KV through the older path, which does not check.
+      - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
+        with:
+          package-name: "@dcl/marketplace-site"
+          version: ${{ inputs.version }}
+          deployment-environments: ${{ inputs.environment }}
+          percentage: ${{ inputs.percentage }}

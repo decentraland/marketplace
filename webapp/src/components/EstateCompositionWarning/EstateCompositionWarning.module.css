@@ -1,0 +1,13 @@
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+.unavailable {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

@@ -1,10 +1,11 @@
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
 import { act, fireEvent, screen } from '@testing-library/react'
 import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } from '@dcl/schemas'
+import { STOLEN_NFT_KEYS } from '../../lib/stolenNfts'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { PageName, SortBy } from '../../modules/routing/types'
-import { useTradePriceDenomination } from '../../modules/trade/hooks'
+import { useTradePricing } from '../../modules/trade/hooks'
 import { renderWithProviders } from '../../utils/test'
 import { HoverPreviewProvider } from '../HoverPreview'
 import AssetCard from './AssetCard'
@@ -16,7 +17,7 @@ const HOVER_INTENT_MS = 120
 // The two reads the pegged path depends on: which unit the listing is in, and the rate to convert it.
 // Both are network calls in production; here they are dials so a test can state the situation it means.
 jest.mock('../../modules/trade/hooks', () => ({
-  useTradePriceDenomination: jest.fn(() => 'mana'),
+  useTradePricing: jest.fn(() => ({ denomination: 'mana', marketplaceAddress: '0xmarketplace' })),
   useManaUsdRate: jest.fn(() => ({ answer: 100000000n, decimals: 8 }))
 }))
 
@@ -136,6 +137,20 @@ describe('AssetCard', () => {
     })
   })
 
+  describe('when the asset is a stolen nft', () => {
+    beforeEach(() => {
+      const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
+      asset = { ...asset, chainId: Number(chainId), contractAddress, tokenId } as Asset
+    })
+
+    it('should render the card without a stolen badge', () => {
+      renderAssetCard({ asset })
+      mockAllIsIntersecting(true)
+      expect(screen.getByTestId('asset-card-content')).toBeInTheDocument()
+      expect(screen.queryByTestId('stolen-nft-badge')).toBeNull()
+    })
+  })
+
   /**
    * A USD-pegged listing carries USD wei in `price`, so drawing it with the MANA glyph tells the shopper
    * the item costs a fraction of what it does. The catalog card renders through its own path, which is why
@@ -146,7 +161,7 @@ describe('AssetCard', () => {
 
     beforeEach(() => {
       // $1 per MANA, so the converted figure is a round number the assertion can name.
-      ;(useTradePriceDenomination as jest.Mock).mockReturnValue('usd-pegged')
+      ;(useTradePricing as jest.Mock).mockReturnValue({ denomination: 'usd-pegged', marketplaceAddress: '0xmarketplace' })
       catalogAsset = {
         ...asset,
         itemId: '0',

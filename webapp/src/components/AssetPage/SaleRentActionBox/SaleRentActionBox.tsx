@@ -10,6 +10,7 @@ import { Button, Popup } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import {
@@ -21,13 +22,16 @@ import {
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
+import { useCheckoutPriceInMana } from '../../../modules/trade/hooks'
 import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { LinkedProfile } from '../../LinkedProfile'
+import { ListingPrice } from '../../ListingPrice'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
+import StolenNFTWarning from '../../StolenNFTWarning'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
@@ -41,7 +45,7 @@ enum View {
 const SaleRentActionBox = ({
   nft,
   wallet,
-  order,
+  order: currentOrder,
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
@@ -53,10 +57,14 @@ const SaleRentActionBox = ({
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
   const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
+  const isStolen = isStolenNFT(nft)
+  // A stolen NFT must never show its listing: no price and no purchase UI.
+  const order = isStolen ? null : currentOrder
   const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
-  const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
+  // A stolen NFT must never start on the rent view: the thief must not monetize it through rentals.
+  const [view, setView] = useState(!!order || !isRentalOpen || isStolen ? View.SALE : View.RENT)
   const maxPriceOfPeriods: string | null = useMemo(() => (rental ? getMaxPriceOfPeriods(rental) : null), [rental])
   const toggleView = useCallback(() => (view === View.RENT ? setView(View.SALE) : setView(View.RENT)), [view])
   const isNFTPartOfAState = useMemo(() => isPartOfEstate(nft), [nft])
@@ -64,7 +72,7 @@ const SaleRentActionBox = ({
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
-  const canBid = !isOwner && isBiddable
+  const canBid = !isOwner && isBiddable && !isStolen
   const isCurrentlyRented = isRentalListingExecuted(rental)
 
   const handleOnRent = useCallback(() => {
@@ -91,15 +99,25 @@ const SaleRentActionBox = ({
         ),
     [rental, currentMana, selectedRentalPeriodIndex, isPeriodSelected]
   )
+  // `order.price` is MANA wei on most listings and USD wei on a USD-pegged one, so the balance is compared
+  // against the MANA figure instead. Unlike the checkout, this one stays optimistic while the trade is being
+  // read: it only picks which call to action to show, and holding it back would flash "get MANA" on every
+  // ordinary listing for as long as the read takes.
+  const checkoutPrice = useCheckoutPriceInMana(order?.price ?? '0', nft.network, order?.tradeId)
+  // The fallback is for the transient state only. Once the amount is known to be unresolvable there is
+  // nothing honest to compare against, and no figure means the call to action offers to get MANA instead.
+  const priceToCompare = checkoutPrice.manaWei ?? (checkoutPrice.status === 'resolving' ? order?.price : undefined)
+
   const hasEnoughManaToBuy = useMemo(
-    () => !!order && !!currentMana && ethers.utils.parseEther(formatBalance(currentMana)).gte(order.price),
-    [order, currentMana]
+    () => !!order && !!currentMana && !!priceToCompare && ethers.utils.parseEther(formatBalance(currentMana)).gte(priceToCompare),
+    [order, currentMana, priceToCompare]
   )
 
   return (
     <div className={styles.main}>
       <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} listingCreatedAt={order?.createdAt} />
-      {isRentalOpen && maxPriceOfPeriods ? (
+      <StolenNFTWarning asset={nft} />
+      {isRentalOpen && maxPriceOfPeriods && !isStolen ? (
         <div className={styles.viewSelector}>
           <button
             onClick={toggleView}
@@ -122,7 +140,7 @@ const SaleRentActionBox = ({
         </div>
       ) : null}
       <div className={styles.actions}>
-        {view === View.RENT && isRentalOpen && maxPriceOfPeriods ? (
+        {view === View.RENT && isRentalOpen && maxPriceOfPeriods && !isStolen ? (
           <>
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>
@@ -175,12 +193,15 @@ const SaleRentActionBox = ({
               <div className={styles.price}>
                 <div className={styles.title}>{t('global.price')}</div>
                 <div className={styles.content}>
-                  <Mana showTooltip className={styles.priceInMana} withTooltip size="medium" network={order.network}>
-                    {formatWeiMANA(order.price)}
-                  </Mana>
-                  <span className={styles.priceInFiat}>
-                    (<ManaToFiat mana={order.price} />)
-                  </span>
+                  <ListingPrice
+                    price={order.price}
+                    network={order.network}
+                    tradeId={order.tradeId}
+                    showFiat
+                    size="medium"
+                    manaClassName={styles.priceInMana}
+                    showTooltip
+                  />
                 </div>
               </div>
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (
@@ -234,7 +255,7 @@ const SaleRentActionBox = ({
                   </Button>
                 ) : null}
                 <div className={styles.saleButtons}>
-                  {order && !isEstateListingBroken ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
+                  {order && !isEstateListingBroken && !isStolen ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
                   {/*
                    * Making a new offer is independent of the seller's listing being
                    * broken by the EstateRegistry upgrade. A fresh bid is signed with the
@@ -257,7 +278,7 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled ? (
+                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled && !isStolen ? (
                   <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
                 ) : null}
               </>

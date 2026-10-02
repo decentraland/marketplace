@@ -25,6 +25,21 @@ export type OnGetCrossChainRoute = (
 export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isUsingMagic'> &
   Omit<ModalProps, 'metadata'> & {
     price: string
+    /**
+     * True when `price` is an oracle conversion of a USD-pegged listing rather than the signed amount, so the
+     * figures rendered from it are marked approximate: the contract recomputes the rate at accept time.
+     */
+    isPriceApproximate?: boolean
+    // Draw the Estate in the checkout strictly from its selection (the authoritative composition), not
+    // expanded from a stale tile layer, so the map matches what the purchase binds to.
+    strictEstateSelection?: boolean
+    /**
+     * The same resolved MANA amount as `price`, before any credits are deducted. Mobile-IAP mode shows the
+     * full price rather than the remainder, and it has to come from here: an asset's own `price` field carries
+     * no unit, so on a USD-pegged listing it is USD wei and bears no relation to what the purchase debits.
+     * Required rather than optional so that a caller cannot leave it out and fall back to the remainder.
+     */
+    priceBeforeCredits: string
     credits: CreditsResponse | null
     useCredits?: boolean
     wallet: Wallet | null
@@ -50,6 +65,9 @@ export type ContainerProps = Pick<
   Props,
   | 'metadata'
   | 'price'
+  | 'isPriceApproximate'
+  | 'strictEstateSelection'
+  | 'priceBeforeCredits'
   | 'useCredits'
   | 'isBuyingAsset'
   | 'onBuyNatively'
