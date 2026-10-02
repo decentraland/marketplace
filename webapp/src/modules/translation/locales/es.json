@@ -1045,10 +1045,6 @@
     "disallowed": "Haz desautorizado al contrato de {contract_link} a operar {symbol} por tí",
     "disapproved": "Haz desautorizado al contrato de {contract_link} a operar {symbol} por tí"
   },
-  "authorization_modal": {
-    "title": "Autorizar {token}",
-    "description": "Para poder continuar deberás autorizar al contrato de {contract} a operar tus tokens de {token}.{br}Esto solo debe realizarse una única vez, y siempre puedes gestionar tus autorizaciones desde la pagina de {settings_link}."
-  },
   "transfer_page": {
     "title": "Transferir {category}",
     "subtitle": "Estás por transferir {name}.",
