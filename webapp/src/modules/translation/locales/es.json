@@ -1127,6 +1127,10 @@
       "title": "Error de Meta transacción",
       "body": "Ocurrió un error publicando la meta transacción.{br}Intentelo de nuevo o ingrese a nuestro {discord_link} para obtener más información."
     },
+    "listing_unavailable": {
+      "title": "Esta publicación ya no está disponible",
+      "body": "El vendedor ya no permite transferir este artículo, por lo que no se puede comprar en este momento. Pruebe con otra publicación."
+    },
     "contract_account": {
       "title": "No soportado",
       "body": "Las billeteras basadas en smart contracts no soportan meta-transacciones"
