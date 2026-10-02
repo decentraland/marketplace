@@ -5,6 +5,7 @@ import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeServic
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
+import { assertNotPaused, getTradeFailureMessage } from '../../lib/pausedTrades'
 import { isStolenNFT, isStolenToken, STOLEN_NFT_BID_ERROR, STOLEN_NFT_SELL_ERROR } from '../../lib/stolenNfts'
 import { isNFT } from '../asset/utils'
 import { getContract } from '../contract/selectors'
@@ -81,6 +82,7 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
       if ('tokenId' in bid && isStolenToken(bid.chainId, bid.contractAddress, bid.tokenId)) {
         throw new Error(STOLEN_NFT_SELL_ERROR)
       }
+      assertNotPaused(bid)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         throw new Error('Can not accept a bid without a wallet')
@@ -89,6 +91,7 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
       if (bidUtils.isBidTrade(bid)) {
         // Offchain bid with tradeId
         const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
+        assertNotPaused(trade)
         txHash = yield call([tradeService, 'accept'], trade, wallet.address)
       } else {
         // Legacy onchain bid without tradeId
@@ -123,7 +126,7 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
 
       yield put(acceptBidSuccess(bid))
     } catch (error) {
-      yield put(acceptBidFailure(bid, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(acceptBidFailure(bid, getTradeFailureMessage(error, t('global.unknown_error'))))
     }
   }
 

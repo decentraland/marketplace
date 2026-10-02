@@ -87,6 +87,12 @@
   margin: 10px;
 }
 
+.Bid .trading-paused-warning {
+  align-self: stretch;
+  width: auto;
+  margin: 0 24px 24px;
+}
+
 @media (max-width: 1300px) {
   .Bid .wrapper {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;

@@ -13,6 +13,7 @@ import {
 import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
+import { PausedTradeError } from '../lib/pausedTrades'
 import { fromMillisecondsToSeconds } from '../lib/time'
 import {
   OFFCHAIN_MARKETPLACE_TYPES,
@@ -20,6 +21,7 @@ import {
   getOnChainTrade,
   getValueForTradeAsset,
   estimateTradeGas,
+  fetchUnpausedTradeData,
   getLatestOffChainMarketplaceContract,
   getDeployedOffChainMarketplaceContracts
 } from './trades'
@@ -443,6 +445,76 @@ describe('when estimating trade gas', () => {
 
     it('should propagate the error', async () => {
       return expect(estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
+    })
+  })
+})
+
+describe('when fetching the trade data of a cross chain route', () => {
+  let tradeId: string
+  let buyerAddress: string
+  let trade: Trade
+  let fetchTradeMock: jest.SpyInstance
+
+  beforeEach(() => {
+    tradeId = 'a-trade-id'
+    buyerAddress = '0xbuyer'
+    trade = {
+      contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+      id: tradeId,
+      createdAt: Date.now(),
+      signature: '0xsignature',
+      signer: '0xsigner',
+      type: TradeType.PUBLIC_ITEM_ORDER,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA,
+      checks: {
+        expiration: Date.now() + 100000000000,
+        effective: Date.now(),
+        uses: 1,
+        salt: '0x',
+        allowedRoot: '0x',
+        contractSignatureIndex: 0,
+        externalChecks: [],
+        signerSignatureIndex: 0
+      },
+      sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xnft', tokenId: '1', extra: '0x' }],
+      received: [
+        { assetType: TradeAssetType.ERC20, contractAddress: '0xtoken', amount: '1000000000000000000', extra: '0x', beneficiary: '0xseller' }
+      ]
+    }
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  describe('and the trade is not paused', () => {
+    let result: unknown
+
+    beforeEach(async () => {
+      fetchTradeMock = jest.spyOn(TradeService.prototype, 'fetchTrade').mockResolvedValueOnce(trade)
+      result = await fetchUnpausedTradeData(tradeId, buyerAddress)
+    })
+
+    it('should resolve the marketplace address and the on chain trade for the buyer', () => {
+      expect(result).toEqual({ marketplaceAddress: trade.contract, onChainTrade: getOnChainTrade(trade, buyerAddress) })
+    })
+  })
+
+  describe('and the trade contract was paused after the page loaded', () => {
+    let error: unknown
+
+    beforeEach(async () => {
+      fetchTradeMock = jest.spyOn(TradeService.prototype, 'fetchTrade').mockResolvedValueOnce({ ...trade, isPaused: true })
+      error = await fetchUnpausedTradeData(tradeId, buyerAddress).catch((e: unknown) => e)
+    })
+
+    it('should reject with the paused trade error', () => {
+      expect(error).toBeInstanceOf(PausedTradeError)
+    })
+
+    it('should fetch the latest version of the trade', () => {
+      expect(fetchTradeMock).toHaveBeenCalledWith(tradeId)
     })
   })
 })

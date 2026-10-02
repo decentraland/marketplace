@@ -12,7 +12,7 @@ jest.mock('../../../modules/trade/hooks', () => ({
   useCheckoutPriceInMana: () => ({ status: 'ready', manaWei: '1', isUSDPegged: false })
 }))
 jest.mock('../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton', () => ({
-  BuyWithCryptoButton: () => <div data-testid="buy-with-crypto-button" />
+  BuyWithCryptoButton: ({ disabled }: { disabled?: boolean }) => <button data-testid="buy-with-crypto-button" disabled={disabled} />
 }))
 jest.mock('../../BidButton', () => ({ __esModule: true, default: () => <div data-testid="bid-button" /> }))
 jest.mock('../../ListingPrice', () => ({ ListingPrice: () => <div /> }))
@@ -54,6 +54,42 @@ describe('SaleRentActionBox', () => {
       const { getByTestId } = renderWithProviders(<SaleRentActionBox {...props} />)
       expect(getByTestId('buy-with-crypto-button')).toBeInTheDocument()
       expect(getByTestId('bid-button')).toBeInTheDocument()
+    })
+  })
+
+  describe('when the order is on a paused marketplace contract', () => {
+    beforeEach(() => {
+      props.order = { ...props.order, isPaused: true } as Order
+    })
+
+    describe('and it is shown to a buyer', () => {
+      it('should keep the buy button visible but disabled', () => {
+        const { getByTestId } = renderWithProviders(<SaleRentActionBox {...props} />)
+        expect(getByTestId('buy-with-crypto-button')).toBeDisabled()
+      })
+
+      it('should explain that purchases of the listing are unavailable', () => {
+        const { getByRole } = renderWithProviders(<SaleRentActionBox {...props} />)
+        expect(getByRole('alert')).toHaveTextContent(t('trading_paused_warning.visitor'))
+      })
+    })
+
+    describe('and it is shown to the owner', () => {
+      beforeEach(() => {
+        props.wallet = { address: '0xowner' } as Wallet
+      })
+
+      it('should ask the owner to cancel and list again', () => {
+        const { getByRole } = renderWithProviders(<SaleRentActionBox {...props} />)
+        expect(getByRole('alert')).toHaveTextContent(t('trading_paused_warning.owner'))
+      })
+    })
+  })
+
+  describe('when the order is on an active marketplace contract', () => {
+    it('should keep the buy button enabled', () => {
+      const { getByTestId } = renderWithProviders(<SaleRentActionBox {...props} />)
+      expect(getByTestId('buy-with-crypto-button')).toBeEnabled()
     })
   })
 

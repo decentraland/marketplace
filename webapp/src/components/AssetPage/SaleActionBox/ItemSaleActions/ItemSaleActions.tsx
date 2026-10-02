@@ -1,10 +1,12 @@
 import { memo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
+import { hasActiveBidFrom } from '../../../../lib/pausedTrades'
 import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
 import BidButton from '../../../BidButton'
+import TradingPausedWarning, { TradingPausedWarningVariant } from '../../../TradingPausedWarning'
 import { BuyNFTButtons } from '../BuyNFTButtons'
 import { Props } from './ItemSaleActions.types'
 import styles from './ItemSaleActions.module.css'
@@ -13,7 +15,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }:
   const isIAP = useIsIAP()
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
-  const alreadyBid = !!bids.find(bid => bid.bidder === wallet?.address)
+  const alreadyBid = hasActiveBidFrom(bids, wallet?.address)
   const canBid = !isOwner && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
@@ -21,6 +23,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }:
     <>
       {isOwner ? (
         <div className={styles.ownerButtons}>
+          <TradingPausedWarning listing={item} isOwnListing variant={TradingPausedWarningVariant.ITEM} />
           <Button as="a" href={builderCollectionUrl} fluid className={customClassnames?.primaryButton}>
             {t('asset_page.actions.edit_price')}
           </Button>

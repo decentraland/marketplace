@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
+import { isPaused } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isNFT } from '../../../modules/asset/utils'
 import { isInsufficientMANA, checkFingerprint } from '../../../modules/bid/utils'
@@ -28,8 +29,10 @@ const AcceptButton = (props: Props) => {
   const assetOwner = !!asset && (isNFT(asset) ? asset.owner : asset?.creator)
   const isValidSeller = assetOwner && assetOwner === userAddress
   const isItemAvailable = !!asset && (isNFT(asset) || asset.available > 0)
+  const isBidPaused = isPaused(bid)
 
   const isDisabled =
+    isBidPaused ||
     isCurrentlyLocked ||
     !asset ||
     isLoadingFingerprint ||
@@ -45,7 +48,15 @@ const AcceptButton = (props: Props) => {
     </Button>
   )
 
-  if (hasInsufficientMANA) {
+  if (isBidPaused) {
+    button = (
+      <Popup
+        content={t('trading_paused_warning.bid_seller')}
+        position="top center"
+        trigger={<div className="popup-button">{button}</div>}
+      />
+    )
+  } else if (hasInsufficientMANA) {
     button = (
       <Popup
         content={t('bid.not_enough_mana_on_bid_received')}

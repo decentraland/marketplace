@@ -4,11 +4,13 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge, Button, Icon, InfoTooltip, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { isPaused } from '../../../lib/pausedTrades'
 import { isNFT } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT, Section } from '../../../modules/vendor/decentraland'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { ListingPrice } from '../../ListingPrice'
+import TradingPausedWarning from '../../TradingPausedWarning'
 import AssetCell from '../AssetCell'
 import { Props } from './OnSaleListElement.types'
 import './OnSaleListElement.css'
@@ -16,6 +18,8 @@ import './OnSaleListElement.css'
 const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke, wallet }: Props) => {
   const category = item?.category || nft!.category
   const isAffectedByEstateUpgrade = !!nft && isNFT(nft) && isEstateListingAffectedByUpgrade(nft, order?.createdAt)
+  const listing = order ?? item
+  const isListingPaused = isPaused(listing)
 
   const cancelOrSellOptions = {
     redirectTo: locations.currentAccount({
@@ -37,6 +41,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
           />
         </div>
         {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing listingCreatedAt={order?.createdAt} /> : null}
+        <TradingPausedWarning listing={listing} isOwnListing />
       </Mobile>
       <NotMobile>
         <Table.Row>
@@ -66,6 +71,18 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                     {t('estate_upgrade_warning.update_listing')}
                   </Link>
                 </div>
+              ) : null}
+              {isListingPaused ? (
+                <Popup
+                  content={t('trading_paused_warning.owner')}
+                  position="top center"
+                  trigger={
+                    <div className="warningExpiration">
+                      <Icon name="pause circle" className={'warningExpiration'} /> {t('trading_paused_warning.label')}
+                    </div>
+                  }
+                  on="hover"
+                />
               ) : null}
               {nft && isNFT(nft) && nft?.owner !== wallet?.address && (
                 <div className="needsAttentionBadge">
@@ -103,7 +120,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   {t('asset_page.actions.update_sale')}
                 </Button>
               )
-            ) : nft && isNFT(nft) && nft?.owner !== wallet?.address ? (
+            ) : nft && (isListingPaused || (isNFT(nft) && nft?.owner !== wallet?.address)) ? (
               <Button as={Link} to={locations.cancel(nft.contractAddress, nft.tokenId, cancelOrSellOptions)} inverted fluid>
                 {t('asset_page.actions.cancel_sale')}
               </Button>

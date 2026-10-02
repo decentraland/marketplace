@@ -24,6 +24,11 @@
   padding: 0px 26px 15px 26px;
 }
 
+.YourOffer .pausedWarning {
+  width: auto;
+  margin: 0 26px 20px;
+}
+
 .YourOffer .calendar {
   height: 26.5px;
   width: 26.5px;

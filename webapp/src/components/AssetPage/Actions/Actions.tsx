@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
+import { hasActiveBidFrom, isPaused } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
+import TradingPausedWarning from '../../TradingPausedWarning'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { Props } from './Actions.types'
 import styles from './Actions.module.css'
@@ -26,10 +28,11 @@ const Actions = (props: Props) => {
 
   const canSell = orderService.canSell()
   const isStolen = isStolenNFT(nft)
-  const canBid = !isOwner && isBiddable && !isStolen && (!wallet || !bids.some(bid => bid.bidder === wallet.address))
+  const canBid = !isOwner && isBiddable && !isStolen && !hasActiveBidFrom(bids, wallet?.address)
 
   return (
     <div className={styles.container}>
+      {order && !isStolen && (!isOwner || canSell) ? <TradingPausedWarning listing={order} isOwnListing={isOwner} /> : null}
       {order ? (
         isOwner && canSell ? (
           <>
@@ -42,7 +45,7 @@ const Actions = (props: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            {!isStolen ? <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto(order)} /> : null}
+            {!isStolen ? <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto(order)} disabled={isPaused(order)} /> : null}
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}

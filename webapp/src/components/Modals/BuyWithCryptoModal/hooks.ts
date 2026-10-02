@@ -4,15 +4,12 @@ import { ChainId, Item, Network, Order } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
-import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { API_SIGNER } from '../../../lib/api'
 import { NFT } from '../../../modules/nft/types'
-import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland'
 import * as events from '../../../utils/events'
-import { getOnChainTrade } from '../../../utils/trades'
+import { fetchUnpausedTradeData } from '../../../utils/trades'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx, getTokenBalance } from './utils'
 
 export const NATIVE_TOKEN = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -212,13 +209,7 @@ export const useCrossChainMintNftRoute = (
           price: priceInMana,
           tradeId: item.tradeId
         },
-        fetchTradeData: async () => {
-          const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(item.tradeId as string)
-          return {
-            marketplaceAddress: trade.contract,
-            onChainTrade: getOnChainTrade(trade, fromAddress)
-          }
-        }
+        fetchTradeData: () => fetchUnpausedTradeData(item.tradeId as string, fromAddress)
       }),
     [item]
   )
@@ -258,17 +249,7 @@ export const useCrossChainBuyNftRoute = (
         toChain: order.chainId,
         order,
         fetchTradeData:
-          order.tradeId && wallet?.address
-            ? async () => {
-                const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(
-                  order.tradeId as string
-                )
-                return {
-                  marketplaceAddress: trade.contract,
-                  onChainTrade: getOnChainTrade(trade, wallet.address)
-                }
-              }
-            : undefined,
+          order.tradeId && wallet?.address ? () => fetchUnpausedTradeData(order.tradeId as string, wallet.address) : undefined,
         slippage
       }),
     [order]

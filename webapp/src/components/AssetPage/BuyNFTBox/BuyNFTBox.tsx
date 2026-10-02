@@ -7,6 +7,7 @@ import clock from '../../../images/clock.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { hasActiveBidFrom } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { AssetType } from '../../../modules/asset/types'
 import { useIsIAP } from '../../../modules/iap/useIAP'
@@ -15,6 +16,7 @@ import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import StolenNFTWarning from '../../StolenNFTWarning'
+import TradingPausedWarning from '../../TradingPausedWarning'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
@@ -25,7 +27,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
   const currentOrder = useGetCurrentOrder()
-  const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
+  const alreadyBid = useMemo(() => hasActiveBidFrom(bids, address), [bids, address])
   const isOwner = nft && nft?.owner === address
   const isStolen = isStolenNFT(nft)
   // A stolen NFT's open listing must never surface a price or any purchase UI.
@@ -49,6 +51,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
         <EstateUpgradeWarning nft={nft} isOwnListing={!!isOwner} listingCreatedAt={order?.createdAt} />
+        {isOwner ? <TradingPausedWarning listing={order} isOwnListing /> : null}
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>

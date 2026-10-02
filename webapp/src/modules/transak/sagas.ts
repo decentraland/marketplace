@@ -15,10 +15,11 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
+import { assertNotPaused, isPausedTradeError } from '../../lib/pausedTrades'
 import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
 import { getIsCreditsEnabled } from '../features/selectors'
-import { getOpenTransakFailureToast } from '../toast/toasts'
+import { getOpenTransakFailureToast, getTradingPausedToast } from '../toast/toasts'
 import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
@@ -51,6 +52,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
     }
 
     try {
+      assertNotPaused(isNFT(asset) ? order : asset)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         return
@@ -83,6 +85,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
         // credits route goes through the CreditsManager and needs neither.
         const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
         const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
+        assertNotPaused(trade)
 
         // if credits are enabled and useCredits is true, we need to use credits
         if (useCredits && credits) {
@@ -254,7 +257,7 @@ export function* transakSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       // Tell the buyer. OPEN_TRANSAK_FAILURE has no reducer or handler, so on its own it is a dead end —
       // the widget just never opens.
-      yield put(showToast(getOpenTransakFailureToast()))
+      yield put(showToast(isPausedTradeError(error) ? getTradingPausedToast() : getOpenTransakFailureToast()))
       yield put(openTransakFailure(error instanceof Error ? error.message : 'Unknown error'))
     }
   }

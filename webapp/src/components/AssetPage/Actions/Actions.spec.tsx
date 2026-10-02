@@ -92,6 +92,30 @@ describe('Actions Component', () => {
           expect(queryByText(t('asset_page.actions.bid'))).not.toBeInTheDocument()
         })
       })
+
+      describe('and the order is on a paused marketplace contract', () => {
+        beforeEach(() => {
+          mockedUseGetCurrentOrder.mockReset()
+          mockedUseGetCurrentOrder.mockReturnValue({ isPaused: true } as Order)
+        })
+
+        it('should render the paused warning', () => {
+          const { queryByText } = renderWithProviders(<Actions {...props} />)
+          expect(queryByText(t('trading_paused_warning.visitor'))).toBeInTheDocument()
+        })
+
+        describe('and the nft was reported as stolen', () => {
+          beforeEach(() => {
+            const [chainId, contractAddress, tokenId] = STOLEN_NFT_KEYS[0].split(':')
+            props.nft = { ...nft, chainId: Number(chainId), contractAddress, tokenId } as NFT
+          })
+
+          it('should not render the paused warning on top of the stolen state', () => {
+            const { queryByText } = renderWithProviders(<Actions {...props} />)
+            expect(queryByText(t('trading_paused_warning.visitor'))).not.toBeInTheDocument()
+          })
+        })
+      })
     })
   })
   describe('and there is no order', () => {

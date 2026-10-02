@@ -1,6 +1,7 @@
 import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import { ChainId, NFTCategory, Network } from '@dcl/schemas'
+import { ChainId, NFTCategory, Network, Order } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
 import { renderWithProviders } from '../../../../utils/test'
@@ -23,22 +24,27 @@ const ITEM = {
 // What the mocked provider hands the render callback. Mutable so a test can list the same item on a
 // different marketplace version; reset before each one.
 let mockProvidedAsset: Asset = ITEM
+let mockProvidedOrder: Order | null = null
 
 // Supplies the loaded asset the real provider would resolve, so the render callback under test runs
 // without the store and network machinery behind it.
 jest.mock('../../../AssetProvider', () => ({
-  AssetProvider: ({ children }: { children: (asset: Asset, order: null) => React.ReactNode }) => children(mockProvidedAsset, null)
+  AssetProvider: ({ children }: { children: (asset: Asset, order: Order | null) => React.ReactNode }) =>
+    children(mockProvidedAsset, mockProvidedOrder)
 }))
 
 afterEach(() => {
   mockProvidedAsset = ITEM
+  mockProvidedOrder = null
 })
 
 jest.mock('../UseCreditsToggle', () => ({
   __esModule: true,
   default: ({ onUseCredits }: { onUseCredits: (value: boolean) => void }) => <button onClick={() => onUseCredits(true)}>use credits</button>
 }))
-jest.mock('./BuyWithCryptoButton', () => ({ BuyWithCryptoButton: () => <button>buy</button> }))
+jest.mock('./BuyWithCryptoButton', () => ({
+  BuyWithCryptoButton: ({ disabled }: { disabled?: boolean }) => <button disabled={disabled}>buy</button>
+}))
 jest.mock('./BuyWithCardButton', () => ({ BuyWithCardButton: () => <button>card</button> }))
 
 function renderButtons(url: string, overrides: Partial<Props> = {}) {
@@ -170,5 +176,61 @@ describe('when the buyer selects credits on a chain that registers one', () => {
 
   it('should keep the card, since that route settles through the credits manager', () => {
     expect(card).toBeInTheDocument()
+  })
+})
+
+describe('when the item is listed on a paused marketplace contract', () => {
+  let onBuyWithCrypto: jest.Mock
+
+  beforeEach(async () => {
+    mockProvidedAsset = { ...ITEM, tradeId: 'a-trade', isPaused: true } as unknown as Asset
+    ;({ onBuyWithCrypto } = renderButtons('/?buyWithCrypto=true'))
+    await screen.findByText('buy')
+  })
+
+  it('should explain that purchases of the item are unavailable', () => {
+    expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.item_visitor'))
+  })
+
+  it('should keep the buy button visible but disabled', () => {
+    expect(screen.getByRole('button', { name: 'buy' })).toBeDisabled()
+  })
+
+  it('should not offer the card', () => {
+    expect(screen.queryByText('card')).not.toBeInTheDocument()
+  })
+
+  it('should not open the checkout from the deep link', () => {
+    expect(onBuyWithCrypto).not.toHaveBeenCalled()
+  })
+})
+
+describe('when the NFT order is on a paused marketplace contract', () => {
+  beforeEach(async () => {
+    mockProvidedAsset = { ...ITEM, tokenId: '1', itemId: undefined } as unknown as Asset
+    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', isPaused: true } as unknown as Order
+    renderButtons('/', { assetType: AssetType.NFT })
+    await screen.findByText('buy')
+  })
+
+  it('should explain that purchases of the listing are unavailable', () => {
+    expect(screen.getByRole('alert')).toHaveTextContent(t('trading_paused_warning.visitor'))
+  })
+
+  it('should keep the buy button visible but disabled', () => {
+    expect(screen.getByRole('button', { name: 'buy' })).toBeDisabled()
+  })
+})
+
+describe('when the NFT order is on an active marketplace contract', () => {
+  beforeEach(async () => {
+    mockProvidedAsset = { ...ITEM, tokenId: '1', itemId: undefined } as unknown as Asset
+    mockProvidedOrder = { id: 'an-order', price: '1', tradeId: 'a-trade', isPaused: false } as unknown as Order
+    renderButtons('/', { assetType: AssetType.NFT })
+    await screen.findByText('buy')
+  })
+
+  it('should not render the paused warning', () => {
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 })
