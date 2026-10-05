@@ -1788,7 +1788,11 @@
     "recreated_in_builder": "re-created in the Builder",
     "unknown_asset": "Unnamed asset",
     "no_price": "-",
-    "more": "Showing {shown} of {total} cancelled orders.",
+    "count": "{count, plural, one {# order} other {# orders}} to review",
+    "loaded": "{shown} of {total} loaded",
+    "loading_more": "Loading more orders…",
+    "load_more_error": "Couldn't load more orders.",
+    "retry": "Try again",
     "type": {
       "bid": "Bid",
       "public_nft_order": "Listing",

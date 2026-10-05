@@ -1,7 +1,7 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { MARKETPLACE_SERVER_URL } from '../nft'
 import { CancelledTradesAPI } from './api'
-import { CancellationReason, CancelledTradesResponse } from './types'
+import { CancellationReason, CancelledTradeType, CancelledTradesResponse } from './types'
 
 let api: CancelledTradesAPI
 let fetchMock: jest.SpyInstance
@@ -34,6 +34,16 @@ describe('when fetching the cancelled trades', () => {
 
     it('should resolve with the server response', () => {
       expect(result).toBe(response)
+    })
+  })
+
+  describe('and several types are provided', () => {
+    beforeEach(async () => {
+      await api.fetchCancelledTrades({ skip: 100, type: [CancelledTradeType.BID, CancelledTradeType.PUBLIC_NFT_ORDER] })
+    })
+
+    it('should repeat the type query param for each type', () => {
+      expect(fetchMock).toHaveBeenCalledWith('/v1/cancelled-trades?skip=100&type=bid&type=public_nft_order', expect.anything())
     })
   })
 

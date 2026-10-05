@@ -153,10 +153,48 @@
   margin: 0 0 0 8px;
 }
 
-.more {
-  margin-top: 16px;
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-bottom: 12px;
   color: var(--secondary-text);
   font-size: 13px;
+}
+
+.count {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Keeps long lists inside the modal */
+.scroller {
+  max-height: min(56vh, 520px);
+  margin-right: -8px;
+  padding-right: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sentinel {
+  height: 1px;
+}
+
+.status:not(:empty),
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0 4px;
+  color: var(--secondary-text);
+  font-size: 14px;
+}
+
+.footer .retry:global(.ui.button) {
+  margin: 0;
 }
 
 @media (max-width: 991px) {
@@ -203,8 +241,9 @@
     white-space: normal;
   }
 
+  /* Price and button share a footer line so long prices don't push the button down */
   .price {
-    margin-left: 60px;
+    flex: 1;
   }
 
   .row .recreate:global(.ui.button) {

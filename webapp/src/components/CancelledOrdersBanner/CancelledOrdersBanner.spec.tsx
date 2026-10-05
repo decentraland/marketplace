@@ -1,4 +1,4 @@
-import { fireEvent, RenderResult, screen } from '@testing-library/react'
+import { act, fireEvent, RenderResult, screen } from '@testing-library/react'
 import { ChainId, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
@@ -12,9 +12,26 @@ const ADDRESS = '0xabc0000000000000000000000000000000000001'
 
 let trades: CancelledTrade[]
 let total: number
+let hasMore: boolean
+let isLoadingMore: boolean
+let error: string | null
+let onLoadMore: jest.Mock
 let renderResult: RenderResult
 
-const renderBanner = () => renderWithProviders(<CancelledOrdersBanner address={ADDRESS} trades={trades} total={total} />)
+const renderBanner = () =>
+  renderWithProviders(
+    <CancelledOrdersBanner
+      address={ADDRESS}
+      trades={trades}
+      total={total}
+      hasMore={hasMore}
+      isLoadingMore={isLoadingMore}
+      error={error}
+      onLoadMore={onLoadMore}
+    />
+  )
+
+const openModal = () => fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.cta') }))
 
 beforeEach(() => {
   trades = [
@@ -33,6 +50,10 @@ beforeEach(() => {
     }
   ]
   total = 1
+  hasMore = false
+  isLoadingMore = false
+  error = null
+  onLoadMore = jest.fn()
 })
 
 afterEach(() => {
@@ -52,7 +73,7 @@ describe('when the wallet has cancelled orders', () => {
 describe('when the user reviews the cancelled orders', () => {
   beforeEach(() => {
     renderResult = renderBanner()
-    fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.cta') }))
+    openModal()
   })
 
   it('should list each affected order with its name', () => {
@@ -82,7 +103,7 @@ describe('when the user reviews a cancelled item listing', () => {
       }
     ]
     renderResult = renderBanner()
-    fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.cta') }))
+    openModal()
   })
 
   it('should tell the user it is re-created in the Builder', () => {
@@ -92,6 +113,84 @@ describe('when the user reviews a cancelled item listing', () => {
   it('should re-create it in the Builder, in a new tab', () => {
     const link = screen.getByRole('link', { name: t('cancelled_orders_banner.recreate') })
     expect([link.getAttribute('href'), link.getAttribute('target')]).toEqual([getBuilderCollectionDetailUrl('0xcontract'), '_blank'])
+  })
+})
+
+describe('when the wallet has more cancelled orders than the ones loaded', () => {
+  let observerCallback: IntersectionObserverCallback
+
+  beforeEach(() => {
+    total = 500
+    hasMore = true
+    window.IntersectionObserver = jest.fn((callback: IntersectionObserverCallback) => {
+      observerCallback = callback
+      return { observe: jest.fn(), disconnect: jest.fn() }
+    }) as unknown as typeof IntersectionObserver
+  })
+
+  afterEach(() => {
+    delete (window as Partial<typeof window>).IntersectionObserver
+  })
+
+  describe('and the user reviews them', () => {
+    beforeEach(() => {
+      renderResult = renderBanner()
+      openModal()
+    })
+
+    it('should show how many orders there are to review', () => {
+      expect(screen.getByText(t('cancelled_orders_banner.count', { count: total }))).toBeInTheDocument()
+    })
+  })
+
+  describe('and the user scrolls to the end of the list', () => {
+    beforeEach(() => {
+      renderResult = renderBanner()
+      openModal()
+      act(() => observerCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver))
+    })
+
+    it('should load the next page of orders', () => {
+      expect(onLoadMore).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('and the next page is loading', () => {
+    beforeEach(() => {
+      isLoadingMore = true
+      renderResult = renderBanner()
+      openModal()
+    })
+
+    it('should tell the user more orders are being loaded', () => {
+      expect(screen.getByText(t('cancelled_orders_banner.loading_more'))).toBeInTheDocument()
+    })
+
+    it('should not observe the end of the list', () => {
+      expect(window.IntersectionObserver).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('and the next page failed to load', () => {
+    beforeEach(() => {
+      error = 'an error'
+      renderResult = renderBanner()
+      openModal()
+    })
+
+    it('should tell the user more orders could not be loaded', () => {
+      expect(screen.getByRole('alert')).toHaveTextContent(t('cancelled_orders_banner.load_more_error'))
+    })
+
+    describe('and the user tries again', () => {
+      beforeEach(() => {
+        fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.retry') }))
+      })
+
+      it('should load the next page of orders', () => {
+        expect(onLoadMore).toHaveBeenCalledTimes(1)
+      })
+    })
   })
 })
 
@@ -107,6 +206,17 @@ describe('when the user dismisses the banner', () => {
 
   it('should remember the dismissal for this wallet and count', () => {
     expect(isCancelledOrdersBannerDismissed(ADDRESS, total)).toBe(true)
+  })
+})
+
+describe('when the banner was dismissed with more orders before', () => {
+  beforeEach(() => {
+    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, '2')
+    renderResult = renderBanner()
+  })
+
+  it('should not render the banner', () => {
+    expect(renderResult.queryByRole('status')).not.toBeInTheDocument()
   })
 })
 

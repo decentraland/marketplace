@@ -8,10 +8,11 @@ export type RecreateLink = { url: string; isExternal: boolean }
 
 const getDismissKey = (address: string) => `${DISMISS_KEY_PREFIX}:${address.toLowerCase()}`
 
-// Dismissal is per wallet and count, so new cancellations show the banner again.
+// Dismissal is per wallet and count: re-creating orders keeps it hidden, new cancellations show it again.
 export const isCancelledOrdersBannerDismissed = (address: string, total: number): boolean => {
   try {
-    return localStorage.getItem(getDismissKey(address)) === total.toString()
+    const dismissedTotal = localStorage.getItem(getDismissKey(address))
+    return dismissedTotal !== null && Number(dismissedTotal) >= total
   } catch {
     return false
   }

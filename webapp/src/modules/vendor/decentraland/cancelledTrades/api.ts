@@ -6,7 +6,8 @@ export class CancelledTradesAPI extends BaseClient {
   async fetchCancelledTrades(filters: CancelledTradesFilters = {}): Promise<CancelledTradesResponse> {
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined) params.append(key, value.toString())
+      if (Array.isArray(value)) value.forEach(item => params.append(key, item))
+      else if (value !== undefined) params.append(key, value.toString())
     })
     const query = params.toString()
 

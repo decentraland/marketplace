@@ -4,11 +4,13 @@ export type Props = {
   address: string
   trades: CancelledTrade[]
   total: number
+  hasMore: boolean
+  isLoadingMore: boolean
+  error: string | null
+  onLoadMore: () => void
 }
 
-export type ModalProps = {
+export type ModalProps = Omit<Props, 'address'> & {
   open: boolean
-  trades: CancelledTrade[]
-  total: number
   onClose: () => void
 }

@@ -1,7 +1,8 @@
 import { RootState } from '../reducer'
 import { CancelledTrade } from '../vendor/decentraland/cancelledTrades/types'
+import { fetchMoreCancelledTradesRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
-import { getCancelledTrades, getCancelledTradesTotal } from './selectors'
+import { getCancelledTrades, getCancelledTradesTotal, hasMoreCancelledTrades, isLoadingMoreCancelledTrades } from './selectors'
 
 let state: RootState
 let trades: CancelledTrade[]
@@ -21,6 +22,41 @@ describe('when the trades belong to the connected wallet', () => {
 
   it('should return the total of cancelled trades', () => {
     expect(getCancelledTradesTotal(state)).toBe(5)
+  })
+
+  describe('and fewer trades than the total are loaded', () => {
+    it('should report that there are more trades to load', () => {
+      expect(hasMoreCancelledTrades(state)).toBe(true)
+    })
+  })
+
+  describe('and every trade is loaded', () => {
+    beforeEach(() => {
+      state = { ...state, cancelledTrades: { ...state.cancelledTrades, total: 1 } } as RootState
+    })
+
+    it('should report that there are no more trades to load', () => {
+      expect(hasMoreCancelledTrades(state)).toBe(false)
+    })
+  })
+})
+
+describe('when the next page of trades is being fetched', () => {
+  beforeEach(() => {
+    state = {
+      ...state,
+      cancelledTrades: { ...state.cancelledTrades, loading: [fetchMoreCancelledTradesRequest('0xabc', 1)] }
+    } as RootState
+  })
+
+  it('should report that more trades are loading', () => {
+    expect(isLoadingMoreCancelledTrades(state)).toBe(true)
+  })
+})
+
+describe('when no page of trades is being fetched', () => {
+  it('should report that no more trades are loading', () => {
+    expect(isLoadingMoreCancelledTrades(state)).toBe(false)
   })
 })
 

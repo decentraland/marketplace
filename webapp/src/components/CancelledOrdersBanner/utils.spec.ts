@@ -101,13 +101,23 @@ describe('when checking if the banner was dismissed', () => {
     })
   })
 
-  describe('and it was dismissed with a different count', () => {
+  describe('and it was dismissed with a lower count', () => {
     beforeEach(() => {
       dismissCancelledOrdersBanner(address, 2)
     })
 
     it('should report it as not dismissed', () => {
       expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(false)
+    })
+  })
+
+  describe('and it was dismissed with a higher count', () => {
+    beforeEach(() => {
+      dismissCancelledOrdersBanner(address, 4)
+    })
+
+    it('should report it as dismissed', () => {
+      expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(true)
     })
   })
 

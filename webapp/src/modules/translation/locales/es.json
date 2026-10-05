@@ -1750,7 +1750,11 @@
     "recreated_in_builder": "se vuelve a crear en el Builder",
     "unknown_asset": "Activo sin nombre",
     "no_price": "-",
-    "more": "Mostrando {shown} de {total} órdenes canceladas.",
+    "count": "{count, plural, one {# orden} other {# órdenes}} para revisar",
+    "loaded": "{shown} de {total} cargadas",
+    "loading_more": "Cargando más órdenes…",
+    "load_more_error": "No se pudieron cargar más órdenes.",
+    "retry": "Reintentar",
     "type": {
       "bid": "Oferta",
       "public_nft_order": "Publicación",

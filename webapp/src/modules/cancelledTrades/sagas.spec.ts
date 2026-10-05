@@ -9,7 +9,14 @@ import { getIsCancelledOrdersBannerEnabled } from '../features/selectors'
 import { generateIdentitySuccess } from '../identity/actions'
 import { CancelledTradesAPI } from '../vendor/decentraland/cancelledTrades/api'
 import { CancellationReason, CancelledTrade, CancelledTradesResponse } from '../vendor/decentraland/cancelledTrades/types'
-import { fetchCancelledTradesFailure, fetchCancelledTradesRequest, fetchCancelledTradesSuccess } from './actions'
+import {
+  fetchCancelledTradesFailure,
+  fetchCancelledTradesRequest,
+  fetchCancelledTradesSuccess,
+  fetchMoreCancelledTradesFailure,
+  fetchMoreCancelledTradesRequest,
+  fetchMoreCancelledTradesSuccess
+} from './actions'
 import { CANCELLED_TRADES_PAGE_SIZE, cancelledTradesSaga } from './sagas'
 
 const getIdentity = () => undefined
@@ -118,6 +125,44 @@ describe('when handling the request to fetch the cancelled trades', () => {
         .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), throwError(error)]])
         .put(fetchCancelledTradesFailure(address, error.message))
         .dispatch(fetchCancelledTradesRequest(address))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request to fetch more cancelled trades', () => {
+  describe('and the server responds with the next page', () => {
+    let response: CancelledTradesResponse
+
+    beforeEach(() => {
+      response = { data: [{ id: 'a-trade-id' } as CancelledTrade], total: 500 }
+    })
+
+    it('should fetch the page that starts after the loaded trades and store it', () => {
+      return expectSaga(cancelledTradesSaga, getIdentity)
+        .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), response]])
+        .call.like({
+          fn: CancelledTradesAPI.prototype.fetchCancelledTrades,
+          args: [{ reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP, first: CANCELLED_TRADES_PAGE_SIZE, skip: 100 }]
+        })
+        .put(fetchMoreCancelledTradesSuccess(address, response.data, response.total))
+        .dispatch(fetchMoreCancelledTradesRequest(address, 100))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the request fails', () => {
+    let error: Error
+
+    beforeEach(() => {
+      error = new Error('an error')
+    })
+
+    it('should put the failure with the error message', () => {
+      return expectSaga(cancelledTradesSaga, getIdentity)
+        .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), throwError(error)]])
+        .put(fetchMoreCancelledTradesFailure(address, error.message))
+        .dispatch(fetchMoreCancelledTradesRequest(address, 100))
         .run({ silenceTimeout: true })
     })
   })

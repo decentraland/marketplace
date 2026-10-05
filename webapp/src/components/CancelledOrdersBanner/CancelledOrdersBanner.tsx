@@ -7,8 +7,8 @@ import { dismissCancelledOrdersBanner, isCancelledOrdersBannerDismissed } from '
 import { Props } from './CancelledOrdersBanner.types'
 import styles from './CancelledOrdersBanner.module.css'
 
-const CancelledOrdersBanner = ({ address, trades, total }: Props) => {
-  const [isDismissed, setIsDismissed] = useState(() => isCancelledOrdersBannerDismissed(address, total))
+const CancelledOrdersBanner = ({ address, total, ...listProps }: Props) => {
+  const [isDismissed, setIsDismissed] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleDismiss = useCallback(() => {
@@ -19,7 +19,7 @@ const CancelledOrdersBanner = ({ address, trades, total }: Props) => {
   const handleOpen = useCallback(() => setIsModalOpen(true), [])
   const handleClose = useCallback(() => setIsModalOpen(false), [])
 
-  if (total === 0 || isDismissed) return null
+  if (total === 0 || isDismissed || isCancelledOrdersBannerDismissed(address, total)) return null
 
   return (
     <>
@@ -33,7 +33,7 @@ const CancelledOrdersBanner = ({ address, trades, total }: Props) => {
           <img src={CloseIcon} alt="" />
         </button>
       </aside>
-      <CancelledOrdersModal open={isModalOpen} trades={trades} total={total} onClose={handleClose} />
+      <CancelledOrdersModal open={isModalOpen} total={total} onClose={handleClose} {...listProps} />
     </>
   )
 }

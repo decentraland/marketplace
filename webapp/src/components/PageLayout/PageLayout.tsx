@@ -5,7 +5,14 @@ import { ChainId } from '@dcl/schemas'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getAddress, getChainId, isConnected } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { config } from '../../config'
-import { getCancelledTrades, getCancelledTradesTotal } from '../../modules/cancelledTrades/selectors'
+import { fetchMoreCancelledTradesRequest } from '../../modules/cancelledTrades/actions'
+import {
+  getCancelledTrades,
+  getCancelledTradesTotal,
+  getError as getCancelledTradesError,
+  hasMoreCancelledTrades,
+  isLoadingMoreCancelledTrades
+} from '../../modules/cancelledTrades/selectors'
 import { getIsCancelledOrdersBannerEnabled } from '../../modules/features/selectors'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { RootState } from '../../modules/reducer'
@@ -46,6 +53,13 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
   const isCancelledOrdersBannerEnabled = useSelector(getIsCancelledOrdersBannerEnabled)
   const cancelledTrades = useSelector(getCancelledTrades)
   const cancelledTradesTotal = useSelector(getCancelledTradesTotal)
+  const hasMoreCancelledOrders = useSelector(hasMoreCancelledTrades)
+  const isLoadingMoreCancelledOrders = useSelector(isLoadingMoreCancelledTrades)
+  const cancelledTradesError = useSelector(getCancelledTradesError)
+  const dispatch = useDispatch()
+  const handleLoadMoreCancelledOrders = useCallback(() => {
+    if (address) dispatch(fetchMoreCancelledTradesRequest(address, cancelledTrades.length))
+  }, [address, cancelledTrades.length, dispatch])
   const showCancelledOrdersBanner = !isIAP && isCancelledOrdersBannerEnabled && !!address && cancelledTradesTotal > 0
 
   return (
@@ -55,10 +69,14 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
         {showAnnouncementBar && <AnnouncementBar onDismiss={handleAnnouncementBarDismiss} />}
         {showCancelledOrdersBanner && address && (
           <CancelledOrdersBanner
-            key={`${address}:${cancelledTradesTotal}`}
+            key={address}
             address={address}
             trades={cancelledTrades}
             total={cancelledTradesTotal}
+            hasMore={hasMoreCancelledOrders}
+            isLoadingMore={isLoadingMoreCancelledOrders}
+            error={cancelledTradesError}
+            onLoadMore={handleLoadMoreCancelledOrders}
           />
         )}
       </div>
