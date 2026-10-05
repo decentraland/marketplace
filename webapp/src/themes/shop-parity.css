@@ -1085,3 +1085,41 @@ body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + label::after,
 body .ui.toggle.checkbox.checked input[type='checkbox'].hidden + .box::after {
   left: 12px;
 }
+
+/* The seasonal campaign skin, driven by `data-campaign-theme` on <html>, which components/Routes
+   publishes from the campaign browser flag's variant payload. Absent for all but a few weeks a year, so
+   everything below overrides rules already in this file rather than standing up a parallel set of them —
+   which is also what keeps a season from drifting away from the design the rest of the year. */
+
+/* The page field keeps the design's radial shape and geometry — every panel, card and band on top of it
+   was drawn against that falloff — and only moves its stops down into a darker, colder purple, with a
+   second layer banking warm light up from the bottom edge like a pumpkin sitting below the fold.
+   Repeat and attachment are inherited from the base `html` rule above. */
+html[data-campaign-theme='halloween'] {
+  background-color: #11041a;
+  background-image: radial-gradient(70% 46% at 50% 104%, rgba(255, 141, 26, 0.38) 0%, rgba(255, 92, 0, 0.13) 45%, rgba(255, 92, 0, 0) 76%),
+    radial-gradient(61.64% 109.58% at 50% 54.49%, #5d2275 0%, #48195c 25%, #331143 50%, #200a2c 75%, #11041a 100%);
+}
+
+/* Only the sheet changes: position, repeat, size, the drift and the inverse vignette are all inherited,
+   so the two tiles stay interchangeable and a third season is one more image.
+
+   The opacity is NOT inherited: this tile is a mid-dark grey with no alpha of its own, so at the base 0.03
+   it reads as a flat wash with no glyphs in it. Raised until the bats and webs are legible, which the
+   vignette then keeps to the rim — and a dressed rim is what a Halloween page wants anyway. */
+html[data-campaign-theme='halloween'] body::before {
+  background-image: url('../images/background/DCL_LogoPattern_Halloween.png');
+  opacity: 0.12;
+}
+
+/* Jack-o'-lantern: candle amber down through pumpkin to a charred low, and nothing else. The charred stop
+   is a deep BURNT ORANGE rather than the black the palette suggests, because this strip sits on a dark
+   bar and a true black band travelling through a short label eats it.
+
+   background-image rather than the `background` SHORTHAND, which would reset background-size to auto and
+   background-clip to border-box: the first kills the 6s drift, since it sweeps a 400%-wide gradient, and
+   the second paints the tab as a solid block with the label invisible inside it. Changing the one
+   property leaves the rest of .campaign-tab-animation doing its job. */
+html[data-campaign-theme='halloween'] .campaign-tab-animation {
+  background-image: linear-gradient(to right, #ffb300 0%, #ff7a18 20%, #ff4d00 40%, #a33500 55%, #ff6a00 75%, #ffb300 100%);
+}

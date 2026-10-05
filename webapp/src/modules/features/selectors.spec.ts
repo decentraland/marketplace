@@ -1,6 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { INITIAL_STATE } from 'decentraland-dapps/dist/modules/features/reducer'
-import { getIsFeatureEnabled, hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
+import { getFeatureVariant, getIsFeatureEnabled, hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
 import {
@@ -15,7 +15,8 @@ import {
   getIsOffchainPublicItemOrdersEnabled,
   getIsCreditsSecondarySalesEnabled,
   getIsUnityWearablePreviewEnabled,
-  getIsSocialEmotesEnabled
+  getIsSocialEmotesEnabled,
+  getCampaignTheme
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -26,6 +27,7 @@ jest.mock('decentraland-dapps/dist/modules/features/selectors', () => {
     __esModule: true,
     ...originalModule,
     getIsFeatureEnabled: jest.fn(),
+    getFeatureVariant: jest.fn(),
     hasLoadedInitialFlags: jest.fn()
   } as unknown
 })
@@ -214,3 +216,74 @@ waitForInitialLoadingSelectors.forEach(({ name, feature, applicationName, select
     })
   })
 )
+
+describe('when getting the campaign theme', () => {
+  let getFeatureVariantMock: jest.MockedFunction<typeof getFeatureVariant>
+
+  const aVariantWith = (value: string) => ({ payload: { value } }) as ReturnType<typeof getFeatureVariant>
+
+  beforeEach(() => {
+    getFeatureVariantMock = getFeatureVariant as jest.MockedFunction<typeof getFeatureVariant>
+    getFeatureVariantMock.mockReset()
+  })
+
+  describe('and the campaign browser is off', () => {
+    beforeEach(() => {
+      getIsFeatureEnabledMock.mockReturnValue(false)
+      getFeatureVariantMock.mockReturnValue(aVariantWith('halloween'))
+    })
+
+    it('should return null, so a payload left behind cannot dress an event that was taken down', () => {
+      expect(getCampaignTheme(state)).toBeNull()
+    })
+  })
+
+  describe('and the campaign browser is on', () => {
+    beforeEach(() => {
+      getIsFeatureEnabledMock.mockReturnValue(true)
+    })
+
+    describe('and the variant names a theme this build has', () => {
+      beforeEach(() => {
+        getFeatureVariantMock.mockReturnValue(aVariantWith('halloween'))
+      })
+
+      it('should return it', () => {
+        expect(getCampaignTheme(state)).toBe('halloween')
+      })
+    })
+
+    describe('and the variant names no theme', () => {
+      beforeEach(() => {
+        getFeatureVariantMock.mockReturnValue(aVariantWith('none'))
+      })
+
+      it('should take the skin off while leaving the event itself running', () => {
+        expect(getCampaignTheme(state)).toBeNull()
+        expect(getIsCampaignBrowserEnabled(state)).toBe(true)
+      })
+    })
+
+    describe('and there is no variant at all', () => {
+      // `null` is what the real selector returns for an application that carries no variant; `undefined`
+      // only happens when the application itself is missing from the store. Both reach this code.
+      it.each([null, undefined])('should return null, which is how the flag has shipped every campaign so far', variant => {
+        getFeatureVariantMock.mockReturnValue(variant as unknown as ReturnType<typeof getFeatureVariant>)
+
+        expect(getCampaignTheme(state)).toBeNull()
+      })
+    })
+
+    describe('and the flags have not loaded, so the lookup throws', () => {
+      beforeEach(() => {
+        getFeatureVariantMock.mockImplementation(() => {
+          throw new Error('features not loaded')
+        })
+      })
+
+      it('should return null rather than take the page down with it', () => {
+        expect(getCampaignTheme(state)).toBeNull()
+      })
+    })
+  })
+})
