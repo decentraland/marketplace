@@ -178,8 +178,7 @@ jobs:
       # second while it is still pending -- which deploys nothing and reports no failure.
       #
       # A version published before this workflow existed has no `.deploy-complete.json`, and
-      # the broker refuses to point at a prefix whose upload it cannot confirm finished. Use
-      # `set-rollout-manual.yaml` for those; it writes KV through the older path, which does not check.
+      # the broker refuses to point at a prefix whose upload it cannot confirm finished.
       - uses: decentraland/actions/cdn-deploy@cdn-deploy-v1
         with:
           package-name: "@dcl/marketplace-site"
