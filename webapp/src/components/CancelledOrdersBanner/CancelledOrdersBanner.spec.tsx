@@ -1,6 +1,7 @@
 import { fireEvent, RenderResult, screen } from '@testing-library/react'
 import { ChainId, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import { renderWithProviders } from '../../utils/test'
@@ -67,6 +68,30 @@ describe('when the user reviews the cancelled orders', () => {
       'href',
       locations.sell('0xcontract', '12')
     )
+  })
+})
+
+describe('when the user reviews a cancelled item listing', () => {
+  beforeEach(() => {
+    trades = [
+      {
+        ...trades[0],
+        id: 'an-item-listing-id',
+        type: CancelledTradeType.PUBLIC_ITEM_ORDER,
+        asset: { contractAddress: '0xcontract', tokenId: null, itemId: '3', name: 'Neon Hat', image: null }
+      }
+    ]
+    renderResult = renderBanner()
+    fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.cta') }))
+  })
+
+  it('should tell the user it is re-created in the Builder', () => {
+    expect(screen.getByRole('listitem')).toHaveTextContent(t('cancelled_orders_banner.recreated_in_builder'))
+  })
+
+  it('should re-create it in the Builder, in a new tab', () => {
+    const link = screen.getByRole('link', { name: t('cancelled_orders_banner.recreate') })
+    expect([link.getAttribute('href'), link.getAttribute('target')]).toEqual([getBuilderCollectionDetailUrl('0xcontract'), '_blank'])
   })
 })
 

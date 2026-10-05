@@ -144,6 +144,15 @@
   margin: 0;
 }
 
+.hint {
+  text-transform: none;
+}
+
+/* Beats the theme's leading-icon margin, which pulls a trailing icon over the label */
+.list .row .recreate:global(.ui.button) > .externalIcon:global(.icon) {
+  margin: 0 0 0 8px;
+}
+
 .more {
   margin-top: 16px;
   color: var(--secondary-text);
