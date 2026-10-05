@@ -26,6 +26,7 @@ import { activitySaga } from './activity/sagas'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
 import { assetSaga } from './asset/sagas'
 import { bidSaga } from './bid/sagas'
+import { cancelledTradesSaga } from './cancelledTrades/sagas'
 import { collectionSaga } from './collection/sagas'
 import { contractSaga } from './contract/sagas'
 import { ensSaga } from './ens/sagas'
@@ -143,6 +144,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     transakSaga(getIdentity),
     favoritesSaga(getIdentity),
+    cancelledTradesSaga(getIdentity),
     loginSaga(),
     ensSaga()
   ])

@@ -111,6 +111,13 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
   return false
 }
 
+export const getIsCancelledOrdersBannerEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CANCELLED_ORDERS_BANNER)
+  }
+  return false
+}
+
 export const getIsCreditsEnabled = (state: RootState) => {
   const wallet = getWallet(state)
   if (!wallet) {

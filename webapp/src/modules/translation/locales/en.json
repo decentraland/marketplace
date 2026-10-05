@@ -1777,5 +1777,21 @@
     "message": "{highlight} - New Layout, New Outfits, and Meet the creators.",
     "cta": "Try it out",
     "dismiss": "Dismiss announcement"
+  },
+  "cancelled_orders_banner": {
+    "message": "{count, plural, one {One of your listings or bids was} other {# of your listings and bids were}} cancelled by the marketplace contract upgrade. Re-create {count, plural, one {it} other {them}} to keep {count, plural, one {it} other {them}} active.",
+    "cta": "Review orders",
+    "dismiss": "Dismiss notice",
+    "modal_title": "Cancelled orders",
+    "modal_description": "The marketplace moved to a new contract and every open order signed on the previous ones was cancelled. Nothing was transferred and no funds moved. Re-create the orders you still want.",
+    "recreate": "Re-create",
+    "unknown_asset": "Unnamed asset",
+    "no_price": "-",
+    "more": "Showing {shown} of {total} cancelled orders.",
+    "type": {
+      "bid": "Bid",
+      "public_nft_order": "Listing",
+      "public_item_order": "Item listing"
+    }
   }
 }

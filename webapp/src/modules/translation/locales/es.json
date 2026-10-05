@@ -1739,5 +1739,21 @@
     "message": "{highlight} - Nuevo diseño, nuevos looks y conoce a los creadores.",
     "cta": "Pruébalo",
     "dismiss": "Cerrar anuncio"
+  },
+  "cancelled_orders_banner": {
+    "message": "{count, plural, one {Una de tus publicaciones u ofertas fue cancelada} other {# de tus publicaciones y ofertas fueron canceladas}} por la actualización del contrato del marketplace. Vuelve a crear{count, plural, one {la} other {las}} para mantener{count, plural, one {la} other {las}} activa{count, plural, one {} other {s}}.",
+    "cta": "Revisar órdenes",
+    "dismiss": "Descartar aviso",
+    "modal_title": "Órdenes canceladas",
+    "modal_description": "El marketplace pasó a un nuevo contrato y todas las órdenes abiertas firmadas en los anteriores fueron canceladas. No se transfirió nada ni se movieron fondos. Vuelve a crear las órdenes que todavía quieras.",
+    "recreate": "Volver a crear",
+    "unknown_asset": "Activo sin nombre",
+    "no_price": "-",
+    "more": "Mostrando {shown} de {total} órdenes canceladas.",
+    "type": {
+      "bid": "Oferta",
+      "public_nft_order": "Publicación",
+      "public_item_order": "Publicación de ítem"
+    }
   }
 }

@@ -16,6 +16,7 @@ import { activityReducer as activity } from './activity/reducer'
 import { analyticsReducer as analytics } from './analytics/reducer'
 import { assetReducer as asset } from './asset/reducer'
 import { bidReducer as bid } from './bid/reducer'
+import { cancelledTradesReducer as cancelledTrades } from './cancelledTrades/reducer'
 import { collectionReducer as collection } from './collection/reducer'
 import { contractReducer as contract } from './contract/reducer'
 import { ensReducer as ens } from './ens/reducer'
@@ -40,6 +41,7 @@ export const createRootReducer = () =>
     campaign,
     authorization,
     bid,
+    cancelledTrades,
     credits,
     item,
     nft,
