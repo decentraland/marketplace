@@ -8,6 +8,7 @@ import {
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
 import { getWallet } from '../wallet/selectors'
+import { parseCampaignTheme, type CampaignTheme } from './campaignTheme'
 import { FeatureName } from './types'
 
 export type CrossChainNameProvider = 'axelar' | 'across'
@@ -55,6 +56,30 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CAMPAIGN_BROWSER)
   } catch (e) {
     return false
+  }
+}
+
+/**
+ * The seasonal skin the Marketplace is wearing, or `null` for its ordinary purple.
+ *
+ * Read from the campaign browser flag's VARIANT rather than from a flag of its own. The skin has no
+ * meaning without the event it dresses, so one switch for both is one fewer way for them to disagree: the
+ * tab can never be live under a theme that was taken down, and the skin can never outlive the tab. An
+ * operator who wants the event without the season writes `none` in the payload.
+ *
+ * Returns `null` while the flags are still loading, which is the direction that costs least: a page that
+ * arrives purple and turns orange a beat later is a flicker, where one that arrives orange and reverts is
+ * a visible mistake.
+ */
+export const getCampaignTheme = (state: RootState): CampaignTheme | null => {
+  try {
+    if (!getIsCampaignBrowserEnabled(state)) {
+      return null
+    }
+    const variant = getFeatureVariant(state, ApplicationName.MARKETPLACE, FeatureName.CAMPAIGN_BROWSER)
+    return parseCampaignTheme(variant?.payload?.value)
+  } catch (e) {
+    return null
   }
 }
 

@@ -32,11 +32,13 @@ import { SettingsPage } from '../SettingsPage'
 import { SignInPage } from '../SignInPage'
 import { SuccessPage } from '../SuccessPage'
 import { TransferPage } from '../TransferPage'
+import { useCampaignThemeAttribute } from './hooks'
 import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
+const Routes = ({ inMaintenance, campaignTheme, onLocationChanged }: Props) => {
   usePageTracking()
   useManaFiatGatewayPurchase()
+  useCampaignThemeAttribute(campaignTheme)
   const location = useLocation()
 
   useEffect(() => {
