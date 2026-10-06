@@ -7,6 +7,7 @@ import { formatWeiMANA } from '../../lib/mana'
 import { CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { PeggedManaPrice } from '../PeggedManaPrice'
+import LearnMoreLink from './LearnMoreLink'
 import { getRecreateLink } from './utils'
 import { ModalProps } from './CancelledOrdersBanner.types'
 import styles from './CancelledOrdersBanner.module.css'
@@ -60,7 +61,9 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
     <Modal open={open} size="small" onClose={onClose} className={styles.modal}>
       <ModalNavigation title={t('cancelled_orders_banner.modal_title')} onClose={onClose} />
       <Modal.Content>
-        <p className={styles.description}>{t('cancelled_orders_banner.modal_description')}</p>
+        <p className={styles.description}>
+          {t('cancelled_orders_banner.modal_description', { learn_more: <LearnMoreLink className={styles.descriptionLink} /> })}
+        </p>
         <div className={styles.summary}>
           <span className={styles.count}>{t('cancelled_orders_banner.count', { count: total })}</span>
           {hasMore ? <span>{t('cancelled_orders_banner.loaded', { shown: trades.length, total })}</span> : null}

@@ -1779,11 +1779,12 @@
     "dismiss": "Dismiss announcement"
   },
   "cancelled_orders_banner": {
-    "message": "{count, plural, one {One of your listings or bids was} other {# of your listings and bids were}} cancelled by the marketplace contract upgrade. Re-create {count, plural, one {it} other {them}} to keep {count, plural, one {it} other {them}} active.",
+    "message": "{count, plural, one {One of your listings or bids was} other {# of your listings and bids were}} cancelled by the marketplace contract upgrade. Re-create {count, plural, one {it} other {them}} to keep {count, plural, one {it} other {them}} active. {learn_more}",
     "cta": "Review orders",
     "dismiss": "Dismiss notice",
+    "learn_more": "Learn more",
     "modal_title": "Cancelled orders",
-    "modal_description": "The marketplace moved to a new contract and every open order signed on the previous ones was cancelled. Nothing was transferred and no funds moved. Re-create the orders you still want. Item listings are re-created in the Builder.",
+    "modal_description": "The marketplace moved to a new contract and every open order signed on the previous ones was cancelled. Nothing was transferred and no funds moved. Re-create the orders you still want. Item listings are re-created in the Builder. {learn_more}",
     "recreate": "Re-create",
     "recreated_in_builder": "re-created in the Builder",
     "unknown_asset": "Unnamed asset",

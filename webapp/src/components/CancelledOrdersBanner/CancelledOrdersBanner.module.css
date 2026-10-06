@@ -27,6 +27,17 @@
   line-height: 1.5;
 }
 
+.message .learnMore {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.message .learnMore:hover {
+  color: var(--cancelled-orders-accent);
+}
+
 .cta {
   flex-shrink: 0;
   padding: 6px 11px;
@@ -68,7 +79,8 @@
 }
 
 .cta:focus-visible,
-.close:focus-visible {
+.close:focus-visible,
+.message .learnMore:focus-visible {
   outline: 2px solid var(--cancelled-orders-color);
   outline-offset: 2px;
 }
@@ -77,6 +89,11 @@
   margin-bottom: 24px;
   color: var(--secondary-text);
   line-height: 1.5;
+}
+
+.description .descriptionLink {
+  text-decoration: underline;
+  white-space: nowrap;
 }
 
 .list {

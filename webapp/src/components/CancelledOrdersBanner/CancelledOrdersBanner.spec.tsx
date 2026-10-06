@@ -1,4 +1,4 @@
-import { act, fireEvent, RenderResult, screen } from '@testing-library/react'
+import { act, fireEvent, RenderResult, screen, within } from '@testing-library/react'
 import { ChainId, Network, TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
@@ -7,7 +7,7 @@ import { fetchManaUsdRate } from '../../modules/trade/manaRate'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import { renderWithProviders } from '../../utils/test'
 import CancelledOrdersBanner from './CancelledOrdersBanner'
-import { dismissCancelledOrdersBanner, isCancelledOrdersBannerDismissed } from './utils'
+import { dismissCancelledOrdersBanner, isCancelledOrdersBannerDismissed, POST_MORTEM_URL } from './utils'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const actual: typeof import('decentraland-dapps/dist/lib/eth') = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -32,6 +32,7 @@ let error: string | null
 let onLoadMore: jest.Mock
 let renderResult: RenderResult
 let observerCallback: IntersectionObserverCallback
+let learnMoreLink: HTMLElement
 
 const renderBanner = () =>
   renderWithProviders(
@@ -87,7 +88,24 @@ describe('when the wallet has cancelled orders', () => {
   })
 
   it('should tell the user their orders were cancelled by the upgrade', () => {
-    expect(screen.getByRole('status')).toHaveTextContent(t('cancelled_orders_banner.message', { count: total }))
+    expect(screen.getByRole('status')).toHaveTextContent(
+      t('cancelled_orders_banner.message', { count: total, learn_more: t('cancelled_orders_banner.learn_more') })
+    )
+  })
+
+  describe('and the user looks for the learn more link', () => {
+    beforeEach(() => {
+      learnMoreLink = within(screen.getByRole('status')).getByRole('link', { name: t('cancelled_orders_banner.learn_more') })
+    })
+
+    it('should link to the post-mortem', () => {
+      expect(learnMoreLink).toHaveAttribute('href', POST_MORTEM_URL)
+    })
+
+    it('should open it in a new tab', () => {
+      expect(learnMoreLink).toHaveAttribute('target', '_blank')
+      expect(learnMoreLink).toHaveAttribute('rel', 'noopener noreferrer')
+    })
   })
 })
 
@@ -114,6 +132,23 @@ describe('when the user reviews the cancelled orders', () => {
 
   it('should show the price of the order in MANA', () => {
     expect(screen.getByRole('listitem')).toHaveTextContent('25')
+  })
+
+  describe('and the user looks for the learn more link in the intro', () => {
+    beforeEach(() => {
+      // The modal has no dialog role; scoped so the banner's link doesn't match.
+      const modal = document.querySelector<HTMLElement>('.ui.modal') as HTMLElement
+      learnMoreLink = within(modal).getByRole('link', { name: t('cancelled_orders_banner.learn_more') })
+    })
+
+    it('should link to the post-mortem', () => {
+      expect(learnMoreLink).toHaveAttribute('href', POST_MORTEM_URL)
+    })
+
+    it('should open it in a new tab', () => {
+      expect(learnMoreLink).toHaveAttribute('target', '_blank')
+      expect(learnMoreLink).toHaveAttribute('rel', 'noopener noreferrer')
+    })
   })
 
   it('should link to the page to re-create the order', () => {

@@ -891,7 +891,7 @@
       "select_token": "选择代币",
       "no_matches": "没有匹配的{search}..."
     },
-    "price_too_low": "仅当物品至少有 1 MANA 时，MANA 交易才免汽油费。要获得此项目，请将您的网络切换到 Polygon 以使用 MATIC 支付 Gas 费。 {learn_more}",
+    "price_too_low": "仅当物品至少有 1 MANA 时，MANA 交易才免汽油费。要获得此项目，请将您的网络切换到 Polygon 以使用 MATIC 支付 Gas 费。{learn_more}",
     "remember_transaction_fee_covered": "使用 Polygon MANA 支付，DAO 会为您支付 Gas 费（项目必须至少为 1 MANA）。",
     "learn_more": "了解更多",
     "cross_chain_polling": {
@@ -1745,11 +1745,12 @@
     "dismiss": "关闭公告"
   },
   "cancelled_orders_banner": {
-    "message": "市场合约升级已取消您的 {count} 个挂单或出价。请重新创建以保持其有效。",
+    "message": "市场合约升级已取消您的 {count} 个挂单或出价。请重新创建以保持其有效。{learn_more}",
     "cta": "查看订单",
     "dismiss": "关闭提示",
+    "learn_more": "了解更多",
     "modal_title": "已取消的订单",
-    "modal_description": "市场已迁移到新合约，在旧合约上签署的所有未完成订单均已取消。没有任何资产转移，也没有资金变动。请重新创建您仍需要的订单。物品挂单需在 Builder 中重新创建。",
+    "modal_description": "市场已迁移到新合约，在旧合约上签署的所有未完成订单均已取消。没有任何资产转移，也没有资金变动。请重新创建您仍需要的订单。物品挂单需在 Builder 中重新创建。{learn_more}",
     "recreate": "重新创建",
     "recreated_in_builder": "在 Builder 中重新创建",
     "unknown_asset": "未命名资产",

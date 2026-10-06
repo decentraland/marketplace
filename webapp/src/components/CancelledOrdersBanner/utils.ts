@@ -4,6 +4,9 @@ import { CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentr
 
 const DISMISS_KEY_PREFIX = 'cancelled-orders-banner'
 
+export const POST_MORTEM_URL =
+  'https://forum.decentraland.org/t/october-2026-off-chain-marketplace-cancelled-order-replay-eip-7702-signature-malleability-post-mortem/25452'
+
 export type RecreateLink = { url: string; isExternal: boolean }
 
 const getDismissKey = (address: string) => `${DISMISS_KEY_PREFIX}:${address.toLowerCase()}`

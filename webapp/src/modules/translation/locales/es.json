@@ -1741,11 +1741,12 @@
     "dismiss": "Cerrar anuncio"
   },
   "cancelled_orders_banner": {
-    "message": "{count, plural, one {Una de tus publicaciones u ofertas fue cancelada} other {# de tus publicaciones y ofertas fueron canceladas}} por la actualización del contrato del marketplace. Vuelve a crear{count, plural, one {la} other {las}} para mantener{count, plural, one {la} other {las}} activa{count, plural, one {} other {s}}.",
+    "message": "{count, plural, one {Una de tus publicaciones u ofertas fue cancelada} other {# de tus publicaciones y ofertas fueron canceladas}} por la actualización del contrato del marketplace. Vuelve a crear{count, plural, one {la} other {las}} para mantener{count, plural, one {la} other {las}} activa{count, plural, one {} other {s}}. {learn_more}",
     "cta": "Revisar órdenes",
     "dismiss": "Descartar aviso",
+    "learn_more": "Más información",
     "modal_title": "Órdenes canceladas",
-    "modal_description": "El marketplace pasó a un nuevo contrato y todas las órdenes abiertas firmadas en los anteriores fueron canceladas. No se transfirió nada ni se movieron fondos. Vuelve a crear las órdenes que todavía quieras. Las publicaciones de ítems se vuelven a crear en el Builder.",
+    "modal_description": "El marketplace pasó a un nuevo contrato y todas las órdenes abiertas firmadas en los anteriores fueron canceladas. No se transfirió nada ni se movieron fondos. Vuelve a crear las órdenes que todavía quieras. Las publicaciones de ítems se vuelven a crear en el Builder. {learn_more}",
     "recreate": "Volver a crear",
     "recreated_in_builder": "se vuelve a crear en el Builder",
     "unknown_asset": "Activo sin nombre",

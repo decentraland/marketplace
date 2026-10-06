@@ -3,6 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
 import CloseIcon from '../../images/announcement-bar-close.svg'
 import CancelledOrdersModal from './CancelledOrdersModal'
+import LearnMoreLink from './LearnMoreLink'
 import { dismissCancelledOrdersBanner, getNewestCancelledAt, isCancelledOrdersBannerDismissed } from './utils'
 import { Props } from './CancelledOrdersBanner.types'
 import styles from './CancelledOrdersBanner.module.css'
@@ -27,7 +28,9 @@ const CancelledOrdersBanner = ({ address, total, ...listProps }: Props) => {
     <>
       <aside className={styles.bar} role="status">
         <Icon name="exclamation triangle" className={styles.icon} />
-        <p className={styles.message}>{t('cancelled_orders_banner.message', { count: total })}</p>
+        <p className={styles.message}>
+          {t('cancelled_orders_banner.message', { count: total, learn_more: <LearnMoreLink className={styles.learnMore} /> })}
+        </p>
         <button type="button" className={styles.cta} onClick={handleOpen}>
           {t('cancelled_orders_banner.cta')}
         </button>
