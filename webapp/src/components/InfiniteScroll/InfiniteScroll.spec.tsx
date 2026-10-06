@@ -11,8 +11,9 @@ class MockIntersectionObserver implements IntersectionObserver {
   callback: IntersectionObserverCallback
   elements: Element[] = []
 
-  constructor(callback: IntersectionObserverCallback) {
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     this.callback = callback
+    this.root = options?.root ?? null
     mockObservers.push(this)
   }
 
@@ -133,6 +134,19 @@ describe('InfiniteScroll', () => {
       // Since no observer is created, we cannot trigger intersection.
       // Just ensure onLoadMore was not called.
       expect(onLoadMoreMock).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when a scroll container is provided as the root', () => {
+    let root: HTMLDivElement
+
+    beforeEach(() => {
+      root = document.createElement('div')
+      renderInfiniteScroll({ root })
+    })
+
+    it('should observe the end of the list within the scroll container', () => {
+      expect(mockObservers[0].root).toBe(root)
     })
   })
 })
