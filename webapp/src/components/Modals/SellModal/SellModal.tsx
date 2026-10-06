@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
-import { ethers } from 'ethers'
 import { Network, NFTCategory, Contract } from '@dcl/schemas'
 import { ChainButton, Modal, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
@@ -15,7 +14,7 @@ import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
-import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
+import { formatOrderPrice, getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor'
 import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import ErrorBanner from '../../ErrorBanner'
@@ -57,7 +56,7 @@ const SellModal = ({
 
   const isUpdate = order !== null
 
-  const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
+  const [price, setPrice] = useState<string>(formatOrderPrice(order))
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt

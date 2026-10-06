@@ -17,6 +17,15 @@ export const convertDateToDateInputValue = (date: Date): string => {
   return dateFnsFormat(date, INPUT_FORMAT)
 }
 
+/**
+ * The order's price in ether, to seed a price input. A listing can reach the client without a price
+ * (the API takes it from the order or, failing that, from the trade's received amount, and both can be
+ * missing), so this returns an empty string instead of letting ethers throw on a null value.
+ */
+export function formatOrderPrice(order: Pick<Order, 'price'> | null): string {
+  return order?.price ? ethers.utils.formatEther(order.price) : ''
+}
+
 export function isExpired(expiresAt: string) {
   return parseInt(expiresAt, 10) < Date.now()
 }
