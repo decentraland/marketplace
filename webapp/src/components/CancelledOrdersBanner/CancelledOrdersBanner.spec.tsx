@@ -20,6 +20,7 @@ jest.mock('../../modules/trade/manaRate', () => {
 })
 
 const ADDRESS = '0xabc0000000000000000000000000000000000001'
+const CANCELLED_AT = 1700000000000
 
 let trades: CancelledTrade[]
 let total: number
@@ -55,7 +56,7 @@ beforeEach(() => {
       reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP,
       createdAt: 0,
       expiresAt: 0,
-      cancelledAt: 0,
+      cancelledAt: CANCELLED_AT,
       asset: { contractAddress: '0xcontract', tokenId: '12', itemId: null, name: 'Cyber Jacket', image: null },
       price: { assetType: TradeAssetType.ERC20, amount: '25000000000000000000' }
     }
@@ -228,14 +229,14 @@ describe('when the user dismisses the banner', () => {
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 
-  it('should remember the dismissal for this wallet and count', () => {
-    expect(isCancelledOrdersBannerDismissed(ADDRESS, total)).toBe(true)
+  it('should remember the dismissal up to the newest cancellation', () => {
+    expect(isCancelledOrdersBannerDismissed(ADDRESS, CANCELLED_AT)).toBe(true)
   })
 })
 
-describe('when the banner was dismissed with more orders before', () => {
+describe('when the banner was dismissed for the same cancellations before', () => {
   beforeEach(() => {
-    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, '2')
+    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, CANCELLED_AT.toString())
     renderResult = renderBanner()
   })
 
@@ -244,13 +245,13 @@ describe('when the banner was dismissed with more orders before', () => {
   })
 })
 
-describe('when the banner was dismissed for the same count before', () => {
+describe('when the banner was dismissed before newer cancellations', () => {
   beforeEach(() => {
-    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, '1')
+    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, (CANCELLED_AT - 1).toString())
     renderResult = renderBanner()
   })
 
-  it('should not render the banner', () => {
-    expect(renderResult.queryByRole('status')).not.toBeInTheDocument()
+  it('should render the banner', () => {
+    expect(renderResult.getByRole('status')).toBeInTheDocument()
   })
 })

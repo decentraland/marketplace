@@ -8,19 +8,22 @@ export type RecreateLink = { url: string; isExternal: boolean }
 
 const getDismissKey = (address: string) => `${DISMISS_KEY_PREFIX}:${address.toLowerCase()}`
 
-// Dismissal is per wallet and count: re-creating orders keeps it hidden, new cancellations show it again.
-export const isCancelledOrdersBannerDismissed = (address: string, total: number): boolean => {
+export const getNewestCancelledAt = (trades: CancelledTrade[]): number =>
+  trades.reduce((newest, trade) => Math.max(newest, trade.cancelledAt), 0)
+
+// Dismissal is per wallet up to the newest cancellation, so only later cancellations show it again.
+export const isCancelledOrdersBannerDismissed = (address: string, newestCancelledAt: number): boolean => {
   try {
-    const dismissedTotal = localStorage.getItem(getDismissKey(address))
-    return dismissedTotal !== null && Number(dismissedTotal) >= total
+    const dismissedAt = localStorage.getItem(getDismissKey(address))
+    return dismissedAt !== null && Number(dismissedAt) >= newestCancelledAt
   } catch {
     return false
   }
 }
 
-export const dismissCancelledOrdersBanner = (address: string, total: number): void => {
+export const dismissCancelledOrdersBanner = (address: string, newestCancelledAt: number): void => {
   try {
-    localStorage.setItem(getDismissKey(address), total.toString())
+    localStorage.setItem(getDismissKey(address), newestCancelledAt.toString())
   } catch {
     // Storage unavailable: the dismissal only lasts for this page view.
   }

@@ -2,7 +2,13 @@ import { ChainId, Network } from '@dcl/schemas'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
-import { dismissCancelledOrdersBanner, getRecreateLink, isCancelledOrdersBannerDismissed, RecreateLink } from './utils'
+import {
+  dismissCancelledOrdersBanner,
+  getNewestCancelledAt,
+  getRecreateLink,
+  isCancelledOrdersBannerDismissed,
+  RecreateLink
+} from './utils'
 
 const CONTRACT = '0xcontract'
 
@@ -80,6 +86,24 @@ describe('when getting the link to re-create a cancelled trade', () => {
   })
 })
 
+describe('when getting the newest cancellation of the trades', () => {
+  let trades: CancelledTrade[]
+  let newest: number
+
+  beforeEach(() => {
+    trades = [
+      { ...buildTrade(CancelledTradeType.BID, {}), cancelledAt: 2 },
+      { ...buildTrade(CancelledTradeType.BID, {}), cancelledAt: 5 },
+      { ...buildTrade(CancelledTradeType.BID, {}), cancelledAt: 3 }
+    ]
+    newest = getNewestCancelledAt(trades)
+  })
+
+  it('should return the latest cancellation time', () => {
+    expect(newest).toBe(5)
+  })
+})
+
 describe('when checking if the banner was dismissed', () => {
   let address: string
 
@@ -91,7 +115,7 @@ describe('when checking if the banner was dismissed', () => {
     localStorage.clear()
   })
 
-  describe('and it was dismissed for the same wallet and count', () => {
+  describe('and it was dismissed for the same wallet and newest cancellation', () => {
     beforeEach(() => {
       dismissCancelledOrdersBanner(address, 3)
     })
@@ -101,23 +125,13 @@ describe('when checking if the banner was dismissed', () => {
     })
   })
 
-  describe('and it was dismissed with a lower count', () => {
+  describe('and there are cancellations newer than the dismissal', () => {
     beforeEach(() => {
       dismissCancelledOrdersBanner(address, 2)
     })
 
     it('should report it as not dismissed', () => {
       expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(false)
-    })
-  })
-
-  describe('and it was dismissed with a higher count', () => {
-    beforeEach(() => {
-      dismissCancelledOrdersBanner(address, 4)
-    })
-
-    it('should report it as dismissed', () => {
-      expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(true)
     })
   })
 

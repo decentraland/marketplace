@@ -1,4 +1,5 @@
 import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { isTransactionAction } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { DISCONNECT_WALLET_SUCCESS, DisconnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isNFT } from '../asset/utils'
 import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
@@ -92,6 +93,8 @@ export function cancelledTradesReducer(state = INITIAL_STATE, action: CancelledT
     case FETCH_MORE_CANCELLED_TRADES_FAILURE:
       return { ...state, loading: loadingReducer(state.loading, action), error: action.payload.error }
     case CREATE_ORDER_SUCCESS: {
+      // Only an off-chain trade re-creates the cancelled one; on-chain orders carry a tx hash.
+      if (isTransactionAction(action)) return state
       const { nft } = action.payload
       return removeRecreated(state, {
         type: CancelledTradeType.PUBLIC_NFT_ORDER,

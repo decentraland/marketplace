@@ -191,6 +191,19 @@ describe('when an order is re-created', () => {
     })
   })
 
+  describe('and it is an on-chain listing of a cancelled NFT listing', () => {
+    beforeEach(() => {
+      newState = cancelledTradesReducer(
+        state,
+        createOrderSuccess({ contractAddress: '0xcontract', tokenId: '12', chainId: ChainId.MATIC_MAINNET } as NFT, 10, 0, '0xtxhash')
+      )
+    })
+
+    it('should leave the state untouched', () => {
+      expect(newState).toBe(state)
+    })
+  })
+
   describe('and it is a bid on an item with a cancelled bid', () => {
     beforeEach(() => {
       newState = cancelledTradesReducer(
