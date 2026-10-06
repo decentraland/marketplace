@@ -38,6 +38,7 @@ const AssetBrowse = (props: Props) => {
     isFullscreen,
     address,
     contracts,
+    ids,
     onSetView,
     onFetchAssetsFromRoute,
     onBrowse,
@@ -111,6 +112,7 @@ const AssetBrowse = (props: Props) => {
         section,
         address,
         contracts,
+        ids,
         onlyOnSale,
         onlySmart,
         status
@@ -145,6 +147,7 @@ const AssetBrowse = (props: Props) => {
     section,
     address,
     contracts,
+    ids,
     onlyOnSale,
     onlySmart,
     viewInState,

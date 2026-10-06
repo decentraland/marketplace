@@ -13,6 +13,8 @@ export type Props = {
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
   contracts?: string[]
+  /** Individual items to select, as `<contract>-<itemId>`. Mutually exclusive with `contracts`. */
+  ids?: string[]
   isMap?: boolean
   isFullscreen?: boolean
   section?: Section
@@ -29,5 +31,5 @@ export type Props = {
 
 export type ContainerProps = Pick<
   Props,
-  'vendor' | 'address' | 'isFullscreen' | 'view' | 'section' | 'sections' | 'contracts' | 'disableSearchDropdown'
+  'vendor' | 'address' | 'isFullscreen' | 'view' | 'section' | 'sections' | 'contracts' | 'ids' | 'disableSearchDropdown'
 >
