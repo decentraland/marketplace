@@ -14,6 +14,7 @@ class MockIntersectionObserver implements IntersectionObserver {
   constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     this.callback = callback
     this.root = options?.root ?? null
+    this.rootMargin = options?.rootMargin ?? ''
     mockObservers.push(this)
   }
 
@@ -147,6 +148,26 @@ describe('InfiniteScroll', () => {
 
     it('should observe the end of the list within the scroll container', () => {
       expect(mockObservers[0].root).toBe(root)
+    })
+  })
+
+  describe('when no root margin is provided', () => {
+    beforeEach(() => {
+      renderInfiniteScroll({})
+    })
+
+    it('should observe the end of the list without a margin', () => {
+      expect(mockObservers[0].rootMargin).toBe('0px')
+    })
+  })
+
+  describe('when a root margin is provided', () => {
+    beforeEach(() => {
+      renderInfiniteScroll({ rootMargin: '0px 0px 240px 0px' })
+    })
+
+    it('should observe the end of the list with that margin', () => {
+      expect(mockObservers[0].rootMargin).toBe('0px 0px 240px 0px')
     })
   })
 })

@@ -11,6 +11,9 @@ import { getRecreateLink } from './utils'
 import { ModalProps } from './CancelledOrdersBanner.types'
 import styles from './CancelledOrdersBanner.module.css'
 
+// Starts loading the next page before the end of the list is reached.
+const LOAD_MORE_MARGIN = '0px 0px 240px 0px'
+
 const RecreateButton = ({ trade }: { trade: CancelledTrade }) => {
   const link = getRecreateLink(trade)
   if (!link) return null
@@ -63,7 +66,14 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
           {hasMore ? <span>{t('cancelled_orders_banner.loaded', { shown: trades.length, total })}</span> : null}
         </div>
         <div className={styles.scroller} ref={setScroller}>
-          <InfiniteScroll page={0} hasMorePages={hasMore && !error} isLoading={isLoadingMore} root={scroller} onLoadMore={handleLoadMore}>
+          <InfiniteScroll
+            page={0}
+            hasMorePages={hasMore && !error}
+            isLoading={isLoadingMore}
+            root={scroller}
+            rootMargin={LOAD_MORE_MARGIN}
+            onLoadMore={handleLoadMore}
+          >
             <ul className={styles.list} aria-label={t('cancelled_orders_banner.modal_title')} aria-busy={isLoadingMore}>
               {trades.map(trade => {
                 const name = trade.asset.name ?? t('cancelled_orders_banner.unknown_asset')

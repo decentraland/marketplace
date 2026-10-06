@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Props } from './InfiniteScroll.types'
 
-export function InfiniteScroll({ page, hasMorePages, isLoading, root = null, children, onLoadMore }: Props) {
+export function InfiniteScroll({ page, hasMorePages, isLoading, root = null, rootMargin = '0px', children, onLoadMore }: Props) {
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function InfiniteScroll({ page, hasMorePages, isLoading, root = null, chi
       },
       {
         root,
-        rootMargin: '0px',
+        rootMargin,
         threshold: 0.1 // Trigger when the sentinel is in view
       }
     )
@@ -30,7 +30,7 @@ export function InfiniteScroll({ page, hasMorePages, isLoading, root = null, chi
         observer.unobserve(bottomRef.current)
       }
     }
-  }, [page, hasMorePages, isLoading, root, onLoadMore])
+  }, [page, hasMorePages, isLoading, root, rootMargin, onLoadMore])
 
   return (
     <div role="feed">
