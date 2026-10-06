@@ -3,6 +3,7 @@ import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import {
+  DismissalMark,
   dismissCancelledOrdersBanner,
   getNewestCancelledAt,
   getRecreateLink,
@@ -106,32 +107,64 @@ describe('when getting the newest cancellation of the trades', () => {
 
 describe('when checking if the banner was dismissed', () => {
   let address: string
+  let mark: DismissalMark
 
   beforeEach(() => {
     address = '0xAbC'
+    mark = { newestCancelledAt: 3, total: 10 }
   })
 
   afterEach(() => {
     localStorage.clear()
   })
 
-  describe('and it was dismissed for the same wallet and newest cancellation', () => {
+  describe('and it was dismissed for the same wallet, newest cancellation and total', () => {
     beforeEach(() => {
-      dismissCancelledOrdersBanner(address, 3)
+      dismissCancelledOrdersBanner(address, mark)
     })
 
     it('should report it as dismissed', () => {
-      expect(isCancelledOrdersBannerDismissed(address.toLowerCase(), 3)).toBe(true)
+      expect(isCancelledOrdersBannerDismissed(address.toLowerCase(), mark)).toBe(true)
     })
   })
 
   describe('and there are cancellations newer than the dismissal', () => {
     beforeEach(() => {
-      dismissCancelledOrdersBanner(address, 2)
+      dismissCancelledOrdersBanner(address, { ...mark, newestCancelledAt: 2 })
     })
 
     it('should report it as not dismissed', () => {
-      expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(false)
+      expect(isCancelledOrdersBannerDismissed(address, mark)).toBe(false)
+    })
+  })
+
+  describe('and the total grew past the one at the dismissal without newer loaded cancellations', () => {
+    beforeEach(() => {
+      dismissCancelledOrdersBanner(address, { ...mark, total: 9 })
+    })
+
+    it('should report it as not dismissed', () => {
+      expect(isCancelledOrdersBannerDismissed(address, mark)).toBe(false)
+    })
+  })
+
+  describe('and the total shrank since the dismissal', () => {
+    beforeEach(() => {
+      dismissCancelledOrdersBanner(address, { ...mark, total: 11 })
+    })
+
+    it('should report it as dismissed', () => {
+      expect(isCancelledOrdersBannerDismissed(address, mark)).toBe(true)
+    })
+  })
+
+  describe('and the stored dismissal is not valid', () => {
+    beforeEach(() => {
+      localStorage.setItem('cancelled-orders-banner:0xabc', '3')
+    })
+
+    it('should report it as not dismissed', () => {
+      expect(isCancelledOrdersBannerDismissed(address, mark)).toBe(false)
     })
   })
 
@@ -147,7 +180,7 @@ describe('when checking if the banner was dismissed', () => {
     })
 
     it('should report it as not dismissed', () => {
-      expect(isCancelledOrdersBannerDismissed(address, 3)).toBe(false)
+      expect(isCancelledOrdersBannerDismissed(address, mark)).toBe(false)
     })
   })
 })

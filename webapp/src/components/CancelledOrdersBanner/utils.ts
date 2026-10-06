@@ -11,19 +11,29 @@ const getDismissKey = (address: string) => `${DISMISS_KEY_PREFIX}:${address.toLo
 export const getNewestCancelledAt = (trades: CancelledTrade[]): number =>
   trades.reduce((newest, trade) => Math.max(newest, trade.cancelledAt), 0)
 
-// Dismissal is per wallet up to the newest cancellation, so only later cancellations show it again.
-export const isCancelledOrdersBannerDismissed = (address: string, newestCancelledAt: number): boolean => {
+export type DismissalMark = { newestCancelledAt: number; total: number }
+
+// Per wallet. The list is sorted by creation, so a later bump can cancel trades past the loaded page:
+// a grown total re-shows it too.
+export const isCancelledOrdersBannerDismissed = (address: string, { newestCancelledAt, total }: DismissalMark): boolean => {
   try {
-    const dismissedAt = localStorage.getItem(getDismissKey(address))
-    return dismissedAt !== null && Number(dismissedAt) >= newestCancelledAt
+    const stored = localStorage.getItem(getDismissKey(address))
+    if (stored === null) return false
+    const dismissed = JSON.parse(stored) as Partial<DismissalMark> | null
+    return (
+      typeof dismissed?.newestCancelledAt === 'number' &&
+      typeof dismissed.total === 'number' &&
+      dismissed.newestCancelledAt >= newestCancelledAt &&
+      dismissed.total >= total
+    )
   } catch {
     return false
   }
 }
 
-export const dismissCancelledOrdersBanner = (address: string, newestCancelledAt: number): void => {
+export const dismissCancelledOrdersBanner = (address: string, mark: DismissalMark): void => {
   try {
-    localStorage.setItem(getDismissKey(address), newestCancelledAt.toString())
+    localStorage.setItem(getDismissKey(address), JSON.stringify(mark))
   } catch {
     // Storage unavailable: the dismissal only lasts for this page view.
   }

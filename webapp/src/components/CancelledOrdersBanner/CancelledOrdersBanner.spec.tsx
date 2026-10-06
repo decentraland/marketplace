@@ -3,10 +3,11 @@ import { ChainId, Network, TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
+import { fetchManaUsdRate } from '../../modules/trade/manaRate'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import { renderWithProviders } from '../../utils/test'
 import CancelledOrdersBanner from './CancelledOrdersBanner'
-import { isCancelledOrdersBannerDismissed } from './utils'
+import { dismissCancelledOrdersBanner, isCancelledOrdersBannerDismissed } from './utils'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const actual: typeof import('decentraland-dapps/dist/lib/eth') = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -131,6 +132,10 @@ describe('when the user reviews a cancelled USD-pegged listing', () => {
     await screen.findByTestId('pegged-mana-price')
   })
 
+  it('should read the rate from the marketplace contract that signed the trade', () => {
+    expect(fetchManaUsdRate).toHaveBeenCalledWith(trades[0].chainId, trades[0].contract)
+  })
+
   it('should show the price converted from USD to MANA', () => {
     expect(screen.getByTestId('pegged-mana-price')).toHaveTextContent('~500')
   })
@@ -238,14 +243,14 @@ describe('when the user dismisses the banner', () => {
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 
-  it('should remember the dismissal up to the newest cancellation', () => {
-    expect(isCancelledOrdersBannerDismissed(ADDRESS, CANCELLED_AT)).toBe(true)
+  it('should remember the dismissal up to the newest cancellation and the total', () => {
+    expect(isCancelledOrdersBannerDismissed(ADDRESS, { newestCancelledAt: CANCELLED_AT, total })).toBe(true)
   })
 })
 
 describe('when the banner was dismissed for the same cancellations before', () => {
   beforeEach(() => {
-    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, CANCELLED_AT.toString())
+    dismissCancelledOrdersBanner(ADDRESS, { newestCancelledAt: CANCELLED_AT, total })
     renderResult = renderBanner()
   })
 
@@ -256,7 +261,20 @@ describe('when the banner was dismissed for the same cancellations before', () =
 
 describe('when the banner was dismissed before newer cancellations', () => {
   beforeEach(() => {
-    localStorage.setItem(`cancelled-orders-banner:${ADDRESS}`, (CANCELLED_AT - 1).toString())
+    dismissCancelledOrdersBanner(ADDRESS, { newestCancelledAt: CANCELLED_AT - 1, total })
+    renderResult = renderBanner()
+  })
+
+  it('should render the banner', () => {
+    expect(renderResult.getByRole('status')).toBeInTheDocument()
+  })
+})
+
+describe('when the banner was dismissed and more orders were cancelled past the loaded page', () => {
+  beforeEach(() => {
+    dismissCancelledOrdersBanner(ADDRESS, { newestCancelledAt: CANCELLED_AT, total })
+    total = total + 1
+    hasMore = true
     renderResult = renderBanner()
   })
 
