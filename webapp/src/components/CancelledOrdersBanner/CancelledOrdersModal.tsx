@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Loader, Mana, Modal, ModalNavigation } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
+import { PeggedManaPrice } from '../PeggedManaPrice'
 import { getRecreateLink } from './utils'
 import { ModalProps } from './CancelledOrdersBanner.types'
 import styles from './CancelledOrdersBanner.module.css'
@@ -21,6 +23,19 @@ const RecreateButton = ({ trade }: { trade: CancelledTrade }) => {
     <Button as={Link} to={link.url} role="link" primary size="small" className={styles.recreate}>
       {t('cancelled_orders_banner.recreate')}
     </Button>
+  )
+}
+
+const Price = ({ trade }: { trade: CancelledTrade }) => {
+  if (!trade.price) return <>{t('cancelled_orders_banner.no_price')}</>
+
+  // USD-pegged amounts are USD wei, not MANA wei.
+  return trade.price.assetType === TradeAssetType.USD_PEGGED_MANA ? (
+    <PeggedManaPrice usdWei={trade.price.amount} network={trade.network} marketplaceAddress={trade.contract} inline />
+  ) : (
+    <Mana network={trade.network} inline>
+      {formatWeiMANA(trade.price.amount)}
+    </Mana>
   )
 }
 
@@ -85,13 +100,7 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
                     </span>
                   </div>
                   <div className={styles.price}>
-                    {trade.price ? (
-                      <Mana network={trade.network} inline>
-                        {formatWeiMANA(trade.price.amount)}
-                      </Mana>
-                    ) : (
-                      t('cancelled_orders_banner.no_price')
-                    )}
+                    <Price trade={trade} />
                   </div>
                   <RecreateButton trade={trade} />
                 </li>

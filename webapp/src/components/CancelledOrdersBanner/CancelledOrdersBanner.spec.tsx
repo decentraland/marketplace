@@ -1,5 +1,5 @@
 import { act, fireEvent, RenderResult, screen } from '@testing-library/react'
-import { ChainId, Network } from '@dcl/schemas'
+import { ChainId, Network, TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
@@ -7,6 +7,17 @@ import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../mo
 import { renderWithProviders } from '../../utils/test'
 import CancelledOrdersBanner from './CancelledOrdersBanner'
 import { isCancelledOrdersBannerDismissed } from './utils'
+
+jest.mock('decentraland-dapps/dist/lib/eth', () => {
+  const actual: typeof import('decentraland-dapps/dist/lib/eth') = jest.requireActual('decentraland-dapps/dist/lib/eth')
+  return { ...actual, getChainIdByNetwork: () => 137 }
+})
+
+// $0.05 per MANA
+jest.mock('../../modules/trade/manaRate', () => {
+  const actual: typeof import('../../modules/trade/manaRate') = jest.requireActual('../../modules/trade/manaRate')
+  return { ...actual, fetchManaUsdRate: jest.fn().mockResolvedValue({ answer: 5000000n, decimals: 8 }) }
+})
 
 const ADDRESS = '0xabc0000000000000000000000000000000000001'
 
@@ -46,7 +57,7 @@ beforeEach(() => {
       expiresAt: 0,
       cancelledAt: 0,
       asset: { contractAddress: '0xcontract', tokenId: '12', itemId: null, name: 'Cyber Jacket', image: null },
-      price: { assetType: 1, amount: '25000000000000000000' }
+      price: { assetType: TradeAssetType.ERC20, amount: '25000000000000000000' }
     }
   ]
   total = 1
@@ -89,6 +100,19 @@ describe('when the user reviews the cancelled orders', () => {
       'href',
       locations.sell('0xcontract', '12')
     )
+  })
+})
+
+describe('when the user reviews a cancelled USD-pegged listing', () => {
+  beforeEach(async () => {
+    trades = [{ ...trades[0], price: { assetType: TradeAssetType.USD_PEGGED_MANA, amount: '25000000000000000000' } }]
+    renderResult = renderBanner()
+    openModal()
+    await screen.findByTestId('pegged-mana-price')
+  })
+
+  it('should show the price converted from USD to MANA', () => {
+    expect(screen.getByTestId('pegged-mana-price')).toHaveTextContent('~500')
   })
 })
 

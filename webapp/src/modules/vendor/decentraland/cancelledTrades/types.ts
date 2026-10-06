@@ -1,4 +1,4 @@
-import { ChainId, Network } from '@dcl/schemas'
+import { ChainId, Network, TradeAssetType } from '@dcl/schemas'
 
 export enum CancelledTradeType {
   BID = 'bid',
@@ -28,7 +28,7 @@ export type CancelledTrade = {
     image: string | null
   }
   price: {
-    assetType: number
+    assetType: TradeAssetType
     amount: string
   } | null
 }
