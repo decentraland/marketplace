@@ -172,7 +172,7 @@ const waitForInitialLoadingSelectors = [
     name: 'IsCancelledOrdersBannerEnabled',
     feature: FeatureName.CANCELLED_ORDERS_BANNER,
     selector: getIsCancelledOrdersBannerEnabled,
-    applicationName: ApplicationName.MARKETPLACE
+    applicationName: ApplicationName.DAPPS
   }
 ]
 
