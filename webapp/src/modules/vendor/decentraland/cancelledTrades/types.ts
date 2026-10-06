@@ -37,7 +37,6 @@ export type CancelledTradesFilters = {
   reason?: CancellationReason
   first?: number
   skip?: number
-  type?: CancelledTradeType[]
 }
 
 export type CancelledTradesResponse = {

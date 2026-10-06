@@ -13,14 +13,14 @@ const CancelledOrdersBanner = ({ address, total, ...listProps }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleDismiss = useCallback(() => {
-    dismissCancelledOrdersBanner(address, newestCancelledAt)
+    if (address) dismissCancelledOrdersBanner(address, newestCancelledAt)
     setIsDismissed(true)
   }, [address, newestCancelledAt])
 
   const handleOpen = useCallback(() => setIsModalOpen(true), [])
   const handleClose = useCallback(() => setIsModalOpen(false), [])
 
-  if (total === 0 || isDismissed || isCancelledOrdersBannerDismissed(address, newestCancelledAt)) return null
+  if (!address || total === 0 || isDismissed || isCancelledOrdersBannerDismissed(address, newestCancelledAt)) return null
 
   return (
     <>

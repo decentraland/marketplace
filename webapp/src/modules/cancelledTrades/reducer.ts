@@ -1,6 +1,5 @@
 import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { isTransactionAction } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { DISCONNECT_WALLET_SUCCESS, DisconnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isNFT } from '../asset/utils'
 import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
 import { CREATE_ORDER_SUCCESS, CreateOrderSuccessAction } from '../order/actions'
@@ -9,19 +8,12 @@ import {
   FETCH_CANCELLED_TRADES_FAILURE,
   FETCH_CANCELLED_TRADES_REQUEST,
   FETCH_CANCELLED_TRADES_SUCCESS,
-  FETCH_MORE_CANCELLED_TRADES_FAILURE,
-  FETCH_MORE_CANCELLED_TRADES_REQUEST,
-  FETCH_MORE_CANCELLED_TRADES_SUCCESS,
   FetchCancelledTradesFailureAction,
   FetchCancelledTradesRequestAction,
-  FetchCancelledTradesSuccessAction,
-  FetchMoreCancelledTradesFailureAction,
-  FetchMoreCancelledTradesRequestAction,
-  FetchMoreCancelledTradesSuccessAction
+  FetchCancelledTradesSuccessAction
 } from './actions'
 
 export type CancelledTradesState = {
-  address: string | null
   data: CancelledTrade[]
   total: number
   loading: LoadingState
@@ -29,7 +21,6 @@ export type CancelledTradesState = {
 }
 
 export const INITIAL_STATE: CancelledTradesState = {
-  address: null,
   data: [],
   total: 0,
   loading: [],
@@ -40,12 +31,8 @@ type CancelledTradesReducerAction =
   | FetchCancelledTradesRequestAction
   | FetchCancelledTradesSuccessAction
   | FetchCancelledTradesFailureAction
-  | FetchMoreCancelledTradesRequestAction
-  | FetchMoreCancelledTradesSuccessAction
-  | FetchMoreCancelledTradesFailureAction
   | CreateOrderSuccessAction
   | PlaceBidSuccessAction
-  | DisconnectWalletSuccessAction
 
 type RecreatedOrder = { type: CancelledTradeType; contractAddress: string; tokenId?: string; itemId?: string }
 
@@ -64,33 +51,16 @@ const removeRecreated = (state: CancelledTradesState, order: RecreatedOrder): Ca
 export function cancelledTradesReducer(state = INITIAL_STATE, action: CancelledTradesReducerAction): CancelledTradesState {
   switch (action.type) {
     case FETCH_CANCELLED_TRADES_REQUEST:
-    case FETCH_MORE_CANCELLED_TRADES_REQUEST:
       return { ...state, loading: loadingReducer(state.loading, action), error: null }
-    case FETCH_CANCELLED_TRADES_SUCCESS:
-      return {
-        ...state,
-        address: action.payload.address.toLowerCase(),
-        data: action.payload.trades,
-        total: action.payload.total,
-        loading: loadingReducer(state.loading, action),
-        error: null
-      }
-    case FETCH_MORE_CANCELLED_TRADES_SUCCESS: {
-      const loading = loadingReducer(state.loading, action)
-      // A page for a wallet that is no longer the stored one is stale.
-      if (action.payload.address.toLowerCase() !== state.address) return { ...state, loading }
-
+    case FETCH_CANCELLED_TRADES_SUCCESS: {
+      const { trades, total, skip } = action.payload
+      // Offset paging: rows that leave the server between pages (e.g. expired) shift the offset and
+      // can skip later rows until the next page load. Only reachable past the first page.
       const loadedIds = new Set(state.data.map(trade => trade.id))
-      return {
-        ...state,
-        data: [...state.data, ...action.payload.trades.filter(trade => !loadedIds.has(trade.id))],
-        total: action.payload.total,
-        loading,
-        error: null
-      }
+      const data = skip === 0 ? trades : [...state.data, ...trades.filter(trade => !loadedIds.has(trade.id))]
+      return { ...state, data, total, loading: loadingReducer(state.loading, action), error: null }
     }
     case FETCH_CANCELLED_TRADES_FAILURE:
-    case FETCH_MORE_CANCELLED_TRADES_FAILURE:
       return { ...state, loading: loadingReducer(state.loading, action), error: action.payload.error }
     case CREATE_ORDER_SUCCESS: {
       // Only an off-chain trade re-creates the cancelled one; on-chain orders carry a tx hash.
@@ -110,8 +80,6 @@ export function cancelledTradesReducer(state = INITIAL_STATE, action: CancelledT
         ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId })
       })
     }
-    case DISCONNECT_WALLET_SUCCESS:
-      return INITIAL_STATE
     default:
       return state
   }

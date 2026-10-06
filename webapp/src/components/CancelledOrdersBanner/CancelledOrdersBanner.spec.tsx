@@ -22,6 +22,7 @@ jest.mock('../../modules/trade/manaRate', () => {
 const ADDRESS = '0xabc0000000000000000000000000000000000001'
 const CANCELLED_AT = 1700000000000
 
+let address: string | undefined
 let trades: CancelledTrade[]
 let total: number
 let hasMore: boolean
@@ -29,11 +30,12 @@ let isLoadingMore: boolean
 let error: string | null
 let onLoadMore: jest.Mock
 let renderResult: RenderResult
+let observerCallback: IntersectionObserverCallback
 
 const renderBanner = () =>
   renderWithProviders(
     <CancelledOrdersBanner
-      address={ADDRESS}
+      address={address}
       trades={trades}
       total={total}
       hasMore={hasMore}
@@ -46,6 +48,7 @@ const renderBanner = () =>
 const openModal = () => fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.cta') }))
 
 beforeEach(() => {
+  address = ADDRESS
   trades = [
     {
       id: 'a-listing-id',
@@ -66,10 +69,15 @@ beforeEach(() => {
   isLoadingMore = false
   error = null
   onLoadMore = jest.fn()
+  window.IntersectionObserver = jest.fn((callback: IntersectionObserverCallback) => {
+    observerCallback = callback
+    return { observe: jest.fn(), unobserve: jest.fn(), disconnect: jest.fn() }
+  }) as unknown as typeof IntersectionObserver
 })
 
 afterEach(() => {
   localStorage.clear()
+  delete (window as Partial<typeof window>).IntersectionObserver
 })
 
 describe('when the wallet has cancelled orders', () => {
@@ -79,6 +87,17 @@ describe('when the wallet has cancelled orders', () => {
 
   it('should tell the user their orders were cancelled by the upgrade', () => {
     expect(screen.getByRole('status')).toHaveTextContent(t('cancelled_orders_banner.message', { count: total }))
+  })
+})
+
+describe('when there is no connected wallet', () => {
+  beforeEach(() => {
+    address = undefined
+    renderResult = renderBanner()
+  })
+
+  it('should not render the banner', () => {
+    expect(renderResult.queryByRole('status')).not.toBeInTheDocument()
   })
 })
 
@@ -142,19 +161,9 @@ describe('when the user reviews a cancelled item listing', () => {
 })
 
 describe('when the wallet has more cancelled orders than the ones loaded', () => {
-  let observerCallback: IntersectionObserverCallback
-
   beforeEach(() => {
     total = 500
     hasMore = true
-    window.IntersectionObserver = jest.fn((callback: IntersectionObserverCallback) => {
-      observerCallback = callback
-      return { observe: jest.fn(), disconnect: jest.fn() }
-    }) as unknown as typeof IntersectionObserver
-  })
-
-  afterEach(() => {
-    delete (window as Partial<typeof window>).IntersectionObserver
   })
 
   describe('and the user reviews them', () => {
@@ -175,8 +184,8 @@ describe('when the wallet has more cancelled orders than the ones loaded', () =>
       act(() => observerCallback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver))
     })
 
-    it('should load the next page of orders', () => {
-      expect(onLoadMore).toHaveBeenCalledTimes(1)
+    it('should load the page that starts after the loaded orders', () => {
+      expect(onLoadMore).toHaveBeenCalledWith(trades.length)
     })
   })
 
@@ -212,8 +221,8 @@ describe('when the wallet has more cancelled orders than the ones loaded', () =>
         fireEvent.click(screen.getByRole('button', { name: t('cancelled_orders_banner.retry') }))
       })
 
-      it('should load the next page of orders', () => {
-        expect(onLoadMore).toHaveBeenCalledTimes(1)
+      it('should load the page that starts after the loaded orders', () => {
+        expect(onLoadMore).toHaveBeenCalledWith(trades.length)
       })
     })
   })

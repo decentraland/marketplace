@@ -9,14 +9,7 @@ import { getIsCancelledOrdersBannerEnabled } from '../features/selectors'
 import { generateIdentitySuccess } from '../identity/actions'
 import { CancelledTradesAPI } from '../vendor/decentraland/cancelledTrades/api'
 import { CancellationReason, CancelledTrade, CancelledTradesResponse } from '../vendor/decentraland/cancelledTrades/types'
-import {
-  fetchCancelledTradesFailure,
-  fetchCancelledTradesRequest,
-  fetchCancelledTradesSuccess,
-  fetchMoreCancelledTradesFailure,
-  fetchMoreCancelledTradesRequest,
-  fetchMoreCancelledTradesSuccess
-} from './actions'
+import { fetchCancelledTradesFailure, fetchCancelledTradesRequest, fetchCancelledTradesSuccess } from './actions'
 import { CANCELLED_TRADES_PAGE_SIZE, cancelledTradesSaga } from './sagas'
 
 const getIdentity = () => undefined
@@ -45,7 +38,7 @@ describe('when the identity of the connected wallet is generated', () => {
       return expectSaga(cancelledTradesSaga, getIdentity)
         .provide(providers)
         .take(fetchApplicationFeaturesSuccess([], {} as never).type)
-        .put(fetchCancelledTradesRequest(address))
+        .put(fetchCancelledTradesRequest())
         .dispatch(generateIdentitySuccess(address, identity))
         .dispatch(fetchApplicationFeaturesSuccess([], {} as never))
         .run({ silenceTimeout: true })
@@ -66,7 +59,7 @@ describe('when the identity of the connected wallet is generated', () => {
     it('should request the cancelled trades of the wallet', () => {
       return expectSaga(cancelledTradesSaga, getIdentity)
         .provide(providers)
-        .put(fetchCancelledTradesRequest(address))
+        .put(fetchCancelledTradesRequest())
         .dispatch(generateIdentitySuccess(address, identity))
         .run({ silenceTimeout: true })
     })
@@ -85,7 +78,7 @@ describe('when the identity of the connected wallet is generated', () => {
     it('should not request the cancelled trades', () => {
       return expectSaga(cancelledTradesSaga, getIdentity)
         .provide(providers)
-        .not.put(fetchCancelledTradesRequest(address))
+        .not.put(fetchCancelledTradesRequest())
         .dispatch(generateIdentitySuccess(address, identity))
         .run({ silenceTimeout: true })
     })
@@ -93,60 +86,22 @@ describe('when the identity of the connected wallet is generated', () => {
 })
 
 describe('when handling the request to fetch the cancelled trades', () => {
-  describe('and the server responds with the cancelled trades', () => {
-    let response: CancelledTradesResponse
-
-    beforeEach(() => {
-      response = { data: [{ id: 'a-trade-id' } as CancelledTrade], total: 1 }
-    })
-
-    it('should fetch the trades cancelled by the signature index bump and store them', () => {
-      return expectSaga(cancelledTradesSaga, getIdentity)
-        .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), response]])
-        .call.like({
-          fn: CancelledTradesAPI.prototype.fetchCancelledTrades,
-          args: [{ reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP, first: CANCELLED_TRADES_PAGE_SIZE }]
-        })
-        .put(fetchCancelledTradesSuccess(address, response.data, response.total))
-        .dispatch(fetchCancelledTradesRequest(address))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the request fails', () => {
-    let error: Error
-
-    beforeEach(() => {
-      error = new Error('an error')
-    })
-
-    it('should put the failure with the error message', () => {
-      return expectSaga(cancelledTradesSaga, getIdentity)
-        .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), throwError(error)]])
-        .put(fetchCancelledTradesFailure(address, error.message))
-        .dispatch(fetchCancelledTradesRequest(address))
-        .run({ silenceTimeout: true })
-    })
-  })
-})
-
-describe('when handling the request to fetch more cancelled trades', () => {
-  describe('and the server responds with the next page', () => {
+  describe('and the server responds with the page', () => {
     let response: CancelledTradesResponse
 
     beforeEach(() => {
       response = { data: [{ id: 'a-trade-id' } as CancelledTrade], total: 500 }
     })
 
-    it('should fetch the page that starts after the loaded trades and store it', () => {
+    it('should fetch the page of trades cancelled by the signature index bump and store it', () => {
       return expectSaga(cancelledTradesSaga, getIdentity)
         .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), response]])
         .call.like({
           fn: CancelledTradesAPI.prototype.fetchCancelledTrades,
           args: [{ reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP, first: CANCELLED_TRADES_PAGE_SIZE, skip: 100 }]
         })
-        .put(fetchMoreCancelledTradesSuccess(address, response.data, response.total))
-        .dispatch(fetchMoreCancelledTradesRequest(address, 100))
+        .put(fetchCancelledTradesSuccess(response.data, response.total, 100))
+        .dispatch(fetchCancelledTradesRequest(100))
         .run({ silenceTimeout: true })
     })
   })
@@ -161,8 +116,8 @@ describe('when handling the request to fetch more cancelled trades', () => {
     it('should put the failure with the error message', () => {
       return expectSaga(cancelledTradesSaga, getIdentity)
         .provide([[matchers.call.fn(CancelledTradesAPI.prototype.fetchCancelledTrades), throwError(error)]])
-        .put(fetchMoreCancelledTradesFailure(address, error.message))
-        .dispatch(fetchMoreCancelledTradesRequest(address, 100))
+        .put(fetchCancelledTradesFailure(error.message))
+        .dispatch(fetchCancelledTradesRequest())
         .run({ silenceTimeout: true })
     })
   })

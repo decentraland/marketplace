@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Loader, Mana, Modal, ModalNavigation } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
+import { InfiniteScroll } from '../InfiniteScroll'
 import { PeggedManaPrice } from '../PeggedManaPrice'
 import { getRecreateLink } from './utils'
 import { ModalProps } from './CancelledOrdersBanner.types'
@@ -47,31 +48,10 @@ const Thumbnail = ({ src }: { src: string | null }) => {
   return <div className={styles.thumbnail}>{src && !hasFailed ? <img src={src} alt="" loading="lazy" onError={handleError} /> : null}</div>
 }
 
-// Starts the next page before the end of the list is reached.
-const LOAD_MORE_MARGIN = '0px 0px 240px 0px'
-
-const useLoadMoreSentinel = (shouldLoad: boolean, onLoadMore: () => void) => {
-  const scrollerRef = useRef<HTMLDivElement>(null)
-  const sentinelRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current
-    if (!shouldLoad || !sentinel) return
-
-    const observer = new IntersectionObserver(([entry]) => entry.isIntersecting && onLoadMore(), {
-      root: scrollerRef.current,
-      rootMargin: LOAD_MORE_MARGIN
-    })
-    observer.observe(sentinel)
-    return () => observer.disconnect()
-  }, [shouldLoad, onLoadMore])
-
-  return { scrollerRef, sentinelRef }
-}
-
 const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, error, onLoadMore, onClose }: ModalProps) => {
-  const canLoadMore = hasMore && !isLoadingMore && !error
-  const { scrollerRef, sentinelRef } = useLoadMoreSentinel(open && canLoadMore, onLoadMore)
+  // State, not a ref, so the observer is re-created once the scroller mounts.
+  const [scroller, setScroller] = useState<HTMLDivElement | null>(null)
+  const handleLoadMore = useCallback(() => onLoadMore(trades.length), [onLoadMore, trades.length])
 
   return (
     <Modal open={open} size="small" onClose={onClose} className={styles.modal}>
@@ -82,32 +62,33 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
           <span className={styles.count}>{t('cancelled_orders_banner.count', { count: total })}</span>
           {hasMore ? <span>{t('cancelled_orders_banner.loaded', { shown: trades.length, total })}</span> : null}
         </div>
-        <div className={styles.scroller} ref={scrollerRef}>
-          <ul className={styles.list} aria-label={t('cancelled_orders_banner.modal_title')} aria-busy={isLoadingMore}>
-            {trades.map(trade => {
-              const name = trade.asset.name ?? t('cancelled_orders_banner.unknown_asset')
-              return (
-                <li key={trade.id} className={styles.row}>
-                  <Thumbnail src={trade.asset.image} />
-                  <div className={styles.details}>
-                    <span className={styles.name}>{name}</span>
-                    <span className={styles.type}>
-                      {t(`cancelled_orders_banner.type.${trade.type}`)}
-                      {/* Primary sales can't be set up in the Marketplace */}
-                      {trade.type === CancelledTradeType.PUBLIC_ITEM_ORDER ? (
-                        <span className={styles.hint}> · {t('cancelled_orders_banner.recreated_in_builder')}</span>
-                      ) : null}
-                    </span>
-                  </div>
-                  <div className={styles.price}>
-                    <Price trade={trade} />
-                  </div>
-                  <RecreateButton trade={trade} />
-                </li>
-              )
-            })}
-          </ul>
-          {canLoadMore ? <div ref={sentinelRef} className={styles.sentinel} /> : null}
+        <div className={styles.scroller} ref={setScroller}>
+          <InfiniteScroll page={0} hasMorePages={hasMore && !error} isLoading={isLoadingMore} root={scroller} onLoadMore={handleLoadMore}>
+            <ul className={styles.list} aria-label={t('cancelled_orders_banner.modal_title')} aria-busy={isLoadingMore}>
+              {trades.map(trade => {
+                const name = trade.asset.name ?? t('cancelled_orders_banner.unknown_asset')
+                return (
+                  <li key={trade.id} className={styles.row}>
+                    <Thumbnail src={trade.asset.image} />
+                    <div className={styles.details}>
+                      <span className={styles.name}>{name}</span>
+                      <span className={styles.type}>
+                        {t(`cancelled_orders_banner.type.${trade.type}`)}
+                        {/* Primary sales can't be set up in the Marketplace */}
+                        {trade.type === CancelledTradeType.PUBLIC_ITEM_ORDER ? (
+                          <span className={styles.hint}> · {t('cancelled_orders_banner.recreated_in_builder')}</span>
+                        ) : null}
+                      </span>
+                    </div>
+                    <div className={styles.price}>
+                      <Price trade={trade} />
+                    </div>
+                    <RecreateButton trade={trade} />
+                  </li>
+                )
+              })}
+            </ul>
+          </InfiniteScroll>
           <div role="status" className={styles.status}>
             {isLoadingMore ? (
               <>
@@ -119,7 +100,7 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
           {error && hasMore ? (
             <div role="alert" className={styles.footer}>
               {t('cancelled_orders_banner.load_more_error')}
-              <Button type="button" size="small" secondary className={styles.retry} onClick={onLoadMore}>
+              <Button type="button" size="small" secondary className={styles.retry} onClick={handleLoadMore}>
                 {t('cancelled_orders_banner.retry')}
               </Button>
             </div>

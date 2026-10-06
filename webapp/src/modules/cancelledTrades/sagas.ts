@@ -5,21 +5,17 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIsCancelledOrdersBannerEnabled } from '../features/selectors'
-import { GENERATE_IDENTITY_SUCCESS, GenerateIdentitySuccessAction } from '../identity/actions'
+import { GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 import { CancelledTradesAPI } from '../vendor/decentraland/cancelledTrades/api'
 import { CancellationReason } from '../vendor/decentraland/cancelledTrades/types'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland/marketplace/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import {
   FETCH_CANCELLED_TRADES_REQUEST,
-  FETCH_MORE_CANCELLED_TRADES_REQUEST,
   FetchCancelledTradesRequestAction,
-  FetchMoreCancelledTradesRequestAction,
   fetchCancelledTradesFailure,
   fetchCancelledTradesRequest,
-  fetchCancelledTradesSuccess,
-  fetchMoreCancelledTradesFailure,
-  fetchMoreCancelledTradesSuccess
+  fetchCancelledTradesSuccess
 } from './actions'
 
 export const CANCELLED_TRADES_PAGE_SIZE = 100
@@ -32,12 +28,11 @@ export function* cancelledTradesSaga(getIdentity: () => AuthIdentity | undefined
   })
 
   yield takeLatest(GENERATE_IDENTITY_SUCCESS, handleGenerateIdentitySuccess)
-  yield takeLatest(FETCH_CANCELLED_TRADES_REQUEST, handleFetchCancelledTradesRequest)
   // Ignores scroll-triggered requests while a page is in flight.
-  yield takeLeading(FETCH_MORE_CANCELLED_TRADES_REQUEST, handleFetchMoreCancelledTradesRequest)
+  yield takeLeading(FETCH_CANCELLED_TRADES_REQUEST, handleFetchCancelledTradesRequest)
 
   // The request is signed, so it waits for the identity instead of the wallet.
-  function* handleGenerateIdentitySuccess(action: GenerateIdentitySuccessAction) {
+  function* handleGenerateIdentitySuccess() {
     const hasLoadedFlags = (yield select(hasLoadedInitialFlags)) as boolean
     if (!hasLoadedFlags) {
       yield take(FETCH_APPLICATION_FEATURES_SUCCESS)
@@ -45,34 +40,21 @@ export function* cancelledTradesSaga(getIdentity: () => AuthIdentity | undefined
 
     const isEnabled = (yield select(getIsCancelledOrdersBannerEnabled)) as boolean
     if (isEnabled) {
-      yield put(fetchCancelledTradesRequest(action.payload.address))
+      yield put(fetchCancelledTradesRequest())
     }
   }
 
   function* handleFetchCancelledTradesRequest(action: FetchCancelledTradesRequestAction) {
-    const { address } = action.payload
-    try {
-      const { data, total } = (yield call([api, 'fetchCancelledTrades'], {
-        reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP,
-        first: CANCELLED_TRADES_PAGE_SIZE
-      })) as Awaited<ReturnType<typeof api.fetchCancelledTrades>>
-      yield put(fetchCancelledTradesSuccess(address, data, total))
-    } catch (error) {
-      yield put(fetchCancelledTradesFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
-    }
-  }
-
-  function* handleFetchMoreCancelledTradesRequest(action: FetchMoreCancelledTradesRequestAction) {
-    const { address, skip } = action.payload
+    const { skip } = action.payload
     try {
       const { data, total } = (yield call([api, 'fetchCancelledTrades'], {
         reason: CancellationReason.CONTRACT_SIGNATURE_INDEX_BUMP,
         first: CANCELLED_TRADES_PAGE_SIZE,
         skip
       })) as Awaited<ReturnType<typeof api.fetchCancelledTrades>>
-      yield put(fetchMoreCancelledTradesSuccess(address, data, total))
+      yield put(fetchCancelledTradesSuccess(data, total, skip))
     } catch (error) {
-      yield put(fetchMoreCancelledTradesFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(fetchCancelledTradesFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

@@ -1,17 +1,9 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
-import { disconnectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { placeBidSuccess } from '../bid/actions'
 import { NFT } from '../nft/types'
 import { createOrderSuccess } from '../order/actions'
 import { CancelledTrade, CancelledTradeType } from '../vendor/decentraland/cancelledTrades/types'
-import {
-  fetchCancelledTradesFailure,
-  fetchCancelledTradesRequest,
-  fetchCancelledTradesSuccess,
-  fetchMoreCancelledTradesFailure,
-  fetchMoreCancelledTradesRequest,
-  fetchMoreCancelledTradesSuccess
-} from './actions'
+import { fetchCancelledTradesFailure, fetchCancelledTradesRequest, fetchCancelledTradesSuccess } from './actions'
 import { cancelledTradesReducer, CancelledTradesState, INITIAL_STATE } from './reducer'
 
 let state: CancelledTradesState
@@ -19,69 +11,15 @@ let address: string
 
 beforeEach(() => {
   state = { ...INITIAL_STATE }
-  address = '0xAbC0000000000000000000000000000000000001'
+  address = '0xabc0000000000000000000000000000000000001'
 })
 
 describe('when the fetch cancelled trades request action is received', () => {
   let request: ReturnType<typeof fetchCancelledTradesRequest>
-
-  beforeEach(() => {
-    request = fetchCancelledTradesRequest(address)
-  })
-
-  it('should add the action to the loading state', () => {
-    expect(cancelledTradesReducer(state, request).loading).toEqual([request])
-  })
-})
-
-describe('when the fetch cancelled trades success action is received', () => {
-  let trades: CancelledTrade[]
   let newState: CancelledTradesState
 
   beforeEach(() => {
-    trades = [{ id: 'a-trade-id', network: Network.MATIC } as CancelledTrade]
-    state = { ...state, loading: [fetchCancelledTradesRequest(address)], error: 'an error' }
-    newState = cancelledTradesReducer(state, fetchCancelledTradesSuccess(address, trades, 3))
-  })
-
-  it('should store the trades, the total and the lowercased address they belong to', () => {
-    expect(newState).toEqual(expect.objectContaining({ data: trades, total: 3, address: address.toLowerCase() }))
-  })
-
-  it('should clear the loading state and the error', () => {
-    expect(newState).toEqual(expect.objectContaining({ loading: [], error: null }))
-  })
-})
-
-describe('when the fetch cancelled trades failure action is received', () => {
-  let newState: CancelledTradesState
-
-  beforeEach(() => {
-    state = { ...state, loading: [fetchCancelledTradesRequest(address)] }
-    newState = cancelledTradesReducer(state, fetchCancelledTradesFailure(address, 'an error'))
-  })
-
-  it('should store the error and clear the loading state', () => {
-    expect(newState).toEqual(expect.objectContaining({ error: 'an error', loading: [] }))
-  })
-})
-
-describe('when the wallet is disconnected', () => {
-  beforeEach(() => {
-    state = { ...state, address: address.toLowerCase(), data: [{ id: 'a-trade-id' } as CancelledTrade], total: 1 }
-  })
-
-  it('should reset the state', () => {
-    expect(cancelledTradesReducer(state, disconnectWalletSuccess())).toEqual(INITIAL_STATE)
-  })
-})
-
-describe('when the fetch more cancelled trades request action is received', () => {
-  let request: ReturnType<typeof fetchMoreCancelledTradesRequest>
-  let newState: CancelledTradesState
-
-  beforeEach(() => {
-    request = fetchMoreCancelledTradesRequest(address, 100)
+    request = fetchCancelledTradesRequest(100)
     state = { ...state, error: 'an error' }
     newState = cancelledTradesReducer(state, request)
   })
@@ -91,26 +29,35 @@ describe('when the fetch more cancelled trades request action is received', () =
   })
 })
 
-describe('when the fetch more cancelled trades success action is received', () => {
+describe('when the fetch cancelled trades success action is received', () => {
   let loadedTrades: CancelledTrade[]
   let pageTrades: CancelledTrade[]
   let newState: CancelledTradesState
 
   beforeEach(() => {
     loadedTrades = [{ id: 'a-trade-id' } as CancelledTrade, { id: 'another-trade-id' } as CancelledTrade]
-    pageTrades = [{ id: 'another-trade-id' } as CancelledTrade, { id: 'a-new-trade-id' } as CancelledTrade]
+    pageTrades = [{ id: 'another-trade-id', network: Network.MATIC } as CancelledTrade, { id: 'a-new-trade-id' } as CancelledTrade]
   })
 
-  describe('and the page belongs to the stored wallet', () => {
+  describe('and it is the first page', () => {
     beforeEach(() => {
-      state = {
-        ...state,
-        address: address.toLowerCase(),
-        data: loadedTrades,
-        total: 3,
-        loading: [fetchMoreCancelledTradesRequest(address, 2)]
-      }
-      newState = cancelledTradesReducer(state, fetchMoreCancelledTradesSuccess(address, pageTrades, 4))
+      state = { ...state, data: loadedTrades, total: 2, loading: [fetchCancelledTradesRequest()], error: 'an error' }
+      newState = cancelledTradesReducer(state, fetchCancelledTradesSuccess(pageTrades, 3, 0))
+    })
+
+    it('should replace the loaded trades and the total', () => {
+      expect(newState).toEqual(expect.objectContaining({ data: pageTrades, total: 3 }))
+    })
+
+    it('should clear the loading state and the error', () => {
+      expect(newState).toEqual(expect.objectContaining({ loading: [], error: null }))
+    })
+  })
+
+  describe('and it is a later page', () => {
+    beforeEach(() => {
+      state = { ...state, data: loadedTrades, total: 3, loading: [fetchCancelledTradesRequest(2)] }
+      newState = cancelledTradesReducer(state, fetchCancelledTradesSuccess(pageTrades, 4, 2))
     })
 
     it('should append the trades that were not loaded yet', () => {
@@ -121,31 +68,14 @@ describe('when the fetch more cancelled trades success action is received', () =
       expect(newState).toEqual(expect.objectContaining({ total: 4, loading: [] }))
     })
   })
-
-  describe('and the page belongs to another wallet', () => {
-    beforeEach(() => {
-      state = {
-        ...state,
-        address: '0xdef',
-        data: loadedTrades,
-        total: 3,
-        loading: [fetchMoreCancelledTradesRequest(address, 2)]
-      }
-      newState = cancelledTradesReducer(state, fetchMoreCancelledTradesSuccess(address, pageTrades, 4))
-    })
-
-    it('should only clear the loading state', () => {
-      expect(newState).toEqual({ ...state, loading: [] })
-    })
-  })
 })
 
-describe('when the fetch more cancelled trades failure action is received', () => {
+describe('when the fetch cancelled trades failure action is received', () => {
   let newState: CancelledTradesState
 
   beforeEach(() => {
-    state = { ...state, loading: [fetchMoreCancelledTradesRequest(address, 100)] }
-    newState = cancelledTradesReducer(state, fetchMoreCancelledTradesFailure(address, 'an error'))
+    state = { ...state, loading: [fetchCancelledTradesRequest()] }
+    newState = cancelledTradesReducer(state, fetchCancelledTradesFailure('an error'))
   })
 
   it('should store the error and clear the loading state', () => {
@@ -175,7 +105,7 @@ describe('when an order is re-created', () => {
       type: CancelledTradeType.BID,
       asset: { contractAddress: '0xcontract', tokenId: null, itemId: '3' }
     } as CancelledTrade
-    state = { ...state, address: address.toLowerCase(), data: [listing, nftBid, itemBid], total: 10 }
+    state = { ...state, data: [listing, nftBid, itemBid], total: 10 }
   })
 
   describe('and it is a listing of a cancelled NFT listing', () => {

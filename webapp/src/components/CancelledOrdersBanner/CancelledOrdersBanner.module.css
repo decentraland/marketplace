@@ -178,10 +178,6 @@
   overscroll-behavior: contain;
 }
 
-.sentinel {
-  height: 1px;
-}
-
 .status:not(:empty),
 .footer {
   display: flex;
