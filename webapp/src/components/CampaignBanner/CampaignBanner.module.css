@@ -5,13 +5,18 @@
                                       aspect ratio, which is what gives the banner its height
      .banner > div > :last-child      its Layout: the title, text and CTA, already padded by 2rem
 
-   The banner runs edge to edge, but the desktop artwork is only 1280px wide (the Shop campaign ships
-   `Web_1280x300.png`), and ui2 stretches it across the whole container: on a 2560px window that came out
-   2512x589, twice its native size, soft avatars and a banner taller than half the viewport. So the artwork
-   is NOT stretched to the full width any more. It is drawn near its native size, pinned to the right where
-   its subject is, and the space left of it is filled with a blurred copy of the same image - the sides read
-   as a continuation of the art instead of as a gap, and no colour has to be hardcoded here, because both
-   layers pick the URL up from the container with `background-image: inherit`. */
+   The banner runs edge to edge and ui2 stretches the artwork across the whole container, which is right
+   for a banner authored at a desktop window's width and wrong for one authored narrower: the Shop campaign
+   ships `Web_1280x300.png`, and on a 2560px window that came out 2512x589, twice its native size, soft
+   avatars and a banner taller than half the viewport. So narrow artwork gets `.framed` instead, which
+   draws it near its native size, pins it to the right where its subject is, and fills the space left of it
+   with a blurred copy of the same image - the sides read as a continuation of the art instead of as a gap,
+   and no colour has to be hardcoded here, because both layers pick the URL up from the container with
+   `background-image: inherit`. Which one a banner gets is decided from the artwork in CampaignBanner.tsx.
+
+   Everything the class drives is desktop-only, because what it measured is the DESKTOP artwork: ui2 paints
+   `mobileBackground` below its tablet breakpoint, a separate image authored to fill a phone, and framing it
+   would fade the edge of a picture that needs no filler. */
 
 .banner {
   /* The rows underneath are 70px apart (Slideshow.css), so the old 24px left the artwork almost touching
@@ -24,55 +29,54 @@
     /* Out to the window edges: PageLayout's content gutter is the only thing between us and them. */
     margin-inline: -24px;
   }
-}
 
-.banner > div {
-  /* Containing block for the blurred layer below. The container already clips (`overflow: hidden`), which
-     is what keeps both the blur's soft edges and the mask inside the banner. */
-  position: relative;
-}
+  .framed > div {
+    /* Containing block for the blurred layer below. The container already clips (`overflow: hidden`), which
+       is what keeps both the blur's soft edges and the mask inside the banner. */
+    position: relative;
+  }
 
-/* The filler: the same artwork blurred out to fill the strip, so what shows beside the sharp copy is the
-   artwork's own colour and light rather than a flat panel. Two deliberate choices here:
+  /* The filler: the same artwork blurred out to fill the strip, so what shows beside the sharp copy is the
+     artwork's own colour and light rather than a flat panel. Two deliberate choices here:
 
-   - `600% 100%` rather than `cover`, which maps the WHOLE frame across the strip: on a very wide window
-     that put the blurred avatars just left of the sharp ones, reading as a ghost of the artwork. Six times
-     the width samples only the empty left sixth of the frame and stretches it across, so the filler
-     carries the art's light with none of its subject. The horizontal distortion that costs is free - the
-     layer is blurred past recognition anyway. The vertical scale stays 100%, so nothing is cropped.
-   - Not darkened: a brightness tweak makes the boundary with the sharp layer visible as a step. */
-.banner > div::before {
-  content: '';
-  position: absolute;
-  /* Overscanned, otherwise the blur fades into transparency at the edges of the strip. */
-  inset: -6%;
-  z-index: 0;
-  background-image: inherit;
-  background-size: 600% 100%;
-  background-position: left center;
-  filter: blur(32px);
-  pointer-events: none;
-}
+     - `600% 100%` rather than `cover`, which maps the WHOLE frame across the strip: on a very wide window
+       that put the blurred avatars just left of the sharp ones, reading as a ghost of the artwork. Six
+       times the width samples only the empty left sixth of the frame and stretches it across, so the
+       filler carries the art's light with none of its subject. The horizontal distortion that costs is
+       free - the layer is blurred past recognition anyway. The vertical scale stays 100%, so nothing is
+       cropped.
+     - Not darkened: a brightness tweak makes the boundary with the sharp layer visible as a step. */
+  .framed > div::before {
+    content: '';
+    position: absolute;
+    /* Overscanned, otherwise the blur fades into transparency at the edges of the strip. */
+    inset: -6%;
+    z-index: 0;
+    background-image: inherit;
+    background-size: 600% 100%;
+    background-position: left center;
+    filter: blur(32px);
+    pointer-events: none;
+  }
 
-/* The sharp layer. The sizer's box is already exactly the artwork's aspect ratio, so `cover` fits the
-   image into it without cropping, and capping its width caps the banner's height with it: 1360px keeps
-   the upscale at 1.06x (and is the same cap `.ui.container` uses in index.css). Pinned right because the
-   avatars and the coins live on that side of the frame; its left edge is faded out so it melts into the
-   blurred layer instead of ending on a seam. */
-.banner > div > div:not(:last-child) {
-  position: relative;
-  z-index: 1;
-  max-width: 1360px;
-  margin-left: auto;
-  margin-right: 0;
-  background-image: inherit;
-  background-size: cover;
-  background-position: center;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 140px);
-  mask-image: linear-gradient(to right, transparent, #000 140px);
-}
+  /* The sharp layer. The sizer's box is already exactly the artwork's aspect ratio, so `cover` fits the
+     image into it without cropping, and capping its width caps the banner's height with it: 1360px keeps
+     the upscale at 1.06x (and is the same cap `.ui.container` uses in index.css). Pinned right because the
+     avatars and the coins live on that side of the frame; its left edge is faded out so it melts into the
+     blurred layer instead of ending on a seam. */
+  .framed > div > div:not(:last-child) {
+    position: relative;
+    z-index: 1;
+    max-width: 1360px;
+    margin-left: auto;
+    margin-right: 0;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 140px);
+    mask-image: linear-gradient(to right, transparent, #000 140px);
+  }
 
-@media (min-width: 768px) {
   .banner > div > :last-child {
     /* Above both artwork layers. */
     position: relative;

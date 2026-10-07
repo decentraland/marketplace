@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { ethers } from 'ethers'
-import { Banner } from 'decentraland-dapps/dist/containers/Banner'
 import { Loader } from 'decentraland-ui'
 import { View } from '../../../modules/ui/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
 import { isVendor } from '../../../modules/vendor/utils'
 import { AssetBrowse } from '../../AssetBrowse'
+import CampaignBanner from '../../CampaignBanner'
 import { NavigationTab } from '../../Navigation/Navigation.types'
 import { PageLayout } from '../../PageLayout'
 import { Props } from './CampaignBrowserPage.types'
@@ -54,9 +54,7 @@ const CampaignBrowserPage = (props: Props) => {
       <div className="CampaignBrowserPage">
         {hasSomethingToShow && !isLoadingCampaign && !isFetchingEvent && campaignTag ? (
           <>
-            <div className="banner">
-              <Banner id={MARKETPLACE_CAMPAIGN_COLLECTIBLES_BANNER_ID} />
-            </div>
+            <CampaignBanner id={MARKETPLACE_CAMPAIGN_COLLECTIBLES_BANNER_ID} />
             <AssetBrowse
               vendor={vendor}
               isFullscreen={Boolean(isFullscreen)}
