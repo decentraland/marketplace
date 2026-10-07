@@ -4,7 +4,7 @@ import { AnyAction } from 'redux'
 import { takeEvery, put, select, call, take, race, spawn, getContext } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import { getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
+import { getItemIds, getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
@@ -125,11 +125,28 @@ export function* handleBrowse(action: BrowseAction) {
     campaignTag && contractsByTag[campaignTag] && contractsByTag[campaignTag].length > 0
       ? contractsByTag[campaignTag]
       : [ethers.constants.AddressZero]
+
+  let campaignSelection: Pick<BrowseOptions, 'contracts' | 'ids'> = {}
+  if (isInACampaignRoute) {
+    if (options.contracts && options.contracts.length > 0) {
+      campaignSelection = { contracts: options.contracts }
+    } else {
+      // A campaign that names its items ONE BY ONE selects by those alone. The catalogue INTERSECTS `id`
+      // with `contractAddress` rather than unioning them, so sending both returns nothing at all: an item
+      // named here almost never sits in a collection the tag resolved, which is the whole reason the field
+      // exists. The cost is that such a campaign cannot also widen itself with a tagged collection; doing
+      // both needs the union this endpoint does not have (marketplace-server ships it on /v3 for the Shop).
+      //
+      // Read only on the campaign route, so an ordinary browse neither pays for the lookup nor depends on
+      // the campaign having been fetched at all.
+      const campaignItemIds = (yield select(getItemIds)) as ReturnType<typeof getItemIds>
+      campaignSelection = campaignItemIds.length > 0 ? { ids: campaignItemIds } : { contracts: campaignContracts }
+    }
+  }
+
   yield call(fetchAssetsFromRoute, {
     ...options,
-    ...(isInACampaignRoute && {
-      contracts: options.contracts && options.contracts.length > 0 ? options.contracts : campaignContracts
-    })
+    ...campaignSelection
   })
   history.push(buildBrowseURL(pathname, options))
 }
@@ -160,6 +177,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlySmart,
     isMap,
     contracts,
+    ids,
     tenant,
     minPrice,
     maxPrice,
@@ -264,6 +282,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               category,
               rarities: rarities,
               contractAddresses: contracts,
+              // Only when it carries something: an `ids: undefined` key is a different object to every
+              // caller that compares filters, and this one is read on a page that does not use it.
+              ...(ids && ids.length > 0 ? { ids } : {}),
               wearableGenders,
               emotePlayMode,
               minPrice,

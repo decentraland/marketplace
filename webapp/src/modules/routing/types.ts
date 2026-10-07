@@ -59,6 +59,11 @@ export type BrowseOptions = {
   wearableGenders?: (WearableGender | GenderFilterOption)[]
   search?: string
   contracts?: string[]
+  /**
+   * INDIVIDUAL items, as `<contract>-<itemId>`. Not a URL filter: a campaign injects it, and the catalogue
+   * INTERSECTS it with `contracts` rather than unioning, so the two are never sent together.
+   */
+  ids?: string[]
   creators?: string[]
   address?: string
   network?: Network

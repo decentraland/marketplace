@@ -12,6 +12,8 @@ export type Props = {
   contracts: Record<string, string[]>
   isCampaignBrowserEnabled: boolean
   campaignTag?: string
+  /** Items the campaign names one by one. When it names any, they are what the page selects. */
+  campaignItemIds: string[]
   additionalCampaignTags: string[]
   isLoadingCampaign?: boolean
   isFetchingEvent?: boolean

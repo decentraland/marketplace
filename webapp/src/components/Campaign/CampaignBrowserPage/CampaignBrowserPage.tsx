@@ -22,12 +22,15 @@ const CampaignBrowserPage = (props: Props) => {
     onFetchEventContracts,
     isLoadingCampaign,
     campaignTag,
+    campaignItemIds,
     additionalCampaignTags,
     isCampaignBrowserEnabled,
     isFetchingEvent
   } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
+  // Still fetched when the campaign names its items: the tag may also resolve collections, and the page has
+  // to settle either way before it can tell "nothing tagged" from "not asked yet".
   useEffect(() => {
     if (campaignTag && !isFetchingEvent && Object.values(contracts).length === 0) {
       onFetchEventContracts(campaignTag, additionalCampaignTags ?? [])
@@ -39,10 +42,17 @@ const CampaignBrowserPage = (props: Props) => {
   const campaignContracts =
     campaignTag && contracts[campaignTag] && contracts[campaignTag].length > 0 ? contracts[campaignTag] : [ethers.constants.AddressZero]
 
+  // A campaign that names its items one by one selects by those alone: the catalogue intersects `id` with
+  // `contractAddress` rather than unioning them, so sending both returns nothing.
+  const namesItems = campaignItemIds.length > 0
+  // Without this the page renders its empty state for a campaign that selects only by item, because the
+  // guard below used to ask for tagged COLLECTIONS and a curated event has none.
+  const hasSomethingToShow = namesItems || Object.values(contracts).length > 0
+
   return isCampaignBrowserEnabled ? (
     <PageLayout activeTab={activeTab}>
       <div className="CampaignBrowserPage">
-        {Object.values(contracts).length > 0 && !isLoadingCampaign && !isFetchingEvent && campaignTag ? (
+        {hasSomethingToShow && !isLoadingCampaign && !isFetchingEvent && campaignTag ? (
           <>
             <div className="banner">
               <Banner id={MARKETPLACE_CAMPAIGN_COLLECTIBLES_BANNER_ID} />
@@ -53,7 +63,7 @@ const CampaignBrowserPage = (props: Props) => {
               view={View.MARKET}
               section={section}
               sections={[Section.WEARABLES, Section.EMOTES]}
-              contracts={campaignContracts}
+              {...(namesItems ? { ids: campaignItemIds } : { contracts: campaignContracts })}
             />
           </>
         ) : (

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAdditionalTags, getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
+import { getAdditionalTags, getItemIds, getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { fetchEventRequest } from '../../../modules/event/actions'
 import { getData as getContracts, isFetchingEvent } from '../../../modules/event/selectors'
 import { getIsCampaignBrowserEnabled } from '../../../modules/features/selectors'
@@ -12,6 +12,7 @@ export const CampaignBrowserPageContainer: React.FC = () => {
   const { vendor, assetType, section, isFullscreen } = useGetBrowseOptions()
   const contracts = useSelector(getContracts)
   const campaignTag = useSelector(getMainTag)
+  const campaignItemIds = useSelector(getItemIds)
   const isCampaignBrowserEnabled = useSelector(getIsCampaignBrowserEnabled)
   const additionalCampaignTags = useSelector(getAdditionalTags)
   const isFetchingEventState = useSelector(isFetchingEvent)
@@ -29,6 +30,7 @@ export const CampaignBrowserPageContainer: React.FC = () => {
       isFullscreen={isFullscreen}
       contracts={contracts}
       campaignTag={campaignTag}
+      campaignItemIds={campaignItemIds}
       isCampaignBrowserEnabled={isCampaignBrowserEnabled}
       additionalCampaignTags={additionalCampaignTags}
       isFetchingEvent={isFetchingEventState}
