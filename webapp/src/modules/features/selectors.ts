@@ -111,6 +111,14 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
   return false
 }
 
+// Shared with the Builder and the Shop, so one switch turns the banner on everywhere.
+export const getIsCancelledOrdersBannerEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.CANCELLED_ORDERS_BANNER)
+  }
+  return false
+}
+
 export const getIsCreditsEnabled = (state: RootState) => {
   const wallet = getWallet(state)
   if (!wallet) {

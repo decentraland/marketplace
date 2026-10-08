@@ -1,0 +1,265 @@
+.bar {
+  --cancelled-orders-accent: #ff7439;
+  --cancelled-orders-color: #ffffff;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 8px 56px;
+  background-color: #2e1f1a;
+  border-bottom: 1px solid rgba(255, 116, 57, 0.45);
+  color: var(--cancelled-orders-color);
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+}
+
+.bar .icon:global(.icon) {
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--cancelled-orders-accent);
+}
+
+.message {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.message .learnMore {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.message .learnMore:hover {
+  color: var(--cancelled-orders-accent);
+}
+
+.cta {
+  flex-shrink: 0;
+  padding: 6px 11px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--cancelled-orders-color);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.46px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cta:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.close {
+  position: absolute;
+  top: 50%;
+  right: 29px;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.close img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cta:focus-visible,
+.close:focus-visible,
+.message .learnMore:focus-visible {
+  outline: 2px solid var(--cancelled-orders-color);
+  outline-offset: 2px;
+}
+
+.description {
+  margin-bottom: 24px;
+  color: var(--secondary-text);
+  line-height: 1.5;
+}
+
+.description .descriptionLink {
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.thumbnail {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.type {
+  color: var(--secondary-text);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.price {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.row .recreate:global(.ui.button) {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.hint {
+  text-transform: none;
+}
+
+/* Beats the theme's leading-icon margin, which pulls a trailing icon over the label */
+.list .row .recreate:global(.ui.button) > .externalIcon:global(.icon) {
+  margin: 0 0 0 8px;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-bottom: 12px;
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+.count {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Keeps long lists inside the modal */
+.scroller {
+  max-height: min(56vh, 520px);
+  margin-right: -8px;
+  padding-right: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.status:not(:empty),
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0 4px;
+  color: var(--secondary-text);
+  font-size: 14px;
+}
+
+.footer .retry:global(.ui.button) {
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .bar {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px 48px 10px 16px;
+  }
+
+  .message {
+    flex: 1 1 calc(100% - 32px);
+    min-width: 0;
+    font-size: 14px;
+  }
+
+  /* Drops under the message, aligned with its text */
+  .cta {
+    margin-left: 13px;
+    font-size: 13px;
+  }
+
+  .close {
+    right: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .thumbnail {
+    width: 48px;
+    height: 48px;
+  }
+
+  .details {
+    flex-basis: calc(100% - 60px);
+  }
+
+  .name {
+    white-space: normal;
+  }
+
+  /* Price and button share a footer line so long prices don't push the button down */
+  .price {
+    flex: 1;
+  }
+
+  .row .recreate:global(.ui.button) {
+    margin-left: auto;
+  }
+}

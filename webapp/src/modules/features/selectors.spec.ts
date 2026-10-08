@@ -16,7 +16,8 @@ import {
   getIsCreditsSecondarySalesEnabled,
   getIsUnityWearablePreviewEnabled,
   getIsSocialEmotesEnabled,
-  getCampaignTheme
+  getCampaignTheme,
+  getIsCancelledOrdersBannerEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -165,6 +166,12 @@ const waitForInitialLoadingSelectors = [
     name: 'IsSocialEmotePreviewEnabled',
     feature: FeatureName.SOCIAL_EMOTES,
     selector: getIsSocialEmotesEnabled,
+    applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'IsCancelledOrdersBannerEnabled',
+    feature: FeatureName.CANCELLED_ORDERS_BANNER,
+    selector: getIsCancelledOrdersBannerEnabled,
     applicationName: ApplicationName.DAPPS
   }
 ]

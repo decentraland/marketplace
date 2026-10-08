@@ -8,6 +8,7 @@ import { config } from '../../config'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { RootState } from '../../modules/reducer'
 import { AnnouncementBar, isAnnouncementBarDismissed } from '../AnnouncementBar'
+import { CancelledOrdersBanner } from '../CancelledOrdersBanner'
 import { Footer } from '../Footer'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -44,6 +45,7 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
       <div className={styles.navbar}>
         <Navbar />
         {showAnnouncementBar && <AnnouncementBar onDismiss={handleAnnouncementBarDismiss} />}
+        {!isIAP && <CancelledOrdersBanner />}
       </div>
       {!hideNavigation && <Navigation activeTab={activeTab} />}
       <div className={styles.content}>{children}</div>

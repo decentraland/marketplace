@@ -11,8 +11,10 @@ class MockIntersectionObserver implements IntersectionObserver {
   callback: IntersectionObserverCallback
   elements: Element[] = []
 
-  constructor(callback: IntersectionObserverCallback) {
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     this.callback = callback
+    this.root = options?.root ?? null
+    this.rootMargin = options?.rootMargin ?? ''
     mockObservers.push(this)
   }
 
@@ -133,6 +135,39 @@ describe('InfiniteScroll', () => {
       // Since no observer is created, we cannot trigger intersection.
       // Just ensure onLoadMore was not called.
       expect(onLoadMoreMock).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when a scroll container is provided as the root', () => {
+    let root: HTMLDivElement
+
+    beforeEach(() => {
+      root = document.createElement('div')
+      renderInfiniteScroll({ root })
+    })
+
+    it('should observe the end of the list within the scroll container', () => {
+      expect(mockObservers[0].root).toBe(root)
+    })
+  })
+
+  describe('when no root margin is provided', () => {
+    beforeEach(() => {
+      renderInfiniteScroll({})
+    })
+
+    it('should observe the end of the list without a margin', () => {
+      expect(mockObservers[0].rootMargin).toBe('0px')
+    })
+  })
+
+  describe('when a root margin is provided', () => {
+    beforeEach(() => {
+      renderInfiniteScroll({ rootMargin: '0px 0px 240px 0px' })
+    })
+
+    it('should observe the end of the list with that margin', () => {
+      expect(mockObservers[0].rootMargin).toBe('0px 0px 240px 0px')
     })
   })
 })
