@@ -53,6 +53,7 @@ import {
   fetchOrdersFailure,
   cancelOrderSuccessTx
 } from './actions'
+import { canListingContractTransfer, LISTING_UNAVAILABLE_ERROR } from './listingApproval'
 import { LegacyOrderFragment } from './types'
 import * as orderUtils from './utils'
 
@@ -208,6 +209,20 @@ export function* orderSaga(tradeService: TradeService) {
           }
         }
 
+        if (trade.contract) {
+          const deliverable: boolean = yield call(
+            canListingContractTransfer,
+            nft.chainId,
+            nft.contractAddress,
+            nft.tokenId,
+            trade.signer,
+            trade.contract
+          )
+          if (!deliverable) {
+            throw new Error(LISTING_UNAVAILABLE_ERROR)
+          }
+        }
+
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
           yield call(pollCreditsAfterPurchase, wallet.address, order, credits.totalCredits)
@@ -216,6 +231,18 @@ export function* orderSaga(tradeService: TradeService) {
         }
       } else {
         const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
+
+        const deliverable: boolean = yield call(
+          canListingContractTransfer,
+          nft.chainId,
+          nft.contractAddress,
+          nft.tokenId,
+          order.owner,
+          order.marketplaceAddress
+        )
+        if (!deliverable) {
+          throw new Error(LISTING_UNAVAILABLE_ERROR)
+        }
 
         if (useCredits && credits) {
           // The legacy credits path settles through `executeOrder`, which carries no fingerprint, so it

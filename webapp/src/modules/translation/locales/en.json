@@ -1159,6 +1159,10 @@
       "title": "Meta transaction error",
       "body": "There was an error sending the meta transaction.{br}Please try again or join our {discord_link} to get support."
     },
+    "listing_unavailable": {
+      "title": "Listing no longer available",
+      "body": "The seller no longer allows this item to be transferred, so it can't be bought right now. Please try another listing."
+    },
     "contract_account": {
       "title": "Not supported",
       "body": "Smart contract wallets don't support meta-transactions."
