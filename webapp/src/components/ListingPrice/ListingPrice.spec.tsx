@@ -101,4 +101,13 @@ describe('ListingPrice', () => {
       expect(screen.getByText('0.5')).toBeInTheDocument()
     })
   })
+
+  describe('when the listing reached the client without a price', () => {
+    it('should render nothing instead of throwing', () => {
+      const { container } = render(<ListingPrice price={null} network={Network.MATIC} showFiat />)
+
+      expect(container).toBeEmptyDOMElement()
+      expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
+    })
+  })
 })
