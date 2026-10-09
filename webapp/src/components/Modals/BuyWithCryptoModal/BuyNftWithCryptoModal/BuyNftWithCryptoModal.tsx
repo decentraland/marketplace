@@ -6,6 +6,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { isPaused } from '../../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../../lib/stolenNfts'
 import { EstateSnapshotStatus, isEstateSnapshotBlocking, useEstateSnapshot } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
@@ -164,6 +165,18 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
         isLoading={false}
         title={t('stolen_nft_warning.label')}
         description={t('stolen_nft_warning.cannot_be_bought')}
+        onClose={onClose}
+      />
+    )
+  }
+
+  if (isPaused(order)) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={false}
+        title={t('trading_paused_warning.title')}
+        description={t('trading_paused_warning.visitor')}
         onClose={onClose}
       />
     )

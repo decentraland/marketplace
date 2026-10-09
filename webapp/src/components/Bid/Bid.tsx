@@ -22,6 +22,7 @@ import EstateUpgradeWarning from '../EstateUpgradeWarning'
 import { LinkedProfile } from '../LinkedProfile'
 import { Mana } from '../Mana'
 import StolenNFTWarning from '../StolenNFTWarning'
+import TradingPausedWarning, { TradingPausedWarningVariant } from '../TradingPausedWarning'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { Props } from './Bid.types'
@@ -147,6 +148,14 @@ const Bid = (props: Props) => {
               {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
               {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} listingCreatedAt={bid.createdAt} /> : null}
               <StolenNFTWarning asset={asset} className="stolen-nft-warning" />
+              {isBidder || isSeller ? (
+                <TradingPausedWarning
+                  listing={bid}
+                  isOwnListing={isBidder}
+                  variant={TradingPausedWarningVariant.BID}
+                  className="trading-paused-warning"
+                />
+              ) : null}
             </>
           )}
         </AssetProvider>

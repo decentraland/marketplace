@@ -7,6 +7,7 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ContractName as TransactionContractName, getContract as getTransactionContract } from 'decentraland-transactions'
 import { API_SIGNER } from '../../lib/api'
+import { getPausedTradeErrorMessage } from '../../lib/pausedTrades'
 import { STOLEN_NFT_BID_ERROR, STOLEN_NFT_KEYS, STOLEN_NFT_SELL_ERROR } from '../../lib/stolenNfts'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
@@ -768,6 +769,75 @@ describe('when handling the cancellation of a bid action', () => {
           .dispatch(cancelBidRequest(bid))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+})
+
+describe('when handling the accepting a bid action of a bid on a paused contract', () => {
+  let wallet: Wallet
+  let bid: Bid
+  let trade: Trade
+
+  beforeEach(() => {
+    wallet = { address: 'anAddress' } as Wallet
+  })
+
+  describe('and the bid is flagged as paused', () => {
+    beforeEach(() => {
+      bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade', isPaused: true } as Bid
+    })
+
+    it('should dispatch the accept bid failure with the paused copy without fetching the trade', () => {
+      return expectSaga(bidSaga, bidService, tradeService)
+        .provide([
+          [getContext('history'), { location: { pathname: 'aPath' } }],
+          [select(getWallet), wallet]
+        ])
+        .put(acceptBidFailure(bid, getPausedTradeErrorMessage()))
+        .not.call.fn(tradeService.fetchTrade)
+        .not.call.fn(tradeService.accept)
+        .dispatch(acceptBidRequest(bid))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the bid is not flagged but its trade is', () => {
+    beforeEach(() => {
+      bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade' } as Bid
+      trade = { id: 'a-trade', isPaused: true } as unknown as Trade
+    })
+
+    it('should dispatch the accept bid failure with the paused copy without accepting the trade', () => {
+      return expectSaga(bidSaga, bidService, tradeService)
+        .provide([
+          [getContext('history'), { location: { pathname: 'aPath' } }],
+          [select(getWallet), wallet],
+          [call([tradeService, 'fetchTrade'], 'a-trade'), trade]
+        ])
+        .put(acceptBidFailure(bid, getPausedTradeErrorMessage()))
+        .not.call.fn(tradeService.accept)
+        .dispatch(acceptBidRequest(bid))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and accepting the trade reverts because the contract is paused', () => {
+    beforeEach(() => {
+      bid = { contractAddress: '0x123', tokenId: '1', chainId: ChainId.MATIC_MAINNET, tradeId: 'a-trade' } as Bid
+      trade = { id: 'a-trade' } as unknown as Trade
+    })
+
+    it('should dispatch the accept bid failure with the paused copy', () => {
+      return expectSaga(bidSaga, bidService, tradeService)
+        .provide([
+          [getContext('history'), { location: { pathname: 'aPath' } }],
+          [select(getWallet), wallet],
+          [call([tradeService, 'fetchTrade'], 'a-trade'), trade],
+          [call([tradeService, 'accept'], trade, wallet.address), throwError(new Error('execution reverted: EnforcedPause()'))]
+        ])
+        .put(acceptBidFailure(bid, getPausedTradeErrorMessage()))
+        .dispatch(acceptBidRequest(bid))
+        .run({ silenceTimeout: true })
     })
   })
 })

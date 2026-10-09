@@ -1,10 +1,12 @@
 import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
-import { ChainId, Item, Order, RentalListing } from '@dcl/schemas'
+import { Bid, ChainId, Item, Order, RentalListing } from '@dcl/schemas'
 import { hideAllToasts, showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { CrossChainProviderType, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
-import { RouteResponse } from 'decentraland-transactions/crossChain'
+import { Route, RouteResponse } from 'decentraland-transactions/crossChain'
+import { getPausedTradeErrorMessage } from '../../lib/pausedTrades'
+import { acceptBidFailure } from '../bid/actions'
 import { claimNameSuccess } from '../ens/actions'
 import { ENS } from '../ens/types'
 import {
@@ -16,7 +18,14 @@ import {
   updateListSuccess
 } from '../favorites/actions'
 import { List } from '../favorites/types'
-import { FetchItemsFailureAction, buyItemCrossChainSuccess, buyItemWithCardFailure, fetchItemsFailure } from '../item/actions'
+import {
+  FetchItemsFailureAction,
+  buyItemCrossChainFailure,
+  buyItemCrossChainSuccess,
+  buyItemFailure,
+  buyItemWithCardFailure,
+  fetchItemsFailure
+} from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
@@ -39,7 +48,8 @@ import {
   getBulkPickItemFailureToast,
   getUpdateListSuccessToast,
   getNameClaimSuccessToast,
-  getCrossChainTransactionSuccessToast
+  getCrossChainTransactionSuccessToast,
+  getTradingPausedToast
 } from '../toast/toasts'
 import { ListOfLists, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
@@ -310,6 +320,110 @@ describe('when handling a successful cross chain item purchase', () => {
       .provide([[select(getState), []]])
       .dispatch(action)
       .put(showToast(getCrossChainTransactionSuccessToast(actionLink)))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of execute order on a paused contract', () => {
+  let order: Order
+
+  beforeEach(() => {
+    order = { contractAddress: 'aContractAddress', tokenId: 'aTokenId', price: '100000000000' } as Order
+  })
+
+  it('should show the paused toast instead of the generic failure', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getTradingPausedToast(), 'bottom center'))
+      .dispatch(executeOrderFailure(order, nft, getPausedTradeErrorMessage()))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of buying an item', () => {
+  describe('and it failed because the contract is paused', () => {
+    it('should show the paused toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .put(showToast(getTradingPausedToast(), 'bottom center'))
+        .dispatch(buyItemFailure(getPausedTradeErrorMessage()))
+        .silentRun()
+    })
+  })
+
+  describe('and it failed for another reason', () => {
+    it('should not show any toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .not.put.like({ action: { type: showToast(getTradingPausedToast()).type } })
+        .dispatch(buyItemFailure('anError'))
+        .silentRun()
+    })
+  })
+})
+
+describe('when handling the failure of a cross chain purchase', () => {
+  let route: Route
+  let item: Item
+
+  beforeEach(() => {
+    route = { route: { params: { fromChain: '1', toChain: '137' } } } as unknown as Route
+    item = { id: 'anItemId', price: '1' } as Item
+  })
+
+  describe('and it failed because the contract is paused', () => {
+    it('should show the paused toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .put(showToast(getTradingPausedToast(), 'bottom center'))
+        .dispatch(buyItemCrossChainFailure(route, item, item.price, getPausedTradeErrorMessage()))
+        .silentRun()
+    })
+  })
+
+  describe('and it failed for another reason', () => {
+    it('should not show the paused toast', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .not.put(showToast(getTradingPausedToast(), 'bottom center'))
+        .dispatch(buyItemCrossChainFailure(route, item, item.price, 'anError'))
+        .silentRun()
+    })
+  })
+})
+
+describe('when handling the failure of a purchase with card because the contract is paused', () => {
+  it('should show the paused toast instead of the card failure for an item', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getTradingPausedToast(), 'bottom center'))
+      .not.put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
+      .dispatch(buyItemWithCardFailure(getPausedTradeErrorMessage()))
+      .silentRun()
+  })
+
+  it('should show the paused toast instead of the card failure for an order', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getTradingPausedToast(), 'bottom center'))
+      .not.put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
+      .dispatch(executeOrderWithCardFailure(getPausedTradeErrorMessage()))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of accepting a bid because the contract is paused', () => {
+  let bid: Bid
+
+  beforeEach(() => {
+    bid = { id: 'aBidId' } as Bid
+  })
+
+  it('should show the paused toast', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getTradingPausedToast(), 'bottom center'))
+      .dispatch(acceptBidFailure(bid, getPausedTradeErrorMessage()))
       .silentRun()
   })
 })

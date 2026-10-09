@@ -1,8 +1,9 @@
-.modal {
+/* Scoped under .ui.modal so these outrank semantic's `.ui.modal > .content { display: block }`. */
+.modal:global(.ui.modal) {
   text-align: center;
 }
 
-.content {
+.modal:global(.ui.modal) > .content {
   display: flex;
   flex-direction: column;
   align-items: center;

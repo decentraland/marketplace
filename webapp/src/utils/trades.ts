@@ -4,6 +4,7 @@ import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { API_SIGNER } from '../lib/api'
+import { assertNotPaused } from '../lib/pausedTrades'
 import { fromMillisecondsToSeconds } from '../lib/time'
 import { MARKETPLACE_SERVER_URL } from '../modules/vendor/decentraland/marketplace/api'
 
@@ -207,6 +208,16 @@ export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>)
 
   const signature = await signer._signTypedData(domain, OFFCHAIN_MARKETPLACE_TYPES, generateTradeValues(trade))
   return signature
+}
+
+// Fetches the trade a cross-chain route settles, refusing it if its contract was paused after the page loaded.
+export async function fetchUnpausedTradeData(
+  tradeId: string,
+  buyerAddress: string
+): Promise<{ marketplaceAddress: string; onChainTrade: OnChainTrade }> {
+  const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(tradeId)
+  assertNotPaused(trade)
+  return { marketplaceAddress: trade.contract, onChainTrade: getOnChainTrade(trade, buyerAddress) }
 }
 
 export async function estimateTradeGas(

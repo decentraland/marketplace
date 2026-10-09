@@ -10,6 +10,7 @@ import { Button, Popup } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isPaused } from '../../../lib/pausedTrades'
 import { isStolenNFT } from '../../../lib/stolenNfts'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { isPartOfEstate } from '../../../modules/nft/utils'
@@ -32,6 +33,7 @@ import { ListingPrice } from '../../ListingPrice'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import StolenNFTWarning from '../../StolenNFTWarning'
+import TradingPausedWarning from '../../TradingPausedWarning'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
@@ -61,6 +63,7 @@ const SaleRentActionBox = ({
   // A stolen NFT must never show its listing: no price and no purchase UI.
   const order = isStolen ? null : currentOrder
   const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
+  const isOrderPaused = isPaused(order)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
   // A stolen NFT must never start on the rent view: the thief must not monetize it through rentals.
@@ -203,6 +206,7 @@ const SaleRentActionBox = ({
                     showTooltip
                   />
                 </div>
+                <TradingPausedWarning listing={order} isOwnListing={isOwner} className={styles.pausedWarning} />
               </div>
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (
               <div className={styles.upperMessage}>
@@ -255,7 +259,9 @@ const SaleRentActionBox = ({
                   </Button>
                 ) : null}
                 <div className={styles.saleButtons}>
-                  {order && !isEstateListingBroken && !isStolen ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
+                  {order && !isEstateListingBroken && !isStolen ? (
+                    <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} disabled={isOrderPaused} />
+                  ) : null}
                   {/*
                    * Making a new offer is independent of the seller's listing being
                    * broken by the EstateRegistry upgrade. A fresh bid is signed with the

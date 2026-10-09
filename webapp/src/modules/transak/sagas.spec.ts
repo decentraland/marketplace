@@ -20,8 +20,10 @@ import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { ContractName, getContract } from 'decentraland-transactions'
+import { PAUSED_TRADE_ERROR } from '../../lib/pausedTrades'
 import { Asset } from '../asset/types'
 import { getIsCreditsEnabled } from '../features/selectors'
 import { resolveCheckoutPriceInMana } from '../trade/checkoutPrice'
@@ -509,6 +511,58 @@ describe('when handling the open transak action', () => {
         .run()
         .then(({ effects }) => {
           expect(putActionTypes(effects)).toEqual(['Show toast'])
+          expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
+        })
+    })
+  })
+})
+
+describe('when opening Transak for a listing on a paused contract', () => {
+  let order: Order
+  let trade: Trade
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('and the order is flagged as paused', () => {
+    beforeEach(() => {
+      order = { ...mockOrder, tradeId: 'a-trade', isPaused: true }
+    })
+
+    it('should dispatch the failure without fetching the trade', () => {
+      return expectSaga(transakSaga, () => undefined)
+        .put(openTransakFailure(PAUSED_TRADE_ERROR))
+        .not.call.fn(TradeService.prototype.fetchTrade)
+        .dispatch(openTransak(mockAsset, order))
+        .run({ silenceTimeout: true })
+    })
+
+    it('should show the paused toast instead of the generic one', () => {
+      return expectSaga(transakSaga, () => undefined)
+        .put.like({ action: { type: 'Show toast', payload: { toast: { title: t('trading_paused_warning.title') } } } })
+        .dispatch(openTransak(mockAsset, order))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the order is not flagged but its trade is', () => {
+    beforeEach(() => {
+      order = { ...mockOrder, tradeId: 'a-trade' }
+      trade = { ...mockTrade, isPaused: true }
+    })
+
+    it('should dispatch the failure without opening the widget', () => {
+      return expectSaga(transakSaga, () => undefined)
+        .provide([
+          [select(getWallet), mockWallet],
+          [select(getAddress), mockWallet.address],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade]
+        ])
+        .put(openTransakFailure(PAUSED_TRADE_ERROR))
+        .dispatch(openTransak(mockAsset, order))
+        .run({ silenceTimeout: true })
+        .then(() => {
           expect(Transak.prototype.openWidget).not.toHaveBeenCalled()
         })
     })

@@ -1,3 +1,4 @@
+import { Bid } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { Item } from '../../../../modules/item/types'
@@ -34,6 +35,36 @@ describe('when off chain bids are enabled', () => {
       it('should render the bid button', () => {
         const { getByTestId } = renderItemSaleActions(props)
         expect(getByTestId('bid-button')).toBeInTheDocument()
+      })
+    })
+
+    describe('and the user only has a bid on a paused marketplace contract', () => {
+      beforeEach(() => {
+        props = { ...props, item: { ...props.item, available: 2 } as Item, bids: [{ bidder: '0xuser', isPaused: true } as Bid] }
+      })
+
+      afterEach(() => {
+        props = { ...props, bids: [] }
+      })
+
+      it('should let the user make a new offer', () => {
+        const { getByTestId } = renderItemSaleActions(props)
+        expect(getByTestId('bid-button')).toHaveTextContent(t('bid_button.bid'))
+      })
+    })
+
+    describe('and the user has a bid on an active marketplace contract', () => {
+      beforeEach(() => {
+        props = { ...props, item: { ...props.item, available: 2 } as Item, bids: [{ bidder: '0xuser' } as Bid] }
+      })
+
+      afterEach(() => {
+        props = { ...props, bids: [] }
+      })
+
+      it('should lock the offer button', () => {
+        const { getByTestId } = renderItemSaleActions(props)
+        expect(getByTestId('bid-button')).toHaveTextContent(t('bid_button.blocked'))
       })
     })
 

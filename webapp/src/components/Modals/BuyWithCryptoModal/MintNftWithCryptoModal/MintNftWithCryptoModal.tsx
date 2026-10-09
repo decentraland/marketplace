@@ -6,6 +6,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { isPaused } from '../../../../lib/pausedTrades'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { useCheckoutPriceInMana } from '../../../../modules/trade/hooks'
@@ -136,6 +137,18 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     () => (priceInMana === null ? null : manaAfterCredits(priceInMana, useCredits ? credits : null)),
     [priceInMana, useCredits, credits]
   )
+
+  if (isPaused(item)) {
+    return (
+      <CheckoutPriceUnavailableModal
+        name={name}
+        isLoading={false}
+        title={t('trading_paused_warning.title')}
+        description={t('trading_paused_warning.item_visitor')}
+        onClose={onClose}
+      />
+    )
+  }
 
   // Without a resolved amount there is nothing to confirm. `resolving` is the trade read (a cache hit for
   // anyone who came through the item page); `unavailable` is an unreadable trade or an unreachable oracle.

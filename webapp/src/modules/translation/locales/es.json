@@ -1718,6 +1718,16 @@
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
   },
+  "trading_paused_warning": {
+    "title": "Compras temporalmente no disponibles",
+    "label": "Pausada",
+    "visitor": "Las compras de esta publicación no están disponibles temporalmente porque el contrato del marketplace en el que se creó ha sido pausado.",
+    "item_visitor": "Las compras de este artículo no están disponibles temporalmente porque el contrato del marketplace a través del cual se vende ha sido pausado.",
+    "owner": "Tu publicación se creó en un contrato del marketplace que ha sido pausado, por lo que no se puede comprar. Cancélala y vuelve a publicarla.",
+    "bid_seller": "Esta oferta se hizo en un contrato del marketplace que ha sido pausado, por lo que no se puede aceptar por ahora.",
+    "bid_bidder": "Tu oferta se hizo en un contrato del marketplace que ha sido pausado, por lo que no se puede aceptar. Cancélala y haz una nueva oferta.",
+    "error": "Esta publicación se creó en un contrato del marketplace que ha sido pausado, por lo que no se puede completar por ahora."
+  },
   "stolen_nft_warning": {
     "label": "LOS NFTS ROBADOS NO SE PUEDEN COMPRAR",
     "cannot_be_bought": "Este artículo fue reportado como robado y no se puede comprar."
