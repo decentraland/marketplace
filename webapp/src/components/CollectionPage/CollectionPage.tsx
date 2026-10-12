@@ -93,7 +93,7 @@ const CollectionPage = (props: Props) => {
                             <Column align="right" className={styles.columnRight}>
                               <Row align="right">
                                 <Button primary inverted compact as="a" href={collectionManagementUrl}>
-                                  {t('collection_page.edit_in_builder')}
+                                  {t('collection_page.edit_collection')}
                                 </Button>
                                 <Button primary inverted compact as="a" href={collectionManagementUrl}>
                                   {collection.isOnSale ? t('collection_page.unlist_from_market') : t('collection_page.list_on_market')}

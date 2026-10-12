@@ -89,7 +89,7 @@ const CancelledOrdersModal = ({ open, trades, total, hasMore, isLoadingMore, err
                         {t(`cancelled_orders_banner.type.${trade.type}`)}
                         {/* Primary sales can't be set up in the Marketplace */}
                         {trade.type === CancelledTradeType.PUBLIC_ITEM_ORDER ? (
-                          <span className={styles.hint}> · {t('cancelled_orders_banner.recreated_in_builder')}</span>
+                          <span className={styles.hint}> · {t('cancelled_orders_banner.recreated_in_create')}</span>
                         ) : null}
                       </span>
                     </div>

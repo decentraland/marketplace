@@ -70,7 +70,7 @@ describe('when getting the link to re-create a cancelled trade', () => {
       link = getRecreateLink(trade)
     })
 
-    it('should link to the collection in the Builder as an external link', () => {
+    it('should link to the collection in Decentraland Create as an external link', () => {
       expect(link).toEqual({ url: getCollectionManagementUrl(CONTRACT), isExternal: true })
     })
   })
