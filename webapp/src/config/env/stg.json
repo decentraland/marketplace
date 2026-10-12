@@ -19,6 +19,7 @@
   "MOON_PAY_POLLING_DELAY": "6000",
   "MOON_PAY_WIDGET_URL": "https://buy-staging.moonpay.io",
   "BUILDER_URL": "https://decentraland.today/builder",
+  "CREATORS_URL": "https://decentraland.today/create",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
   "DOCS_URL": "https://docs.decentraland.org",
   "MARKETPLACE_ADAPTER_FEE_PER_MILLION": "25000",

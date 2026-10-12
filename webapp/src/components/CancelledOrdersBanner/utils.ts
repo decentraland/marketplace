@@ -1,4 +1,4 @@
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { getCollectionManagementUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 
@@ -53,8 +53,8 @@ export const getRecreateLink = (trade: CancelledTrade): RecreateLink | null => {
       if (itemId) return { url: locations.bidItem(contractAddress, itemId), isExternal: false }
       return null
     case CancelledTradeType.PUBLIC_ITEM_ORDER:
-      // Item listings are managed by the creator in the Builder.
-      return { url: getBuilderCollectionDetailUrl(contractAddress), isExternal: true }
+      // Item listings are managed by the creator in the creators app.
+      return { url: getCollectionManagementUrl(contractAddress), isExternal: true }
     default:
       return null
   }

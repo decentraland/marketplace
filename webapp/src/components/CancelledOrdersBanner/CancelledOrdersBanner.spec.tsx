@@ -1,7 +1,7 @@
 import { act, fireEvent, RenderResult, screen, within } from '@testing-library/react'
 import { ChainId, Network, TradeAssetType } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { getCollectionManagementUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { fetchManaUsdRate } from '../../modules/trade/manaRate'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
@@ -196,7 +196,7 @@ describe('when the user reviews a cancelled item listing', () => {
 
   it('should re-create it in the Builder, in a new tab', () => {
     const link = screen.getByRole('link', { name: t('cancelled_orders_banner.recreate') })
-    expect([link.getAttribute('href'), link.getAttribute('target')]).toEqual([getBuilderCollectionDetailUrl('0xcontract'), '_blank'])
+    expect([link.getAttribute('href'), link.getAttribute('target')]).toEqual([getCollectionManagementUrl('0xcontract'), '_blank'])
   })
 })
 
