@@ -1,5 +1,5 @@
 import { ChainId, Network } from '@dcl/schemas'
-import { getCollectionManagementUrl } from '../../modules/collection/utils'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { locations } from '../../modules/routing/locations'
 import { CancellationReason, CancelledTrade, CancelledTradeType } from '../../modules/vendor/decentraland/cancelledTrades/types'
 import {
@@ -70,8 +70,8 @@ describe('when getting the link to re-create a cancelled trade', () => {
       link = getRecreateLink(trade)
     })
 
-    it('should link to the collection in Decentraland Create as an external link', () => {
-      expect(link).toEqual({ url: getCollectionManagementUrl(CONTRACT), isExternal: true })
+    it('should link to the collection in the Builder as an external link', () => {
+      expect(link).toEqual({ url: getBuilderCollectionDetailUrl(CONTRACT), isExternal: true })
     })
   })
 
