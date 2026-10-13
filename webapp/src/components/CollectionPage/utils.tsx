@@ -2,14 +2,14 @@ import { ethers } from 'ethers'
 import { Item, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Dropdown } from 'decentraland-ui'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { getCollectionManagementUrl } from '../../modules/collection/utils'
 import { ListingPrice } from '../ListingPrice'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
 import { DataTableType } from '../Table/TableContent/TableContent.types'
 import styles from './CollectionPage.module.css'
 
 export const formatDataToTable = (rentals?: Item[], isCollectionOwner: boolean = false, isMobile = false): DataTableType[] => {
-  const builderCollectionUrl = (contractAddress: string) => getBuilderCollectionDetailUrl(contractAddress)
+  const collectionManagementUrl = (contractAddress: string) => getCollectionManagementUrl(contractAddress)
 
   const getItemCategoryText = (item: Item) => {
     switch (item.category) {
@@ -56,8 +56,8 @@ export const formatDataToTable = (rentals?: Item[], isCollectionOwner: boolean =
             <div className={styles.ellipsis}>
               <Dropdown className={styles.ellipsis} icon="ellipsis horizontal" direction="left">
                 <Dropdown.Menu>
-                  <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={builderCollectionUrl(item.contractAddress)} />
-                  <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={builderCollectionUrl(item.contractAddress)} />
+                  <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={collectionManagementUrl(item.contractAddress)} />
+                  <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={collectionManagementUrl(item.contractAddress)} />
                 </Dropdown.Menu>
               </Dropdown>
             </div>

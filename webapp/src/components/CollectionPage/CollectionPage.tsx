@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Back, Column, Page, Row, Section, Header, Badge, Icon, Color, Button, Loader, useMobileMediaQuery } from 'decentraland-ui'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { getCollectionManagementUrl } from '../../modules/collection/utils'
 import CollectionProvider from '../CollectionProvider'
 import { ListingPrice } from '../ListingPrice'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
@@ -49,7 +49,7 @@ const CollectionPage = (props: Props) => {
             {({ collection, items, isLoading }) => {
               const isCollectionOwner = !!collection && !!currentAddress && collection.creator.toLowerCase() === currentAddress
 
-              const builderCollectionUrl = getBuilderCollectionDetailUrl(contractAddress)
+              const collectionManagementUrl = getCollectionManagementUrl(contractAddress)
               const hasWearables = items?.some(item => item.category === NFTCategory.WEARABLE)
               const hasEmotes = items?.some(item => item.category === NFTCategory.EMOTE)
 
@@ -92,10 +92,10 @@ const CollectionPage = (props: Props) => {
                           {isCollectionOwner && (
                             <Column align="right" className={styles.columnRight}>
                               <Row align="right">
-                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
-                                  {t('collection_page.edit_in_builder')}
+                                <Button primary inverted compact as="a" href={collectionManagementUrl}>
+                                  {t('collection_page.edit_collection')}
                                 </Button>
-                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
+                                <Button primary inverted compact as="a" href={collectionManagementUrl}>
                                   {collection.isOnSale ? t('collection_page.unlist_from_market') : t('collection_page.list_on_market')}
                                 </Button>
                               </Row>
