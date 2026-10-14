@@ -43,7 +43,14 @@ import {
   executeOrderWithCardRequest,
   executeOrderWithCardSuccess
 } from './actions'
+import { canListingContractTransfer, LISTING_UNAVAILABLE_ERROR } from './listingApproval'
 import { orderSaga } from './sagas'
+
+// Reads approvals on chain. Every test sees a deliverable listing unless it provides otherwise.
+jest.mock('./listingApproval', () => ({
+  ...jest.requireActual<typeof import('./listingApproval')>('./listingApproval'),
+  canListingContractTransfer: () => Promise.resolve(true)
+}))
 
 let nft: NFT
 let order: Order
@@ -447,6 +454,30 @@ describe('when handling the execute order request action', () => {
           .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+
+  describe('and the seller no longer lets the legacy marketplace transfer the NFT', () => {
+    let vendor: Vendor<VendorName>
+
+    beforeEach(() => {
+      vendor = VendorFactory.build(nft.vendor, undefined)
+    })
+
+    it('should put the execute order failure without executing the order', () => {
+      return expectSaga(orderSaga, tradeService)
+        .provide([
+          [select(getIsOffchainPublicNFTOrdersEnabled), false],
+          [select(getIsCreditsEnabled), false],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getWallet), wallet],
+          [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+          [matchers.call.fn(canListingContractTransfer), false]
+        ])
+        .not.call.fn(vendor.orderService.execute)
+        .put(executeOrderFailure(order, nft, LISTING_UNAVAILABLE_ERROR))
+        .dispatch(executeOrderRequest(order, nft, fingerprint))
+        .run({ silenceTimeout: true })
     })
   })
 
@@ -858,6 +889,30 @@ describe('when accepting an off-chain order for an estate', () => {
         .put(executeOrderTransactionSubmitted(estateOrder, estateNft, txHash))
         .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
         .run({ silenceTimeout: true })
+    })
+
+    describe('and the seller no longer lets the trade contract transfer the estate', () => {
+      it('should fail without accepting the trade', () => {
+        const trade = {
+          ...baseTrade,
+          sent: [{ assetType: TradeAssetType.ERC721, contractAddress: '0xestate', tokenId: '6503', extra: reviewedFingerprint }]
+        } as unknown as Trade
+
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), true],
+            [select(getWallet), wallet],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [matchers.call.fn(canListingContractTransfer), false],
+            [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+          ])
+          .call(canListingContractTransfer, estateNft.chainId, '0xestate', '6503', trade.signer, trade.contract)
+          .not.call.fn(TradeService.prototype.accept)
+          .put(executeOrderFailure(estateOrder, estateNft, LISTING_UNAVAILABLE_ERROR))
+          .dispatch(executeOrderRequest(estateOrder, estateNft, reviewedFingerprint))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
