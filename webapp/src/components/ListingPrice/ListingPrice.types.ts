@@ -1,8 +1,8 @@
 import { Network } from '@dcl/schemas'
 
 export type Props = {
-  /** MANA wei, or USD wei when the backing trade is USD-pegged. */
-  price: string
+  /** MANA wei, or USD wei when the backing trade is USD-pegged. Nothing is rendered when it is missing. */
+  price: string | null | undefined
   network: Network
   /**
    * The trade backing this listing, when there is one. Its received asset type is the only thing that

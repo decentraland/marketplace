@@ -278,6 +278,25 @@ describe('when creating the action to signal a successful cancel order request',
       }
     })
   })
+
+  describe('and the listing reached the client without a price', () => {
+    it('should still build the action, with an empty price', () => {
+      const pricelessOrder = { ...order, price: null } as unknown as Order
+
+      expect(cancelOrderSuccess(pricelessOrder, nft, txHash).payload).toEqual({
+        order: pricelessOrder,
+        nft,
+        skipRedirection: undefined,
+        ...buildTransactionPayload(nft.chainId, txHash, {
+          tokenId: nft.tokenId,
+          contractAddress: nft.contractAddress,
+          network: nft.network,
+          name: getAssetName(nft),
+          price: ''
+        })
+      })
+    })
+  })
 })
 
 describe('when creating the action to signal a failure in the cancel order request', () => {
