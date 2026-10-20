@@ -33,6 +33,7 @@ import {
   CREATE_ORDER_SUCCESS,
   CreateOrderSuccessAction
 } from '../order/actions'
+import { LISTING_UNAVAILABLE_ERROR } from '../order/listingApproval'
 import { CLAIM_ASSET_SUCCESS, REMOVE_RENTAL_SUCCESS, UpsertRentalSuccessAction, UPSERT_RENTAL_SUCCESS } from '../rental/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
@@ -43,6 +44,7 @@ import {
   getDeleteListSuccessToast,
   getNameClaimSuccessToast,
   getExecuteOrderFailureToast,
+  getListingUnavailableToast,
   getFetchAssetsFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
@@ -128,9 +130,10 @@ function* handleBuyNFTWithCardFailure() {
 }
 
 function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
-  const { silent } = action.payload
+  const { silent, error } = action.payload
   if (!silent) {
-    yield put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
+    const toast = error === LISTING_UNAVAILABLE_ERROR ? getListingUnavailableToast() : getExecuteOrderFailureToast()
+    yield put(showToast(toast, 'bottom center'))
   }
 }
 
