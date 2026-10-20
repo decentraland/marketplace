@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { ChainId, Network, NFTCategory } from '@dcl/schemas'
 import { ActivityEvent, ActivityEventType } from '../../../modules/activity/types'
+import { locations } from '../../../modules/routing/locations'
 import { renderWithProviders } from '../../../utils/test'
 import ActivityEventItem from './ActivityEventItem'
 
@@ -43,7 +44,10 @@ describe('ActivityEventItem', () => {
         details: { transfer }
       }
       renderWithProviders(<ActivityEventItem event={event} />)
-      expect(screen.getByText(/You sent/)).toHaveTextContent('You sent … to 0xfriend.')
+      const description = screen.getByText(/You sent/)
+      expect(description).toHaveTextContent('You sent … to 0xfriend.')
+      expect(within(description).getByRole('link', { name: '…' })).toHaveAttribute('href', locations.nft('0xcontract', '762'))
+      expect(within(description).getByRole('link', { name: '0xfriend' })).toHaveAttribute('href', locations.account('0xfriend'))
     })
   })
 
@@ -58,10 +62,12 @@ describe('ActivityEventItem', () => {
         contractAddress: '0xcontract',
         tokenId: '762',
         counterparty: '0xflora',
-        details: { transfer }
+        details: { transfer: { ...transfer, from: '0xflora', to: '0xuser', itemId: null } }
       }
       renderWithProviders(<ActivityEventItem event={event} />)
-      expect(screen.getByText(/You received/)).toHaveTextContent('You received … from 0xflora.')
+      const description = screen.getByText(/You received/)
+      expect(description).toHaveTextContent('You received … from 0xflora.')
+      expect(within(description).getByRole('link', { name: '0xflora' })).toHaveAttribute('href', locations.account('0xflora'))
     })
   })
 

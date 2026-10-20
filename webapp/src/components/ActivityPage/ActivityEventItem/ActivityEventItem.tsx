@@ -27,7 +27,14 @@ const formatPrice = (priceInWei?: string) => {
 
 type AssetSelector = { type: AssetType; tokenId: string; contractAddress: string }
 
+// A transfer moved one specific NFT, so it points at that token rather than at the collection item.
+const isTransfer = (event: ActivityEvent): boolean =>
+  event.type === ActivityEventType.TRANSFER_SENT || event.type === ActivityEventType.TRANSFER_RECEIVED
+
 const getAssetSelector = (event: ActivityEvent): AssetSelector | null => {
+  if (isTransfer(event) && event.tokenId && event.contractAddress) {
+    return { type: AssetType.NFT, tokenId: event.tokenId, contractAddress: event.contractAddress }
+  }
   if (event.itemId && event.contractAddress) {
     return { type: AssetType.ITEM, tokenId: event.itemId, contractAddress: event.contractAddress }
   }
@@ -40,6 +47,7 @@ const getAssetSelector = (event: ActivityEvent): AssetSelector | null => {
 const renderAssetLink = (event: ActivityEvent, asset: Asset | null | undefined): React.ReactNode => {
   if (!event.contractAddress) return ''
   const name = asset ? getAssetName(asset) : '…'
+  if (isTransfer(event) && event.tokenId) return <Link to={locations.nft(event.contractAddress, event.tokenId)}>{name}</Link>
   if (event.itemId) return <Link to={locations.item(event.contractAddress, event.itemId)}>{name}</Link>
   if (event.tokenId) return <Link to={locations.nft(event.contractAddress, event.tokenId)}>{name}</Link>
   return name
