@@ -61,11 +61,19 @@ const eventTranslationKey: Record<ActivityEventType, string> = {
   [ActivityEventType.BID_RECEIVED]: 'activity_page.event.bid_received',
   [ActivityEventType.ORDER_CREATED]: 'activity_page.event.order_created',
   [ActivityEventType.ORDER_FILLED]: 'activity_page.event.order_filled',
-  [ActivityEventType.TRADE_CREATED]: 'activity_page.event.trade_created'
+  [ActivityEventType.TRADE_CREATED]: 'activity_page.event.trade_created',
+  [ActivityEventType.TRANSFER_SENT]: 'activity_page.event.transfer_sent',
+  [ActivityEventType.TRANSFER_RECEIVED]: 'activity_page.event.transfer_received'
 }
 
 const ActivityEventItem = (props: Props) => {
   const { event } = props
+  // The server can add event types before this app knows them; an unknown one is skipped rather than crashing the page.
+  const translationKey = eventTranslationKey[event.type] as string | undefined
+  if (!translationKey) {
+    return null
+  }
+
   const selector = getAssetSelector(event)
   const priceLabel = (
     <Mana showTooltip network={event.network} inline>
@@ -90,7 +98,7 @@ const ActivityEventItem = (props: Props) => {
         <div className="text">
           <div className="description">
             <T
-              id={eventTranslationKey[event.type]}
+              id={translationKey}
               values={{
                 name: renderAssetLink(event, asset),
                 price: priceLabel,
