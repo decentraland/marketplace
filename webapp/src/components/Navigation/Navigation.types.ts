@@ -15,6 +15,7 @@ export enum NavigationTab {
 
 export type Props = {
   isCampaignBrowserEnabled: boolean
+  isConnected: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
   campaignTab?: string

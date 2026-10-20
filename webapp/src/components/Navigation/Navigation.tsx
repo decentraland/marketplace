@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Mobile, Tabs, useMobileMediaQuery } from 'decentraland-ui'
+import activityIcon from '../../images/icon-activity.svg'
 import { AssetType } from '../../modules/asset/types'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { locations } from '../../modules/routing/locations'
@@ -17,7 +18,7 @@ import { NavigationTab, Props } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, campaignTab, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal, onClearFilters } = props
+  const { activeTab, isFullscreen, campaignTab, isCampaignBrowserEnabled, isConnected, onOpenBuyManaWithFiatModal, onClearFilters } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
   const isIAP = useIsIAP()
@@ -96,6 +97,19 @@ const Navigation = (props: Props) => {
             <Link to={locations.lists()} className="my-lists-heart" aria-label={t('navigation.my_lists')} title={t('navigation.my_lists')}>
               <Icon name={activeTab === NavigationTab.MY_LISTS ? 'heart' : 'heart outline'} fitted />
             </Link>
+            {/* Beside the heart, as in the shop. */}
+            {isConnected ? (
+              <Link
+                to={locations.activity()}
+                className="activity-link"
+                aria-label={t('navigation.activity')}
+                title={t('navigation.activity')}
+                aria-current={activeTab === NavigationTab.ACTIVITY ? 'page' : undefined}
+                data-testid="navigation-activity"
+              >
+                <img src={activityIcon} alt="" aria-hidden />
+              </Link>
+            ) : null}
             <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
