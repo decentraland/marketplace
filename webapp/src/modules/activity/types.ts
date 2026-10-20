@@ -1,4 +1,4 @@
-import { Bid, Network, Order, Sale, Trade } from '@dcl/schemas'
+import { Bid, ChainId, Network, NFTCategory, Order, Sale, Trade } from '@dcl/schemas'
 
 export enum ActivityEventType {
   SALE_BUYER = 'sale_buyer',
@@ -7,7 +7,9 @@ export enum ActivityEventType {
   BID_RECEIVED = 'bid_received',
   ORDER_CREATED = 'order_created',
   ORDER_FILLED = 'order_filled',
-  TRADE_CREATED = 'trade_created'
+  TRADE_CREATED = 'trade_created',
+  TRANSFER_SENT = 'transfer_sent',
+  TRANSFER_RECEIVED = 'transfer_received'
 }
 
 export type ActivityEventBase = {
@@ -30,6 +32,22 @@ export type OrderCreatedEvent = ActivityEventBase & { type: ActivityEventType.OR
 export type OrderFilledEvent = ActivityEventBase & { type: ActivityEventType.ORDER_FILLED; details: { order: Order } }
 export type TradeCreatedEvent = ActivityEventBase & { type: ActivityEventType.TRADE_CREATED; details: { trade: Trade } }
 
+export type Transfer = {
+  id: string
+  from: string
+  to: string
+  contractAddress: string
+  tokenId: string
+  itemId: string | null
+  category: NFTCategory
+  txHash: string
+  timestamp: number
+  network: Network
+  chainId: ChainId
+}
+export type TransferSentEvent = ActivityEventBase & { type: ActivityEventType.TRANSFER_SENT; details: { transfer: Transfer } }
+export type TransferReceivedEvent = ActivityEventBase & { type: ActivityEventType.TRANSFER_RECEIVED; details: { transfer: Transfer } }
+
 export type ActivityEvent =
   | SaleBuyerEvent
   | SaleSellerEvent
@@ -38,3 +56,5 @@ export type ActivityEvent =
   | OrderCreatedEvent
   | OrderFilledEvent
   | TradeCreatedEvent
+  | TransferSentEvent
+  | TransferReceivedEvent

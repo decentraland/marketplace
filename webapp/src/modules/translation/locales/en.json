@@ -1091,6 +1091,8 @@
       "order_created": "You listed {name} on sale for {price}.",
       "order_filled": "Your listing of {name} was bought for {price}.",
       "trade_created": "You created a trade for {name}.",
+      "transfer_sent": "You sent {name} to {counterparty}.",
+      "transfer_received": "You received {name} from {counterparty}.",
       "status": {
         "confirmed": "Confirmed"
       }

@@ -27,7 +27,14 @@ const formatPrice = (priceInWei?: string) => {
 
 type AssetSelector = { type: AssetType; tokenId: string; contractAddress: string }
 
+// A transfer moved one specific NFT, so it points at that token rather than at the collection item.
+const isTransfer = (event: ActivityEvent): boolean =>
+  event.type === ActivityEventType.TRANSFER_SENT || event.type === ActivityEventType.TRANSFER_RECEIVED
+
 const getAssetSelector = (event: ActivityEvent): AssetSelector | null => {
+  if (isTransfer(event) && event.tokenId && event.contractAddress) {
+    return { type: AssetType.NFT, tokenId: event.tokenId, contractAddress: event.contractAddress }
+  }
   if (event.itemId && event.contractAddress) {
     return { type: AssetType.ITEM, tokenId: event.itemId, contractAddress: event.contractAddress }
   }
@@ -40,6 +47,7 @@ const getAssetSelector = (event: ActivityEvent): AssetSelector | null => {
 const renderAssetLink = (event: ActivityEvent, asset: Asset | null | undefined): React.ReactNode => {
   if (!event.contractAddress) return ''
   const name = asset ? getAssetName(asset) : '…'
+  if (isTransfer(event) && event.tokenId) return <Link to={locations.nft(event.contractAddress, event.tokenId)}>{name}</Link>
   if (event.itemId) return <Link to={locations.item(event.contractAddress, event.itemId)}>{name}</Link>
   if (event.tokenId) return <Link to={locations.nft(event.contractAddress, event.tokenId)}>{name}</Link>
   return name
@@ -61,11 +69,19 @@ const eventTranslationKey: Record<ActivityEventType, string> = {
   [ActivityEventType.BID_RECEIVED]: 'activity_page.event.bid_received',
   [ActivityEventType.ORDER_CREATED]: 'activity_page.event.order_created',
   [ActivityEventType.ORDER_FILLED]: 'activity_page.event.order_filled',
-  [ActivityEventType.TRADE_CREATED]: 'activity_page.event.trade_created'
+  [ActivityEventType.TRADE_CREATED]: 'activity_page.event.trade_created',
+  [ActivityEventType.TRANSFER_SENT]: 'activity_page.event.transfer_sent',
+  [ActivityEventType.TRANSFER_RECEIVED]: 'activity_page.event.transfer_received'
 }
 
 const ActivityEventItem = (props: Props) => {
   const { event } = props
+  // The server can add event types before this app knows them; an unknown one is skipped rather than crashing the page.
+  const translationKey = eventTranslationKey[event.type] as string | undefined
+  if (!translationKey) {
+    return null
+  }
+
   const selector = getAssetSelector(event)
   const priceLabel = (
     <Mana showTooltip network={event.network} inline>
@@ -90,7 +106,7 @@ const ActivityEventItem = (props: Props) => {
         <div className="text">
           <div className="description">
             <T
-              id={eventTranslationKey[event.type]}
+              id={translationKey}
               values={{
                 name: renderAssetLink(event, asset),
                 price: priceLabel,
