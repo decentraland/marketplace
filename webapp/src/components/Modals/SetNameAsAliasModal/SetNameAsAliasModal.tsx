@@ -27,7 +27,7 @@ const SetNameAsAliasModal = ({ address, profile, metadata: { name }, isLoading, 
           <div className="card">
             {profile && successOnSetAlias && address ? (
               <div className="successContainer">
-                <Profile address={address} avatar={profile.avatars[0]} inline={false} size="massive" imageOnly />
+                <Profile address={address} inline={false} size="massive" imageOnly />
                 <div className="verified">
                   <span>{profile.avatars[0].name}</span>
                   <img src={VerifiedIcon} alt="verified icon" />
