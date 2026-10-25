@@ -15,10 +15,18 @@ const SelectFilter = (props: Props) => {
   const [isTyping, setIsTyping] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  // The first of the options the filter was given, never a search result: falling back to a
+  // search result would switch the filter to something the user did not pick.
+  const fallbackValue = options.length > 0 ? options[0].value : undefined
+
   // In the case that the value does not match to one of the options,
   // the component will try to fetch the option from the backend and add it.
-  // If the option is not found, the value will be changed to the first option.
+  // If the option is not found, the value will be changed to the first given option. Without one
+  // (e.g. the collection filter, whose options come only from searching), the value is kept: it may
+  // come from a link that set the filter on purpose.
   useEffect(() => {
+    let isCancelled = false
+
     async function tryFetchOptionFromValue() {
       if (!value || !fetchOptionFromValue || providedOptions.some(option => option.value === value)) {
         return
@@ -26,19 +34,31 @@ const SelectFilter = (props: Props) => {
 
       setIsLoading(true)
 
-      const result = await fetchOptionFromValue(value)
+      try {
+        const result = await fetchOptionFromValue(value)
 
-      setIsLoading(false)
+        if (isCancelled) {
+          return
+        }
 
-      if (!result) {
-        onChange(providedOptions[0].value)
-      } else {
-        setProvidedOptions([...providedOptions, result])
+        if (result) {
+          setProvidedOptions(currentOptions => [...currentOptions, result])
+        } else if (fallbackValue !== undefined) {
+          onChange(fallbackValue)
+        }
+      } catch (error) {
+        console.warn('Could not fetch the option for the selected value', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     void tryFetchOptionFromValue()
-  }, [fetchOptionFromValue, providedOptions, value, onChange])
+
+    return () => {
+      isCancelled = true
+    }
+  }, [fetchOptionFromValue, providedOptions, value, onChange, fallbackValue])
 
   // The component will fetch the options from the backend depending on the search input.
   // The search will be triggered after some time of inactivity to prevent too many requests.
