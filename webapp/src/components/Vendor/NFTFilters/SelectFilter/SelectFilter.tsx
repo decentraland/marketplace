@@ -17,8 +17,12 @@ const SelectFilter = (props: Props) => {
 
   // In the case that the value does not match to one of the options,
   // the component will try to fetch the option from the backend and add it.
-  // If the option is not found, the value will be changed to the first option.
+  // If the option is not found, the value will be changed to the first option, when there is one.
+  // Without options to fall back to (e.g. the collection filter, whose options come only from
+  // searching), the value is kept: it may come from a link that set the filter on purpose.
   useEffect(() => {
+    let isCancelled = false
+
     async function tryFetchOptionFromValue() {
       if (!value || !fetchOptionFromValue || providedOptions.some(option => option.value === value)) {
         return
@@ -26,18 +30,30 @@ const SelectFilter = (props: Props) => {
 
       setIsLoading(true)
 
-      const result = await fetchOptionFromValue(value)
+      try {
+        const result = await fetchOptionFromValue(value)
 
-      setIsLoading(false)
+        if (isCancelled) {
+          return
+        }
 
-      if (!result) {
-        onChange(providedOptions[0].value)
-      } else {
-        setProvidedOptions([...providedOptions, result])
+        if (result) {
+          setProvidedOptions(currentOptions => [...currentOptions, result])
+        } else if (providedOptions.length > 0) {
+          onChange(providedOptions[0].value)
+        }
+      } catch (error) {
+        console.warn('Could not fetch the option for the selected value', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     void tryFetchOptionFromValue()
+
+    return () => {
+      isCancelled = true
+    }
   }, [fetchOptionFromValue, providedOptions, value, onChange])
 
   // The component will fetch the options from the backend depending on the search input.
