@@ -1,4 +1,5 @@
 import { render, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import SelectFilter from './SelectFilter'
 import { Props } from './SelectFilter.types'
 
@@ -54,6 +55,20 @@ describe('SelectFilter', () => {
 
           await waitFor(() => expect(fetchOptionFromValue).toHaveBeenCalledWith('0xcollection'))
           await waitFor(() => expect(document.querySelector('.ui.dropdown.loading')).not.toBeInTheDocument())
+          expect(onChange).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('and the user then searches for another option', () => {
+        it('should keep the value instead of switching to a search result', async () => {
+          const fetchOptions = jest.fn().mockResolvedValue([{ value: '0xother', text: 'Another collection' }])
+          const { getByRole, findAllByText } = renderSelectFilter({ value: '0xcollection', fetchOptions, fetchOptionFromValue, onChange })
+
+          await waitFor(() => expect(fetchOptionFromValue).toHaveBeenCalledTimes(1))
+          await userEvent.type(getByRole('combobox').querySelector('input') as HTMLInputElement, 'Another')
+
+          expect(await findAllByText('Another collection', {}, { timeout: 3000 })).not.toHaveLength(0)
+          await waitFor(() => expect(fetchOptionFromValue).toHaveBeenCalledTimes(2))
           expect(onChange).not.toHaveBeenCalled()
         })
       })

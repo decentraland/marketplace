@@ -15,11 +15,15 @@ const SelectFilter = (props: Props) => {
   const [isTyping, setIsTyping] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  // The first of the options the filter was given, never a search result: falling back to a
+  // search result would switch the filter to something the user did not pick.
+  const fallbackValue = options.length > 0 ? options[0].value : undefined
+
   // In the case that the value does not match to one of the options,
   // the component will try to fetch the option from the backend and add it.
-  // If the option is not found, the value will be changed to the first option, when there is one.
-  // Without options to fall back to (e.g. the collection filter, whose options come only from
-  // searching), the value is kept: it may come from a link that set the filter on purpose.
+  // If the option is not found, the value will be changed to the first given option. Without one
+  // (e.g. the collection filter, whose options come only from searching), the value is kept: it may
+  // come from a link that set the filter on purpose.
   useEffect(() => {
     let isCancelled = false
 
@@ -39,8 +43,8 @@ const SelectFilter = (props: Props) => {
 
         if (result) {
           setProvidedOptions(currentOptions => [...currentOptions, result])
-        } else if (providedOptions.length > 0) {
-          onChange(providedOptions[0].value)
+        } else if (fallbackValue !== undefined) {
+          onChange(fallbackValue)
         }
       } catch (error) {
         console.warn('Could not fetch the option for the selected value', error)
@@ -54,7 +58,7 @@ const SelectFilter = (props: Props) => {
     return () => {
       isCancelled = true
     }
-  }, [fetchOptionFromValue, providedOptions, value, onChange])
+  }, [fetchOptionFromValue, providedOptions, value, onChange, fallbackValue])
 
   // The component will fetch the options from the backend depending on the search input.
   // The search will be triggered after some time of inactivity to prevent too many requests.
