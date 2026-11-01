@@ -52,22 +52,42 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   const [selectedCreators, setSelectedCreators] = useState<Pick<CreatorAccount, 'address' | 'name'>[]>()
 
   useEffect(() => {
-    const getCollections = async () => {
-      if (contracts?.length) {
-        const collections = await Promise.all(contracts.map(contract => getCollectionByAddress(contract)))
+    let isCancelled = false
 
-        setCollections(
-          collections.map(collection => ({
-            address: collection.contractAddress,
-            name: collection.name
-          }))
-        )
-      } else if (!contracts?.length) {
+    const getCollections = async () => {
+      if (!contracts?.length) {
         setCollections([])
+        return
+      }
+
+      try {
+        const collections = await Promise.all(contracts.map(contract => getCollectionByAddress(contract)))
+        if (isCancelled) {
+          return
+        }
+
+        // A contract the API has no collection for gets no pill instead of crashing the whole lookup.
+        setCollections(
+          collections
+            .filter((collection): collection is NonNullable<typeof collection> => !!collection)
+            .map(collection => ({
+              address: collection.contractAddress,
+              name: collection.name
+            }))
+        )
+      } catch (error) {
+        if (!isCancelled) {
+          console.error('Could not load the selected collections', error)
+          setCollections([])
+        }
       }
     }
 
     void getCollections()
+
+    return () => {
+      isCancelled = true
+    }
   }, [contracts, onlyOnSale])
 
   useEffect(() => {
