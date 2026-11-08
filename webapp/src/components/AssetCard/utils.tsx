@@ -76,8 +76,8 @@ export function getAssetListingsRangeInfoText(asset: Item) {
 /**
  * Parses a browse price filter (whole MANA, as it comes from the URL) into wei.
  * The filters are read straight from the query string, so they can hold anything ("test", "1,5",
- * more than 18 decimals). A value that can't be parsed is treated as no filter instead of throwing
- * while the card renders.
+ * "1e3", more than 18 decimals). A value that can't be parsed is treated as no filter instead of
+ * throwing while the card renders.
  */
 function parsePriceFilter(value: string | undefined): BigNumber | undefined {
   if (!value) {

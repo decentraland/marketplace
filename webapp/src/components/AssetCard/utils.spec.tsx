@@ -522,7 +522,41 @@ describe('AssetCard utils', () => {
             expect(getCatalogCardInformation(asset, appliedFilters)).toEqual(getCatalogCardInformation(asset, { sortBy, minPrice: '200' }))
           })
         })
+
+        describe('and only the min price filter is not a valid amount', () => {
+          beforeEach(() => {
+            appliedFilters = { sortBy, minPrice: 'test', maxPrice: '50' }
+          })
+
+          it('should ignore the invalid min price and apply the max price', () => {
+            expect(getCatalogCardInformation(asset, appliedFilters)).toEqual(getCatalogCardInformation(asset, { sortBy, maxPrice: '50' }))
+          })
+        })
       }
     )
+
+    describe('when the asset has mint and listings and both price filters are not valid amounts', () => {
+      beforeEach(() => {
+        asset = {
+          isOnSale: true,
+          available: 1,
+          listings: 2,
+          price: ethers.utils.parseUnits('100').toString(),
+          minPrice: ethers.utils.parseUnits('10').toString(),
+          minListingPrice: ethers.utils.parseUnits('10').toString(),
+          maxListingPrice: ethers.utils.parseUnits('1000').toString()
+        } as Item
+        appliedFilters = { sortBy: SortBy.NEWEST, minPrice: 'test', maxPrice: 'test' }
+      })
+
+      it('should show the available for mint label, mint icon, the mint price and the listings range', () => {
+        expect(getCatalogCardInformation(asset, appliedFilters)).toEqual({
+          action: t('asset_card.available_for_mint'),
+          actionIcon: mintingIcon,
+          extraInformation: getAssetListingsRangeInfoText(asset),
+          price: asset.price
+        })
+      })
+    })
   })
 })
