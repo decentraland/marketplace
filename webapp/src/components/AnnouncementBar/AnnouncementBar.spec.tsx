@@ -93,20 +93,17 @@ describe('AnnouncementBar', () => {
   })
 
   describe('when the browser denies access to localStorage', () => {
-    let getItem: jest.SpyInstance
-    let setItem: jest.SpyInstance
+    let localStorageGetter: jest.SpyInstance
 
     beforeEach(() => {
-      const denied = () => {
+      // Denied storage throws from the `localStorage` getter itself, before any method is called.
+      localStorageGetter = jest.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
         throw new DOMException("Failed to read the 'localStorage' property from 'Window'", 'SecurityError')
-      }
-      getItem = jest.spyOn(Storage.prototype, 'getItem').mockImplementation(denied)
-      setItem = jest.spyOn(Storage.prototype, 'setItem').mockImplementation(denied)
+      })
     })
 
     afterEach(() => {
-      getItem.mockRestore()
-      setItem.mockRestore()
+      localStorageGetter.mockRestore()
     })
 
     it('should report the bar as not dismissed instead of throwing', () => {
