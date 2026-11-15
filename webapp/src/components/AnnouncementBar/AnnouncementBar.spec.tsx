@@ -92,6 +92,43 @@ describe('AnnouncementBar', () => {
     })
   })
 
+  describe('when the browser denies access to localStorage', () => {
+    let getItem: jest.SpyInstance
+    let setItem: jest.SpyInstance
+
+    beforeEach(() => {
+      const denied = () => {
+        throw new DOMException("Failed to read the 'localStorage' property from 'Window'", 'SecurityError')
+      }
+      getItem = jest.spyOn(Storage.prototype, 'getItem').mockImplementation(denied)
+      setItem = jest.spyOn(Storage.prototype, 'setItem').mockImplementation(denied)
+    })
+
+    afterEach(() => {
+      getItem.mockRestore()
+      setItem.mockRestore()
+    })
+
+    it('should report the bar as not dismissed instead of throwing', () => {
+      expect(isAnnouncementBarDismissed()).toBe(false)
+    })
+
+    describe('and the user dismisses the bar', () => {
+      beforeEach(() => {
+        renderComponent(onDismiss)
+        fireEvent.click(screen.getByRole('button', { name: t('announcement_bar.dismiss') }))
+      })
+
+      it('should still notify the parent so the bar hides for this page view', () => {
+        expect(onDismiss).toHaveBeenCalled()
+      })
+
+      it('should still track the dismissal', () => {
+        expect(track).toHaveBeenCalledWith(events.DISMISS_SHOP_ANNOUNCEMENT_BAR, { source: 'marketplace', path: PATH })
+      })
+    })
+  })
+
   describe('when it was dismissed in a previous visit', () => {
     beforeEach(() => {
       localStorage.setItem(ANNOUNCEMENT_BAR_KEY, '1')
