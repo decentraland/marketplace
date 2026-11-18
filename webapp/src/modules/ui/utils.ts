@@ -39,12 +39,23 @@ export const useScrollSectionIntoView = <T>(
 export const PERSISTED_IS_MAP_STORAGE_KEY = 'is-map'
 export const EXPIRED_LISTINGS_MODAL_KEY = 'expired-listing-modals-key'
 
+// localStorage throws a SecurityError where the browser denies storage. The persisted map toggle is
+// read while the browse pages render, so it is best-effort: without storage it is simply not persisted.
 export const persistIsMapProperty = (val: boolean) => {
-  localStorage.setItem(PERSISTED_IS_MAP_STORAGE_KEY, val.toString())
+  try {
+    localStorage.setItem(PERSISTED_IS_MAP_STORAGE_KEY, val.toString())
+  } catch {
+    // Storage unavailable: the toggle only lasts for this page view.
+  }
 }
 
 export const getPersistedIsMapProperty = (): boolean | null => {
-  const persistedIsMapProperty = localStorage.getItem(PERSISTED_IS_MAP_STORAGE_KEY) || ''
+  let persistedIsMapProperty: string
+  try {
+    persistedIsMapProperty = localStorage.getItem(PERSISTED_IS_MAP_STORAGE_KEY) || ''
+  } catch {
+    return null
+  }
 
   if (['true', 'false'].includes(persistedIsMapProperty)) {
     return persistedIsMapProperty === 'true'
