@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { AnyAction } from 'redux'
 import { call, delay, put, race, select, take } from 'redux-saga/effects'
 import { ChainId } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
@@ -89,9 +90,14 @@ export function* switchToChainIfNeeded(chainId: ChainId) {
   }
 
   yield put(switchNetworkRequest(chainId))
+  // Other parts of the app request switches too, so only the result for this chain counts
   const { failure } = (yield race({
-    success: take(SWITCH_NETWORK_SUCCESS),
-    failure: take(SWITCH_NETWORK_FAILURE)
+    success: take(
+      (action: AnyAction) => action.type === SWITCH_NETWORK_SUCCESS && (action as SwitchNetworkSuccessAction).payload.chainId === chainId
+    ),
+    failure: take(
+      (action: AnyAction) => action.type === SWITCH_NETWORK_FAILURE && (action as SwitchNetworkFailureAction).payload.chainId === chainId
+    )
   })) as { success?: SwitchNetworkSuccessAction; failure?: SwitchNetworkFailureAction }
   if (failure) {
     throw new Error(failure.payload.error)

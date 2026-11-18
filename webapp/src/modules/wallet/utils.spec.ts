@@ -135,6 +135,7 @@ describe('when switching the wallet to a chain if needed', () => {
             ])
             .put(switchNetworkRequest(chainId))
             .dispatch(switchNetworkSuccess(chainId))
+            .returns(undefined)
             .run()
         })
       })
@@ -155,6 +156,24 @@ describe('when switching the wallet to a chain if needed', () => {
             ])
             .dispatch(switchNetworkFailure(chainId, switchError))
             .throws(new Error(switchError))
+            .run()
+        })
+      })
+
+      describe('and a switch to another chain finishes while the wallet is switching', () => {
+        beforeEach(() => {
+          connectedChainIds = [ChainId.MATIC_MAINNET, ChainId.ETHEREUM_MAINNET]
+        })
+
+        it('should ignore the unrelated result and finish once the wallet is on the requested chain', () => {
+          return expectSaga(switchToChainIfNeeded, chainId)
+            .provide([
+              [call(getConnectedProvider), provider],
+              [call(getProviderChainId, provider), dynamic(() => connectedChainIds.shift())]
+            ])
+            .dispatch(switchNetworkFailure(ChainId.MATIC_MAINNET, 'anUnrelatedError'))
+            .dispatch(switchNetworkSuccess(chainId))
+            .returns(undefined)
             .run()
         })
       })
