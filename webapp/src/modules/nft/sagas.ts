@@ -1,5 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { Entity, RentalStatus } from '@dcl/schemas'
+import { Entity, Network, RentalStatus } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -25,6 +25,7 @@ import { Contract } from '../vendor/services'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
+import { switchToChainIfNeeded } from '../wallet/utils'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -181,6 +182,10 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         throw new Error('A wallet is needed to perform a NFT transfer request')
+      }
+
+      if (nft.network === Network.ETHEREUM) {
+        yield call(switchToChainIfNeeded, nft.chainId)
       }
 
       const txHash = (yield call([vendor.nftService, 'transfer'], wallet, address, nft)) as Awaited<

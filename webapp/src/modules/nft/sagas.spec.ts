@@ -2,7 +2,7 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { ChainId, Entity, EntityType, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, Network, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet'
@@ -23,6 +23,7 @@ import { MAX_QUERY_SIZE } from '../vendor/api'
 import { PeerAPI } from '../vendor/decentraland/peer/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getWallet } from '../wallet/selectors'
+import { switchToChainIfNeeded } from '../wallet/utils'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   fetchNFTFailure,
@@ -396,6 +397,117 @@ describe('when handling the transfer NFT request action', () => {
           [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.reject(error)]
         ])
         .put(transferNFTFailure(nft, address, error.message))
+        .dispatch(transferNFTRequest(nft, address))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the NFT lives on Ethereum', () => {
+    let nft: NFT
+    let address: string
+    let wallet: Wallet
+    let vendor: Vendor<VendorName.DECENTRALAND>
+
+    beforeEach(() => {
+      nft = {
+        vendor: VendorName.DECENTRALAND,
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_MAINNET,
+        openRentalId: null
+      } as NFT
+      address = 'anAddress'
+      wallet = { address } as Wallet
+      vendor = VendorFactory.build(nft.vendor)
+    })
+
+    describe('and the wallet switches to the chain of the NFT', () => {
+      let txHash: string
+
+      beforeEach(() => {
+        txHash = 'someHash'
+      })
+
+      it('should send the transfer once the wallet is on the chain of the NFT', () => {
+        return expectSaga(nftSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+            [select(getWallet), wallet],
+            [call(switchToChainIfNeeded, nft.chainId), Promise.resolve()],
+            [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)]
+          ])
+          .call(switchToChainIfNeeded, nft.chainId)
+          .put(transferNFTransactionSubmitted(nft, address, txHash))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the wallet does not switch to the chain of the NFT', () => {
+      let switchError: Error
+
+      beforeEach(() => {
+        switchError = new Error('Error switching network: User rejected the request.')
+      })
+
+      it('should put the transfer failure action with the switch error', () => {
+        return expectSaga(nftSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+            [select(getWallet), wallet],
+            [call(switchToChainIfNeeded, nft.chainId), throwError(switchError)]
+          ])
+          .put(transferNFTFailure(nft, address, switchError.message))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
+
+      it('should not send the transfer', () => {
+        return expectSaga(nftSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+            [select(getWallet), wallet],
+            [call(switchToChainIfNeeded, nft.chainId), throwError(switchError)]
+          ])
+          .not.call([vendor.nftService, 'transfer'], wallet, address, nft)
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+
+  describe('and the NFT lives on Polygon', () => {
+    let nft: NFT
+    let address: string
+    let wallet: Wallet
+    let vendor: Vendor<VendorName.DECENTRALAND>
+    let txHash: string
+
+    beforeEach(() => {
+      nft = {
+        vendor: VendorName.DECENTRALAND,
+        network: Network.MATIC,
+        chainId: ChainId.MATIC_MAINNET,
+        openRentalId: null
+      } as NFT
+      address = 'anAddress'
+      wallet = { address } as Wallet
+      vendor = VendorFactory.build(nft.vendor)
+      txHash = 'someHash'
+    })
+
+    it('should send the transfer without asking the wallet to switch the network', () => {
+      return expectSaga(nftSaga, getIdentity)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
+          [select(getWallet), wallet],
+          [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)]
+        ])
+        .not.call.fn(switchToChainIfNeeded)
+        .put(transferNFTransactionSubmitted(nft, address, txHash))
         .dispatch(transferNFTRequest(nft, address))
         .run({ silenceTimeout: true })
     })

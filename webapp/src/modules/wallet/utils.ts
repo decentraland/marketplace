@@ -1,14 +1,21 @@
 import { ethers } from 'ethers'
-import { delay, race, select, take } from 'redux-saga/effects'
+import { call, delay, put, race, select, take } from 'redux-saga/effects'
+import { ChainId } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS,
   ConnectWalletFailureAction,
-  ConnectWalletSuccessAction
+  ConnectWalletSuccessAction,
+  SWITCH_NETWORK_FAILURE,
+  SWITCH_NETWORK_SUCCESS,
+  SwitchNetworkFailureAction,
+  SwitchNetworkSuccessAction,
+  switchNetworkRequest
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
+import { getProviderChainId } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { config } from '../../config'
 import { GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 
@@ -59,5 +66,40 @@ export function* waitForWalletConnectionAndIdentityIfConnecting() {
         failure: take(GENERATE_IDENTITY_FAILURE)
       })
     }
+  }
+}
+
+function* getConnectedChainId() {
+  const provider = (yield call(getConnectedProvider)) as Awaited<ReturnType<typeof getConnectedProvider>>
+  if (!provider) {
+    throw new Error('A connected provider is required to switch the network')
+  }
+
+  return (yield call(getProviderChainId, provider)) as ChainId
+}
+
+/**
+ * Asks the wallet to switch to the given chain when it is connected to another one.
+ * sendTransaction relays any call made from another chain as a meta-transaction, which an Ethereum contract cannot execute.
+ */
+export function* switchToChainIfNeeded(chainId: ChainId) {
+  const connectedChainId = (yield call(getConnectedChainId)) as ChainId
+  if (connectedChainId === chainId) {
+    return
+  }
+
+  yield put(switchNetworkRequest(chainId))
+  const { failure } = (yield race({
+    success: take(SWITCH_NETWORK_SUCCESS),
+    failure: take(SWITCH_NETWORK_FAILURE)
+  })) as { success?: SwitchNetworkSuccessAction; failure?: SwitchNetworkFailureAction }
+  if (failure) {
+    throw new Error(failure.payload.error)
+  }
+
+  // Some wallets, like Magic, report a failed switch as a successful one
+  const switchedChainId = (yield call(getConnectedChainId)) as ChainId
+  if (switchedChainId !== chainId) {
+    throw new Error(`The wallet did not switch to the chain ${chainId}`)
   }
 }
