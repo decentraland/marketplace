@@ -22,6 +22,12 @@ const ListingPrice = ({ price, network, tradeId, showFiat = false, size, classNa
   const { denomination, marketplaceAddress } = useTradePricing(tradeId)
   const isUSDPegged = denomination === PriceDenomination.USD_PEGGED
 
+  // A listing can reach the client without a price (see `formatWeiMANA`). Render nothing rather than letting the
+  // MANA, fiat or pegged conversions throw on it and take the whole panel down.
+  if (!price) {
+    return null
+  }
+
   if (isUSDPegged) {
     // No fiat parenthetical here even when `showFiat` is set: the USD figure is what the listing is pegged TO,
     // not what the buyer pays, and showing both invites reading the wrong one as the price.
