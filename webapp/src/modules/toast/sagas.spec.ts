@@ -21,12 +21,14 @@ import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
+import { LISTING_UNAVAILABLE_ERROR } from '../order/listingApproval'
 import { claimAssetSuccess, removeRentalSuccess, upsertRentalSuccess } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { updateStoreSuccess } from '../store/actions'
 import { getEmptyStore } from '../store/utils'
 import {
   getExecuteOrderFailureToast,
+  getListingUnavailableToast,
   getBuyNFTWithCardErrorToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
@@ -144,6 +146,17 @@ describe('when handling the failure of execute order', () => {
       .put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
       .dispatch(executeOrderFailure(order, nft, error))
       .silentRun()
+  })
+
+  describe('and the listing can no longer be delivered by its seller', () => {
+    it('should show a toast saying the listing is no longer available', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .put(showToast(getListingUnavailableToast(), 'bottom center'))
+        .not.put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
+        .dispatch(executeOrderFailure(order, nft, LISTING_UNAVAILABLE_ERROR))
+        .silentRun()
+    })
   })
 })
 
