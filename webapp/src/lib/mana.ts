@@ -3,8 +3,16 @@ import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 
 /**
  * Format wei to a supported unit ('ether' by default) and localizes it with the desired fraction digits (2 by default)
+ *
+ * A missing amount formats as an empty string. Listings can reach the client without a price (the API takes it
+ * from the order or, failing that, from the trade's received amount), and ethers would otherwise throw on `null`
+ * in the middle of a render or a saga.
  */
-export function formatWeiMANA(wei: string, maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS): string {
+export function formatWeiMANA(wei: string | null | undefined, maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS): string {
+  if (wei === null || wei === undefined || wei === '') {
+    return ''
+  }
+
   const value = Number(ethers.utils.formatEther(wei))
 
   if (value === 0) {

@@ -17,7 +17,7 @@ import { isStubMaticCollectionContract } from '../../../modules/contract/utils'
 import { applyEstateSnapshot } from '../../../modules/nft/estate/utils'
 import { isEstateSnapshotBlocking, useEstateSnapshot } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
-import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
+import { INPUT_FORMAT, formatOrderPrice, getDefaultExpirationDate } from '../../../modules/order/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
@@ -51,7 +51,7 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const shouldRemoveListing = order?.tradeId
-  const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
+  const [price, setPrice] = useState<string>(formatOrderPrice(order))
   // The listing records which LANDs the Estate contains, so it is created against
   // the composition read when this page opened — the one shown alongside it — and
   // not against whatever the registry holds by the time the listing is signed.
