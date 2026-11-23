@@ -12,7 +12,24 @@ import styles from './AnnouncementBar.module.css'
 const ANNOUNCEMENT_BAR_KEY = 'shop-announcement-bar'
 const ANNOUNCEMENT_BAR_SOURCE = 'marketplace'
 
-export const isAnnouncementBarDismissed = () => localStorage.getItem(ANNOUNCEMENT_BAR_KEY) !== null
+// Reading or writing localStorage throws a SecurityError where the browser denies storage (some
+// in-app WebViews, blocked site data). The bar renders from PageLayout, so a throw here would take
+// the whole page down: storage is best-effort, and without it the dismissal only lasts this page view.
+export const isAnnouncementBarDismissed = (): boolean => {
+  try {
+    return localStorage.getItem(ANNOUNCEMENT_BAR_KEY) !== null
+  } catch {
+    return false
+  }
+}
+
+const rememberAnnouncementBarDismissal = (): void => {
+  try {
+    localStorage.setItem(ANNOUNCEMENT_BAR_KEY, '1')
+  } catch {
+    // Storage unavailable: the parent still hides the bar for this page view.
+  }
+}
 
 const AnnouncementBar = ({ onDismiss }: Props) => {
   const { pathname } = useLocation()
@@ -28,7 +45,7 @@ const AnnouncementBar = ({ onDismiss }: Props) => {
   }, [])
 
   const handleDismiss = useCallback(() => {
-    localStorage.setItem(ANNOUNCEMENT_BAR_KEY, '1')
+    rememberAnnouncementBarDismissal()
     getAnalytics()?.track(events.DISMISS_SHOP_ANNOUNCEMENT_BAR, { source: ANNOUNCEMENT_BAR_SOURCE, path: pathname })
     onDismiss()
   }, [onDismiss, pathname])

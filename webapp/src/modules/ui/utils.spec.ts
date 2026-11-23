@@ -1,5 +1,5 @@
 import { Section } from '../vendor/decentraland'
-import { isHoverPreviewSection, isListsSection } from './utils'
+import { getPersistedIsMapProperty, isHoverPreviewSection, isListsSection, persistIsMapProperty } from './utils'
 
 describe('when getting if the section is lists', () => {
   it('should return true when it is', () => {
@@ -34,5 +34,49 @@ describe('when getting if the section shows hover previews', () => {
 
   it('should return false when there is no section', () => {
     expect(isHoverPreviewSection(undefined)).toBe(false)
+  })
+})
+
+describe('when persisting and reading the map toggle', () => {
+  afterEach(() => {
+    localStorage.clear()
+  })
+
+  describe('and storage is available', () => {
+    beforeEach(() => {
+      persistIsMapProperty(true)
+    })
+
+    it('should read back the persisted value', () => {
+      expect(getPersistedIsMapProperty()).toBe(true)
+    })
+  })
+
+  describe('and nothing was persisted', () => {
+    it('should return null', () => {
+      expect(getPersistedIsMapProperty()).toBeNull()
+    })
+  })
+
+  describe('and the browser denies access to localStorage', () => {
+    let localStorageGetter: jest.SpyInstance
+
+    beforeEach(() => {
+      localStorageGetter = jest.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
+        throw new DOMException("Failed to read the 'localStorage' property from 'Window'", 'SecurityError')
+      })
+    })
+
+    afterEach(() => {
+      localStorageGetter.mockRestore()
+    })
+
+    it('should return null instead of throwing', () => {
+      expect(getPersistedIsMapProperty()).toBeNull()
+    })
+
+    it('should not throw when persisting the toggle', () => {
+      expect(() => persistIsMapProperty(false)).not.toThrow()
+    })
   })
 })
