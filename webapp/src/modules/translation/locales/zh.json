@@ -73,8 +73,7 @@
     "guest": "客人",
     "block_vrm": "出口",
     "block_vrm_tooltip": "此项目不允许VRM导出",
-    "utility": "公用事业",
-    "temporarily_unavailable": "暂时不可用"
+    "utility": "公用事业"
   },
   "search_dropdown": {
     "recent": "最近的",
@@ -533,8 +532,6 @@
       "buy": "购买",
       "buy_with_mana": "用 MANA 购买",
       "checkout": "结账",
-      "use_credits": "使用积分",
-      "get_with_credits": "用积分购买",
       "buy_with_card": "刷卡购买",
       "get_mana": "获取法力值",
       "mint": "购买",
@@ -1712,10 +1709,6 @@
   "bid_button": {
     "bid": "提出要约",
     "blocked": "您的报价已提出"
-  },
-  "credits": {
-    "value": "1 积分 = 1 MANA 价值",
-    "offline_message": "Marketplace Credits 目前离线。请检查 {discord_link} 的 #product-status 频道以获取更新，如果服务没有很快恢复。"
   },
   "estate_upgrade_warning": {
     "owner": "此挂单已不可用。请重新创建。",

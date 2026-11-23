@@ -128,13 +128,6 @@ export const getIsCreditsEnabled = (state: RootState) => {
   return isEnabled
 }
 
-export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CREDITS_SECONDARY_SALES)
-  }
-  return false
-}
-
 export const getIsUnityWearablePreviewEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.UNITY_WEARABLE_PREVIEW)

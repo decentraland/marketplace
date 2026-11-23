@@ -1,9 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import classNames from 'classnames'
-import { BigNumber } from 'ethers'
-import { Network, Order } from '@dcl/schemas'
+import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Loader } from 'decentraland-ui'
@@ -16,8 +14,6 @@ import { locations } from '../../../../modules/routing/locations'
 import { getTransakPurchase, isTransakSupported } from '../../../../modules/transak/utils'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
-import { getMinSaleValueInWei } from '../../../BuyPage/utils'
-import UseCreditsToggle from '../UseCreditsToggle'
 import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
 import { Props } from './BuyNFTButtons.types'
@@ -58,15 +54,13 @@ const BuyNFTButtons = ({
   tokenId,
   buyWithCardClassName,
   isBuyingWithCryptoModalOpen,
-  isCreditsEnabled,
-  isCreditsSecondarySalesEnabled,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
   onBuyItemWithCard,
   onUseCredits
 }: Props) => {
+  // Credits are only spent from the mobile in-app view, which always pays with them.
   const isIAP = useIsIAP()
-  const [useCredits, setUseCredits] = useState(isIAP)
   const analytics = getAnalytics()
   const location = useLocation()
 
@@ -85,9 +79,9 @@ const BuyNFTButtons = ({
   const handleBuyWithCard = useCallback(
     (asset: Asset, order?: Order) => {
       analytics?.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
-      !isNFT(asset) ? onBuyItemWithCard(asset, useCredits) : onExecuteOrderWithCard(asset, order, useCredits)
+      !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset, order)
     },
-    [analytics, onBuyItemWithCard, onExecuteOrderWithCard, useCredits]
+    [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
   )
 
   const handleBuyWithCrypto = useCallback(
@@ -96,18 +90,10 @@ const BuyNFTButtons = ({
         history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
         analytics?.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
-        onBuyWithCrypto(asset, order, useCredits)
+        onBuyWithCrypto(asset, order, isIAP)
       }
     },
-    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, history, onBuyWithCrypto, useCredits]
-  )
-
-  const handleUseCredits = useCallback(
-    (value: boolean) => {
-      setUseCredits(value)
-      onUseCredits(value)
-    },
-    [onUseCredits]
+    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, history, onBuyWithCrypto, isIAP]
   )
 
   return (
@@ -123,14 +109,6 @@ const BuyNFTButtons = ({
               {children}
             </>
           )
-          const isItemFree = !isNFT(asset) && asset.price === '0'
-          const isBuyingEntirelyWithCredits =
-            useCredits &&
-            !!credits &&
-            ((!isNFT(asset) && BigInt(credits.totalCredits) >= BigInt(asset.price)) ||
-              (isNFT(asset) && order && BigInt(credits.totalCredits) >= BigInt(order.price)))
-          const isFree = isItemFree || !!isBuyingEntirelyWithCredits
-
           if (isIAP) {
             if (!wallet) {
               const basename = getBasename()
@@ -174,33 +152,18 @@ const BuyNFTButtons = ({
 
           return withAutoOpen(
             <>
-              {/* Credits toggle is only available for items with price > 1 MANA or for NFTs as well if the secondary sales are enabled */}
-              {((isCreditsEnabled && !isNFT(asset) && BigNumber.from(asset.price).gte(getMinSaleValueInWei() || '')) ||
-                (isCreditsEnabled && isCreditsSecondarySalesEnabled && isNFT(asset))) &&
-                asset.network === Network.MATIC && ( // credits are only available for Polygon items
-                  <UseCreditsToggle
-                    asset={asset}
-                    assetPrice={!isNFT(asset) ? asset.price : order ? order.price : undefined}
-                    useCredits={useCredits}
-                    onUseCredits={handleUseCredits}
-                  />
-                )}
               <BuyWithCryptoButton
                 className={styles.buyWithCryptoButton}
                 asset={asset}
                 onClick={() => handleBuyWithCrypto(asset, order)}
-                isFree={isFree}
-                useCredits={useCredits}
+                isFree={!isNFT(asset) && asset.price === '0'}
               />
               {/* Only when Transak can actually execute what this click would send. The widget needs a
                   registration for the contract the purchase runs through, and it has none for a marketplace
-                  version it was never told about, nor for a credits purchase — offering the rail in either
-                  case takes the buyer through checkout to a failure the click could have avoided. */}
-              {isTransakSupported({ ...getTransakPurchase(asset, order), useCredits }) ? (
-                <BuyWithCardButton
-                  className={classNames(buyWithCardClassName, { [styles.visibilityHidden]: isFree && useCredits })}
-                  onClick={() => handleBuyWithCard(asset, order || undefined)}
-                />
+                  version it was never told about — offering the rail then takes the buyer through checkout
+                  to a failure the click could have avoided. */}
+              {isTransakSupported(getTransakPurchase(asset, order)) ? (
+                <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
               ) : null}
             </>
           )
