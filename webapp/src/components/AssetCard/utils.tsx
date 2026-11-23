@@ -73,11 +73,26 @@ export function getAssetListingsRangeInfoText(asset: Item) {
   ) : null
 }
 
-function getIsMintPriceInRange(asset: Item, appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>) {
-  return (
-    (!appliedFilters.minPrice || BigNumber.from(asset.price).gte(ethers.utils.parseUnits(appliedFilters.minPrice))) &&
-    (!appliedFilters.maxPrice || BigNumber.from(asset.price).lte(ethers.utils.parseUnits(appliedFilters.maxPrice)))
-  )
+/**
+ * Parses a browse price filter (whole MANA, as it comes from the URL) into wei.
+ * The filters are read straight from the query string, so they can hold anything ("test", "1,5",
+ * "1e3", more than 18 decimals). A value that can't be parsed is treated as no filter instead of
+ * throwing while the card renders.
+ */
+function parsePriceFilter(value: string | undefined): BigNumber | undefined {
+  if (!value) {
+    return undefined
+  }
+
+  try {
+    return ethers.utils.parseUnits(value)
+  } catch {
+    return undefined
+  }
+}
+
+function getIsMintPriceInRange(asset: Item, minPrice: BigNumber | undefined, maxPrice: BigNumber | undefined) {
+  return (!minPrice || BigNumber.from(asset.price).gte(minPrice)) && (!maxPrice || BigNumber.from(asset.price).lte(maxPrice))
 }
 
 /**
@@ -101,7 +116,9 @@ export function getCatalogCardInformation(
   const hasOnlyListings = hasListings && !isAvailableForMint
   const hasOnlyMint = isAvailableForMint && !hasListings
   const notForSale = !isAvailableForMint && !hasListings
-  const hasRangeApplied = !!appliedFilters.minPrice || !!appliedFilters.maxPrice
+  const minPrice = parsePriceFilter(appliedFilters.minPrice)
+  const maxPrice = parsePriceFilter(appliedFilters.maxPrice)
+  const hasRangeApplied = !!minPrice || !!maxPrice
 
   if (notForSale) {
     return {
@@ -128,8 +145,8 @@ export function getCatalogCardInformation(
       // has both minting and listings
       if (hasRangeApplied) {
         info.price = asset.minPrice ?? asset.price // TODO check if this is necessary
-        if (appliedFilters.minPrice) {
-          const isMintingLessThanMinPriceFilter = BigNumber.from(asset.price).lt(ethers.utils.parseUnits(appliedFilters.minPrice))
+        if (minPrice) {
+          const isMintingLessThanMinPriceFilter = BigNumber.from(asset.price).lt(minPrice)
           info.extraInformation = isMintingLessThanMinPriceFilter ? getAlsoAvailableForMintingText(asset) : null
         }
       } else {
@@ -152,7 +169,7 @@ export function getCatalogCardInformation(
       !!asset.maxListingPrice && BigNumber.from(asset.price).gt(BigNumber.from(asset.maxListingPrice))
 
     info.price =
-      getIsMintPriceInRange(asset, appliedFilters) && isMintingGreaterThanMaxListingPrice
+      getIsMintPriceInRange(asset, minPrice, maxPrice) && isMintingGreaterThanMaxListingPrice
         ? asset.price
         : asset.maxListingPrice ?? asset.price
 
@@ -182,14 +199,14 @@ export function getCatalogCardInformation(
     // both mint and listings available
 
     if (hasRangeApplied) {
-      const isMintInRange = getIsMintPriceInRange(asset, appliedFilters)
+      const isMintInRange = getIsMintPriceInRange(asset, minPrice, maxPrice)
       info.action = isMintInRange ? t('asset_card.available_for_mint') : t('asset_card.available_listings_in_range')
       info.price = isMintInRange ? asset.price : asset.minListingPrice ?? ''
       info.actionIcon = isMintInRange ? mintingIcon : null
       info.extraInformation = isMintInRange ? getAssetListingsRangeInfoText(asset) : null
 
-      if (appliedFilters.minPrice) {
-        const isMintingLessThanMinPriceFilter = BigNumber.from(asset.price).lt(ethers.utils.parseUnits(appliedFilters.minPrice))
+      if (minPrice) {
+        const isMintingLessThanMinPriceFilter = BigNumber.from(asset.price).lt(minPrice)
         info.extraInformation =
           !isMintInRange && isMintingLessThanMinPriceFilter ? getAlsoAvailableForMintingText(asset) : info.extraInformation
       }
