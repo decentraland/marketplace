@@ -13,7 +13,6 @@ import {
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
   getIsOffchainPublicItemOrdersEnabled,
-  getIsCreditsSecondarySalesEnabled,
   getIsUnityWearablePreviewEnabled,
   getIsSocialEmotesEnabled,
   getCampaignTheme,
@@ -149,12 +148,6 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
     applicationName: ApplicationName.DAPPS
-  },
-  {
-    name: 'IsCreditsSecondarySalesEnabled',
-    feature: FeatureName.CREDITS_SECONDARY_SALES,
-    selector: getIsCreditsSecondarySalesEnabled,
-    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsUnityWearablePreviewEnabled',

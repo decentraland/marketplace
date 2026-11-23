@@ -16,8 +16,6 @@ export type Props = {
   wallet: Wallet | null
   credits: CreditsResponse | null
   isConnecting: boolean
-  isCreditsEnabled: boolean
-  isCreditsSecondarySalesEnabled: boolean
   onBuyWithCrypto: (asset: Asset, order?: Order | null, useCredits?: boolean) => void
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   onBuyItemWithCard: typeof buyItemWithCardRequest
@@ -26,10 +24,7 @@ export type Props = {
 
 export type OwnProps = Pick<Props, 'asset' | 'assetType' | 'tokenId' | 'buyWithCardClassName'>
 
-export type MapStateProps = Pick<
-  Props,
-  'wallet' | 'isConnecting' | 'isBuyingWithCryptoModalOpen' | 'isCreditsEnabled' | 'isCreditsSecondarySalesEnabled' | 'credits'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isConnecting' | 'isBuyingWithCryptoModalOpen' | 'credits'>
 
 export type MapDispatchProps = Pick<Props, 'onExecuteOrderWithCard' | 'onBuyItemWithCard' | 'onBuyWithCrypto'>
 export type MapDispatch = Dispatch<ExecuteOrderWithCardRequestAction | BuyItemWithCardRequestAction | OpenModalAction>

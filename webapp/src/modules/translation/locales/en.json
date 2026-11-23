@@ -75,8 +75,7 @@
     "guest": "Guest",
     "block_vrm": "Export",
     "block_vrm_tooltip": "This Item doesn't allow VRM export",
-    "utility": "Utility",
-    "temporarily_unavailable": "Temporarily Unavailable"
+    "utility": "Utility"
   },
   "search_dropdown": {
     "recent": "Recent",
@@ -540,8 +539,6 @@
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
       "checkout": "Checkout",
-      "use_credits": "Use Credits",
-      "get_with_credits": "Get with Credits",
       "buy_with_another_token": "Use another Token",
       "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
@@ -1748,10 +1745,6 @@
   "bid_button": {
     "bid": "Make offer",
     "blocked": "Your offer has been made"
-  },
-  "credits": {
-    "value": "1 Credit = 1 MANA in value",
-    "offline_message": "Marketplace Credits are currently offline.{br} Please check the #product-status channel at {br} {discord_link} for updates if service does not resume shortly."
   },
   "estate_upgrade_warning": {
     "owner": "This listing is no longer available. You need to recreate it.",

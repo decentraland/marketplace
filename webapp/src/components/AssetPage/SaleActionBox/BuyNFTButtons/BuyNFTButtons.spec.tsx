@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
@@ -34,10 +34,6 @@ afterEach(() => {
   mockProvidedAsset = ITEM
 })
 
-jest.mock('../UseCreditsToggle', () => ({
-  __esModule: true,
-  default: ({ onUseCredits }: { onUseCredits: (value: boolean) => void }) => <button onClick={() => onUseCredits(true)}>use credits</button>
-}))
 jest.mock('./BuyWithCryptoButton', () => ({ BuyWithCryptoButton: () => <button>buy</button> }))
 jest.mock('./BuyWithCardButton', () => ({ BuyWithCardButton: () => <button>card</button> }))
 
@@ -50,8 +46,6 @@ function renderButtons(url: string, overrides: Partial<Props> = {}) {
     wallet: { address: '0xbuyer', networks: { [Network.MATIC]: { mana: 1000 }, [Network.ETHEREUM]: { mana: 0 } } },
     credits: null,
     isConnecting: false,
-    isCreditsEnabled: false,
-    isCreditsSecondarySalesEnabled: false,
     onBuyWithCrypto,
     onExecuteOrderWithCard: jest.fn(),
     onBuyItemWithCard: jest.fn(),
@@ -133,42 +127,6 @@ describe('when the listing settles on a marketplace version Transak knows', () =
   })
 
   it('should offer the card', () => {
-    expect(card).toBeInTheDocument()
-  })
-})
-
-describe('when the buyer selects credits on a chain that registers no credits manager', () => {
-  beforeEach(async () => {
-    mockProvidedAsset = {
-      ...ITEM,
-      tradeId: 'a-trade',
-      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_MAINNET).address
-    } as unknown as Asset
-    renderButtons('/', { isCreditsEnabled: true })
-    fireEvent.click(await screen.findByText('use credits'))
-  })
-
-  it('should withdraw the card, because that click would take a route Transak cannot execute', async () => {
-    await waitFor(() => expect(screen.queryByText('card')).not.toBeInTheDocument())
-  })
-})
-
-describe('when the buyer selects credits on a chain that registers one', () => {
-  let card: HTMLElement
-
-  beforeEach(async () => {
-    mockProvidedAsset = {
-      ...ITEM,
-      chainId: ChainId.MATIC_AMOY,
-      tradeId: 'a-trade',
-      tradeContractAddress: getContract(ContractName.OffChainMarketplaceV3, ChainId.MATIC_AMOY).address
-    } as unknown as Asset
-    renderButtons('/', { isCreditsEnabled: true })
-    fireEvent.click(await screen.findByText('use credits'))
-    card = await screen.findByText('card')
-  })
-
-  it('should keep the card, since that route settles through the credits manager', () => {
     expect(card).toBeInTheDocument()
   })
 })
