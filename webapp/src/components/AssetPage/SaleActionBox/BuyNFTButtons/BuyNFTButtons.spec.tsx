@@ -1,11 +1,15 @@
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset, AssetType } from '../../../../modules/asset/types'
 import { renderWithProviders } from '../../../../utils/test'
 import BuyNFTButtons from './BuyNFTButtons'
 import { Props } from './BuyNFTButtons.types'
+
+const ITEM_PRICE = '100000000000000000000'
 
 const ITEM = {
   id: 'an-item',
@@ -14,7 +18,7 @@ const ITEM = {
   category: NFTCategory.WEARABLE,
   network: Network.MATIC,
   chainId: ChainId.MATIC_MAINNET,
-  price: '100000000000000000000',
+  price: ITEM_PRICE,
   available: 1,
   data: {},
   isOnSale: true
@@ -39,6 +43,7 @@ jest.mock('./BuyWithCardButton', () => ({ BuyWithCardButton: () => <button>card<
 
 function renderButtons(url: string, overrides: Partial<Props> = {}) {
   const onBuyWithCrypto = jest.fn()
+  const onUseCredits = jest.fn()
   const props = {
     asset: ITEM,
     assetType: AssetType.ITEM,
@@ -49,14 +54,14 @@ function renderButtons(url: string, overrides: Partial<Props> = {}) {
     onBuyWithCrypto,
     onExecuteOrderWithCard: jest.fn(),
     onBuyItemWithCard: jest.fn(),
-    onUseCredits: jest.fn(),
+    onUseCredits,
     ...overrides
   } as unknown as Props
 
   const rendered = renderWithProviders(<BuyNFTButtons {...props} />, { initialEntries: [url] })
   // Re-renders the same component, which is what a dispatch sitting in the render body reacted to.
   const rerender = () => rendered.rerender(<BuyNFTButtons {...props} />)
-  return { onBuyWithCrypto, rerender }
+  return { onBuyWithCrypto, onUseCredits, rerender }
 }
 
 // A `buyWithCrypto=true` deep link opens the checkout on arrival. The call used to sit in the render
@@ -128,5 +133,51 @@ describe('when the listing settles on a marketplace version Transak knows', () =
 
   it('should offer the card', () => {
     expect(card).toBeInTheDocument()
+  })
+})
+
+// The mobile in-app view is the one place the buy box still spends credits: it always pays with them,
+// so the single checkout button is gated on the balance rather than offered as a choice.
+describe('when the page is opened in the mobile in-app view', () => {
+  let onBuyWithCrypto: jest.Mock
+  let onUseCredits: jest.Mock
+  let credits: CreditsResponse
+
+  describe('and the credits balance covers the price', () => {
+    beforeEach(async () => {
+      credits = { totalCredits: ITEM_PRICE } as unknown as CreditsResponse
+      ;({ onBuyWithCrypto, onUseCredits } = renderButtons('/?view=mobile-iap', { credits }))
+      await screen.findByRole('button')
+    })
+
+    it('should switch the purchase to credits', () => {
+      expect(onUseCredits).toHaveBeenCalledWith(true)
+    })
+
+    it('should let the buyer check out', () => {
+      expect(screen.getByRole('button')).toBeEnabled()
+    })
+
+    describe('and the buyer checks out', () => {
+      beforeEach(async () => {
+        await userEvent.click(screen.getByRole('button'))
+      })
+
+      it('should pay the purchase with credits', () => {
+        expect(onBuyWithCrypto).toHaveBeenCalledWith(ITEM, null, true)
+      })
+    })
+  })
+
+  describe('and the credits balance falls short of the price', () => {
+    beforeEach(async () => {
+      credits = { totalCredits: '1' } as unknown as CreditsResponse
+      renderButtons('/?view=mobile-iap', { credits })
+      await screen.findByRole('button')
+    })
+
+    it('should not let the buyer check out', () => {
+      expect(screen.getByRole('button')).toBeDisabled()
+    })
   })
 })
